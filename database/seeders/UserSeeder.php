@@ -63,7 +63,7 @@ class UserSeeder extends Seeder
             'firstname' => 'Public',
             'lastname' => 'Vendor',
             'phone' => '+919002090020',
-            'type' => null,
+            'type' => 'shop',
             'email' => 'vendor@test.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123456'),
