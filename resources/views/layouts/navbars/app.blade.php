@@ -18,12 +18,12 @@
         <!-- User avatar dropdown -->
         <div class="dropdown">
             <div class="user col align-self-end">
-                <img src="{{ asset('admin/dist-assets/images/faces/1.jpg')}}" id="userDropdown" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img src="{{ Auth::user()->photo ? asset('images/' . Auth::user()->photo) : asset('admin/dist-assets/images/avatar.jpg') }}" id="userDropdown" alt="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
                     <div class="dropdown-header">
-                        <i class="i-Lock-User mr-1"></i> Ademola Davies
+                        <i class="i-Lock-User mr-1"></i> {{Auth::user()->firstname . ' ' . Auth::user()->lastname}}
                     </div>
-                    <a class="dropdown-item" href="#">Profile Settings</a>
+                    <a class="dropdown-item" href="{{route('profile')}}">Profile Settings</a>
                     <a class="dropdown-item" href="#">Billing History</a>
                     <a onclick="event.preventDefault();
                     document.getElementById('logout-form').submit();" class="dropdown-item" href="#">Sign Out</a>
