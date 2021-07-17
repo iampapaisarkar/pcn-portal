@@ -25,6 +25,44 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        //
+        Gate::define('isAdmin', function($user){
+            if($user->role->code == 'sadmin'){
+                return true;
+            }else{
+                return false;
+            }
+        });
+
+        Gate::define('isSOffice', function($user){
+            if($user->role->code == 'state_office'){
+                return true;
+            }else{
+                return false;
+            }
+        });
+
+        Gate::define('isPPractice', function($user){
+            if($user->role->code == 'pharmacy_practice'){
+                return true;
+            }else{
+                return false;
+            }
+        });
+
+        Gate::define('isRLicencing', function($user){
+            if($user->role->code == 'registration_licencing'){
+                return true;
+            }else{
+                return false;
+            }
+        });
+        
+        Gate::define('isVendor', function($user){
+            if($user->role->code == 'vendor'){
+                return true;
+            }else{
+                return false;
+            }
+        });
     }
 }

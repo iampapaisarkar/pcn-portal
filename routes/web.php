@@ -14,12 +14,23 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('auth.login');
+    if(Auth::check()){
+        return view('index');
+    }else{
+        return view('auth.login');
+    }
 });
 
 Auth::routes(['verify' => true]);
 
-
 Route::group(['middleware' => ['auth','verified']], function () {
-	Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+	Route::get('/', function () {
+        return view('index');
+    })->name('dashboard');
+});
+
+Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
+	// Route::get('/', function () {
+    //     return view('index');
+    // })->name('dashboard');
 });

@@ -38,4 +38,30 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function userRole() {
+        return $this->hasOne(UserRole::class,'user_id', 'id');
+    }
+
+    public function hasRole($roles)
+    {
+        if (is_array($roles)) {
+            foreach ($roles as $role) {
+                if(!Role::where('role',$role)->exists()){
+                    return false;
+                }
+                $mRole = Role::where('role',$role)->first();
+                if (UserRole::where(['role_id'=>$mRole->id,'user_id'=>Auth::user()->id])->exists()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    public function role() {
+        return $this->hasOne(UserRole::class,'user_id', 'id')
+        ->join('roles', 'roles.id', 'user_roles.role_id')
+        ->select('roles.code', 'roles.role', 'roles.id as role_id', 'user_roles.role_id', 'user_roles.user_id');
+    }
 }
