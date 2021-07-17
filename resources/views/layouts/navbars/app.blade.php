@@ -26,7 +26,7 @@
                     <a class="dropdown-item" href="#">Profile Settings</a>
                     <a class="dropdown-item" href="#">Billing History</a>
                     <a onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();" class="dropdown-item" href="index.php">Sign Out</a>
+                    document.getElementById('logout-form').submit();" class="dropdown-item" href="#">Sign Out</a>
                 </div>
             </div>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">

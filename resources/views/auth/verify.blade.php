@@ -24,7 +24,11 @@
                 </div>
                 <div class="col-md-6 text-center" style="background-size: cover;background-image: url({{asset('admin/dist-assets/images/photo-long-3.jpg')}})">
                     <div class="pr-3 auth-right">
-                    <a class="btn btn btn-outline-primary btn-outline-email btn-block btn-icon-text" href="{{ route('register') }}"><i class="i-Mail-with-At-Sign"></i> Register Profile</a>
+                    <a onclick="event.preventDefault();
+                    document.getElementById('logout-form').submit();" class="btn btn btn-outline-primary btn-outline-email btn-block btn-icon-text" href="#"><i class="i-Mail-with-At-Sign"></i>Login with another email</a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
                     </div>
                 </div>
             </div>
