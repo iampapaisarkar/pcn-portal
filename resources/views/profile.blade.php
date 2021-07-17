@@ -9,7 +9,7 @@
                 {{ session('status') }}
             </div>
         @endif
-        <form method="POST" action="{{ route('profile-update') }}">
+        <form method="POST" action="{{ route('profile-update') }}" enctype="multipart/form-data">
         @csrf
             <div class="row">
                 <div class="col-md-4 form-group mb-3">
@@ -164,6 +164,7 @@
                     <input name="photo" type="file" name="color_passportsize" class="custom-file-input" id="inputGroupFile02" accept="image/*">
                     <label class="custom-file-label " for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
                     </div>
+                    <img src="{{asset('images/' . Auth::user()->photo)}}" alt="" class="w-25">
                 </div>
                 @endcan
                 <div class="col-md-12">
