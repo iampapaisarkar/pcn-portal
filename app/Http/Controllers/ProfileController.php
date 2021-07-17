@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use DB;
 
 class ProfileController extends Controller
 {
@@ -11,10 +13,22 @@ class ProfileController extends Controller
     }
 
     public function update(Request $requet){
-        // return back()->with('success','Your query successfully submitted');
-        return back()->with('error','There is something error, please try after some time');
 
-        dd($requet->all());
-        return view('profile');
+        try {
+            DB::beginTransaction();
+
+            if(Auth::user()->hasRole(['vendor'])){
+                
+            }
+
+            DB::commit();
+
+            return back()->with('success','Your query successfully submitted');
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
+
     }
 }

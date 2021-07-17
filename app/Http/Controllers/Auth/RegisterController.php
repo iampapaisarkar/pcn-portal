@@ -96,7 +96,7 @@ class RegisterController extends Controller
 
         }catch(Exception $e) {
             DB::rollback();
-            return response()->json(['message' => 'There something internal server error'], 422);
+            return back()->with('error','There something internal server errore');
         }  
     }
 }
