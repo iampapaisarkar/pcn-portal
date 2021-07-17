@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="icon" href="{{ asset('admin/dist-assets/images/logo.png')}}" type="image/ong" sizes="16x16">
 
     <!-- Templates  -->
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
