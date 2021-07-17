@@ -27,6 +27,9 @@ Route::group(['middleware' => ['auth','verified']], function () {
 	Route::get('/', function () {
         return view('index');
     })->name('dashboard');
+
+    // Profile routes 
+    Route::get('/profile', 'App\Http\Controllers\ProfileController@index')->name('profile');
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {

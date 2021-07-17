@@ -2,7 +2,6 @@
 
 @section('content')
 @include('layouts.navbars.breadcrumb', ['page' => 'Dashboard', 'route' => 'dashboard'])
-<div class="separator-breadcrumb border-top"></div>
 <div class="row">
     <div class="col-lg-6 col-md-12">
         <!-- CARD ICON-->

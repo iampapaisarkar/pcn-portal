@@ -15,6 +15,7 @@
         <h1 class="mr-2">Tiered PPMV</h1>
     @endif
     <ul>
-        <li><a href="{{route($route)}}">Dashboard</a></li>
+        <li><a href="{{route($route)}}">{{$page}}</a></li>
     </ul>
 </div>
+<div class="separator-breadcrumb border-top"></div>
