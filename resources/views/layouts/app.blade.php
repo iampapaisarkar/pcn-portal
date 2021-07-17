@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet" />
     <link href="{{ asset('admin/dist-assets/css/themes/lite-purple.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('admin/dist-assets/css/plugins/perfect-scrollbar.min.css') }}" rel="stylesheet" />
+    <link href="{{ asset('admin/plugin/toast.css') }}" rel="stylesheet">
 
 
     <!-- Scripts -->
@@ -42,5 +43,49 @@
     <script src="{{ asset('admin/dist-assets/js/scripts/datatables.script.min.js')}}"></script>
     <script src="{{ asset('admin/dist-assets/js/plugins/datatables.min.js')}}"></script>
     <script src="{{ asset('admin/dist-assets/js/scripts/dashboard.v2.script.min.js')}}"></script>
+    <script src="{{ asset('admin/plugin/toast.js')}}"></script>
+
+    <script>
+        toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": false,
+        "positionClass": "toast-bottom-right",
+        "preventDuplicates": false,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+        }
+
+        @if(Session::has('success'))
+            toastr.success("{{ Session::get('success') }}");
+        @endif
+
+        @if(Session::has('status'))
+            toastr.success("{{ Session::get('status') }}");
+        @endif
+
+        @if(Session::has('errors'))
+            var errors = <?php echo Session::get('errors'); ?>;
+            var errorKeys = Object.keys(errors);
+            errorKeys.forEach(key => {
+
+                errors[key].forEach(errorMessage => {
+                    toastr.error(errorMessage);
+                });
+            });
+        @endif 
+
+        @if(Session::has('error'))
+            toastr.error("{{ Session::get('error') }}");
+        @endif
+    </script>
 </body>
 </html>

@@ -87,7 +87,7 @@ class RegisterController extends Controller
                     'role_id' => $role->id
                 ]);
             }else{
-                return back();
+                return back()->with('error','There is something error, please try after some time');
             }
                 
             DB::commit();

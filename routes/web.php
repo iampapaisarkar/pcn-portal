@@ -30,10 +30,8 @@ Route::group(['middleware' => ['auth','verified']], function () {
 
     // Profile routes 
     Route::get('/profile', 'App\Http\Controllers\ProfileController@index')->name('profile');
+    Route::post('/profile-update', 'App\Http\Controllers\ProfileController@update')->name('profile-update');
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
-	// Route::get('/', function () {
-    //     return view('index');
-    // })->name('dashboard');
 });
