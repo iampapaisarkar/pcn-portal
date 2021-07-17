@@ -4,6 +4,11 @@
 @include('layouts.navbars.breadcrumb', ['page' => 'Profile', 'route' => 'profile'])
 <div class="row">
     <div class="col-lg-12 col-md-12">
+        @if (session('status'))
+            <div class="alert alert-warning">
+                {{ session('status') }}
+            </div>
+        @endif
         <form method="POST" action="{{ route('profile-update') }}">
         @csrf
             <div class="row">

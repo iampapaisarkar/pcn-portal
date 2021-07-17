@@ -68,9 +68,9 @@
             toastr.success("{{ Session::get('success') }}");
         @endif
 
-        @if(Session::has('status'))
-            toastr.success("{{ Session::get('status') }}");
-        @endif
+        // @if(Session::has('status'))
+        //     toastr.success("{{ Session::get('status') }}");
+        // @endif
 
         @if(Session::has('errors'))
             var errors = <?php echo Session::get('errors'); ?>;

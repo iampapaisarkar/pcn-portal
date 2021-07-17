@@ -23,14 +23,13 @@ Route::get('/', function () {
 
 Auth::routes(['verify' => true]);
 
-Route::group(['middleware' => ['auth','verified']], function () {
-	Route::get('/', function () {
-        return view('index');
-    })->name('dashboard');
 
-    // Profile routes 
-    Route::get('/profile', 'App\Http\Controllers\ProfileController@index')->name('profile');
-    Route::post('/profile-update', 'App\Http\Controllers\ProfileController@update')->name('profile-update');
+// Profile routes 
+Route::get('/profile', 'App\Http\Controllers\ProfileController@index')->name('profile')->middleware('auth', 'verified');
+Route::post('/profile-update', 'App\Http\Controllers\ProfileController@update')->name('profile-update')->middleware('auth', 'verified');
+
+Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], function () {
+	Route::get('/', function () { return view('index'); })->name('dashboard');
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
