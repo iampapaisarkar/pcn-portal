@@ -6,6 +6,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -46,12 +47,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasRole($roles)
     {
+        // dd();
         if (is_array($roles)) {
             foreach ($roles as $role) {
-                if(!Role::where('role',$role)->exists()){
+                if(!Role::where('code',$role)->exists()){
                     return false;
                 }
-                $mRole = Role::where('role',$role)->first();
+                $mRole = Role::where('code',$role)->first();
                 if (UserRole::where(['role_id'=>$mRole->id,'user_id'=>Auth::user()->id])->exists()) {
                     return true;
                 }

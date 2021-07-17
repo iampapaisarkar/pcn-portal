@@ -21,23 +21,23 @@
         
         <div class="submenu-area" data-parent="admin">
             <header>
-                @if(Auth::user()->hasRole('sadmin'))
+                @if(Auth::user()->hasRole(['sadmin']))
                 <h6>HQ Abuja</h6>
                 <p>Super Admin</p>
                 @endif
-                @if(Auth::user()->hasRole('state_office'))
+                @if(Auth::user()->hasRole(['state_office']))
                 <h6>PCN State Office</h6>
                 <p>State Office</p>
                 @endif
-                @if(Auth::user()->hasRole('pharmacy_practice'))
+                @if(Auth::user()->hasRole(['pharmacy_practice']))
                 <h6>PCN HQ Abuja</h6>
                 <p>Pharmacy Practice</p>
                 @endif
-                @if(Auth::user()->hasRole('registration_licencing'))
+                @if(Auth::user()->hasRole(['registration_licencing']))
                 <h6>PCN HQ Abuja</h6>
                 <p>Registration and Licencing</p>
                 @endif
-                @if(Auth::user()->hasRole('vendor'))
+                @if(Auth::user()->hasRole(['vendor']))
                 <h6>PPMV</h6>
                 <p>Tiered PPMV</p>
                 @endif

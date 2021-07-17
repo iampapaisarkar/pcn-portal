@@ -1,12 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="breadcrumb">
-    <h1 class="mr-2">PCN Pharmacy Practice | HQ Abuja</h1>
-    <ul>
-        <li><a href="">Dashboard</a></li>
-    </ul>
-</div>
+@include('layouts.navbars.breadcrumb', ['page' => 'Dashboard', 'route' => 'dashboard'])
 <div class="separator-breadcrumb border-top"></div>
 <div class="row">
     <div class="col-lg-6 col-md-12">
