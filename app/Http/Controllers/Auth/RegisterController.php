@@ -71,13 +71,14 @@ class RegisterController extends Controller
     {
         try {
             DB::beginTransaction();
+
+            if($data['type'] == 'vendor'){
                 $role = Role::where('code', $data['type'])->first();
-                
+
                 $user = User::create([
                     'firstname' => $data['firstname'],
                     'lastname' => $data['lastname'],
                     'phone' => $data['phone'],
-                    'type' => $data['type'],
                     'email' => $data['email'],
                     'password' => Hash::make($data['password']),
                 ]);
@@ -85,6 +86,9 @@ class RegisterController extends Controller
                     'user_id' => $user->id,
                     'role_id' => $role->id
                 ]);
+            }else{
+                return back();
+            }
                 
             DB::commit();
 
