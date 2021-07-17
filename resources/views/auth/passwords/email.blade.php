@@ -8,13 +8,24 @@
                 <div class="col-md-6">
                     <div class="p-4">
                         <div class="auth-logo text-center mb-4"><img src="{{asset('admin/dist-assets/images/logo.png')}}" alt=""></div>
-                        <h1 class="mb-3 text-18">Forgot Password</h1>
-                        <form action="index.php">
-                            <div class="form-group">
-                                <label for="email">Email address</label>
-                                <input class="form-control form-control" id="email" type="email">
+                        @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
                             </div>
-                            <button class="btn btn-primary btn-block btn mt-3">Reset Password</button>
+                        @endif
+                        <h1 class="mb-3 text-18">{{ __('Reset Password') }}</h1>
+                        <form method="POST" action="{{ route('password.email') }}">
+                        @csrf
+                            <div class="form-group">
+                                <label for="email">{{ __('E-Mail Address') }}</label>
+                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block btn mt-3">{{ __('Send Password Reset Link') }}</button>
                         </form>
                         <div class="mt-3 text-center"><a class="text-muted" href="{{route('login')}}">
                                 <u>Sign in</u></a></div>
