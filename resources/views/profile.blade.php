@@ -73,43 +73,9 @@
                     <select required name="state" class="form-control @error('state') is-invalid @enderror">
                         <option hidden selected value="{{Auth::user()->state}}">{{Auth::user()->state}}</option>
                         <option {{!Auth::user()->state ? 'selected' : ''}} value="">Select State</option>
-                        <option value="Abia">Abia</option>
-                        <option value="Adamawa">Adamawa</option>
-                        <option value="Anambra">Anambra</option>
-                        <option value="Akwa Ibom">Akwa Ibom</option>
-                        <option value="Bauchi">Bauchi</option>
-                        <option value="Bayelsa">Bayelsa</option>
-                        <option value="Benue">Benue</option>
-                        <option value="Borno">Borno</option>
-                        <option value="Cross River">Cross River</option>
-                        <option value="Delta">Delta</option>
-                        <option value="Ebonyi">Ebonyi</option>
-                        <option value="Enugu">Enugu</option>
-                        <option value="Edo">Edo</option>
-                        <option value="Ekiti">Ekiti</option>
-                        <option value="Gombe">Gombe</option>
-                        <option value="Imo">Imo</option>
-                        <option value="Jigawa">Jigawa</option>
-                        <option value="Kaduna">Kaduna</option>
-                        <option value="Kano">Kano</option>
-                        <option value="Katsina">Katsina</option>
-                        <option value="Kebbi">Kebbi</option>
-                        <option value="Kogi">Kogi</option>
-                        <option value="Kwara">Kwara</option>
-                        <option value="Lagos">Lagos</option>
-                        <option value="Nasarawa">Nasarawa</option>
-                        <option value="Niger">Niger</option>
-                        <option value="Ogun">Ogun</option>
-                        <option value="Ondo">Ondo</option>
-                        <option value="Osun">Osun</option>
-                        <option value="Oyo">Oyo</option>
-                        <option value="Plateau">Plateau</option>
-                        <option value="Rivers">Rivers</option>
-                        <option value="Sokoto">Sokoto</option>
-                        <option value="Taraba">Taraba</option>
-                        <option value="Yobe">Yobe</option>
-                        <option value="Zamfara">Zamfara</option>
-                        <option value="FCT Abuja">FCT Abuja</option>
+                        @foreach(config('custom.states') as $state)
+                        <option value="{{$state}}">{{$state}}</option>
+                        @endforeach
                     </select>
                     @error('state')
                         <span class="invalid-feedback" role="alert">
@@ -122,26 +88,9 @@
                     <select required name="lga" class="form-control @error('lga') is-invalid @enderror">
                         <option hidden selected value="{{Auth::user()->lga}}">{{Auth::user()->lga}}</option>
                         <option  {{!Auth::user()->lga ? 'selected' : ''}} value="">Select LGA</option>
-                        <option value="Alimosho">Alimosho</option>
-                        <option value="Agege">Agege</option>
-                        <option value="Ajeromi Ifelodun">Ajeromi Ifelodun</option>
-                        <option value="Apapa">Apapa</option>
-                        <option value="Amuwo Odofin">Amuwo Odofin</option>
-                        <option value="Badagry">Badagry</option>
-                        <option value="Epe">Epe</option>
-                        <option value="Eti Osa">Eti Osa</option>
-                        <option value="Ibeju-Lekki">Ibeju-Lekki</option>
-                        <option value="Ifako Ijaiye">Ifako Ijaiye</option>
-                        <option value="Ikeja">Ikeja</option>
-                        <option value="Ikorodu">Ikorodu</option>
-                        <option value="Kosofe">Kosofe</option>
-                        <option value="Lagos Island">Lagos Island</option>
-                        <option value="Lagos Mainland">Lagos Mainland</option>
-                        <option value="Mushin">Mushin</option>
-                        <option value="Ojo">Ojo</option>
-                        <option value="Oshodi/Isolo">Oshodi/Isolo</option>
-                        <option value="Shomolu">Shomolu</option>
-                        <option value="Surulere">Surulere</option>
+                        @foreach(config('custom.lga') as $lga)
+                        <option value="{{$lga}}">{{$lga}}</option>
+                        @endforeach
                     </select>
                     @error('lga')
                         <span class="invalid-feedback" role="alert">
