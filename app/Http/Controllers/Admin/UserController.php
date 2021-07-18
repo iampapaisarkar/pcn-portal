@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\UserRole;
+use App\Models\Role;
 
 class UserController extends Controller
 {
@@ -12,9 +15,15 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+
     public function index()
     {
-        //
+        $perPage = 4;
+
+        $users = User::with('role')->latest()->paginate($perPage);
+
+        return view('admin.users.index', compact('users'));
     }
 
     /**
@@ -24,7 +33,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::get();
+
+        return view('admin.users.create', compact('roles'));
     }
 
     /**

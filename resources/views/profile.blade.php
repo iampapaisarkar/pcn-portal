@@ -51,7 +51,7 @@
                 </div>
                 <div class="col-md-4 form-group mb-3">
                     <label for="credit1">Profile Type</label>
-                    <input name="phone" class="form-control @error('phone') is-invalid @enderror" id="credit1" placeholder="Card" value="{{Auth::user()->role->role}}" readonly/>
+                    <input name="type" class="form-control @error('phone') is-invalid @enderror" id="credit1" placeholder="Card" value="{{Auth::user()->role->role}}" readonly/>
                     @error('type')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

@@ -33,4 +33,5 @@ Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], functi
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
+    Route::resource('users', 'App\Http\Controllers\Admin\UserController');
 });

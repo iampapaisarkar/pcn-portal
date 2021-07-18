@@ -60,7 +60,7 @@
                 <!-- Super admin routes start  -->
                 @can('isAdmin')
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}">
+                    <a href="{{route('users.index')}}">
                         <i class="nav-icon i-Receipt-4"></i>
                         <span class="item-name">Admin Users</span>
                     </a>
