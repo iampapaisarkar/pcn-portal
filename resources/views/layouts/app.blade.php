@@ -27,12 +27,12 @@
 
     <!-- Styles -->
     <!-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> -->
+    <script src="{{ asset('admin/dist-assets/js/plugins/jquery-3.3.1.min.js')}}"></script>
 </head>
 <body>
     <!-- <div id="app"> -->
     @include('layouts.page_templates.app')
     <!-- </div> -->
-    <script src="{{ asset('admin/dist-assets/js/plugins/jquery-3.3.1.min.js')}}"></script>
     <script src="{{ asset('admin/dist-assets/js/plugins/bootstrap.bundle.min.js')}}"></script>
     <script src="{{ asset('admin/dist-assets/js/plugins/perfect-scrollbar.min.js')}}"></script>
     <script src="{{ asset('admin/dist-assets/js/scripts/script.min.js')}}"></script>

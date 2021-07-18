@@ -17,11 +17,26 @@ class UserController extends Controller
      */
     
 
-    public function index()
-    {
-        $perPage = 4;
+    public function index(Request $request)
+    {   
+        $users = User::with('role');
 
-        $users = User::with('role')->latest()->paginate($perPage);
+        if($request->page){
+            $perPage = (integer) $request->page;
+        }else{
+            $perPage = 10;
+        }
+
+        if(!empty($request->search)){
+            $search = $request->search;
+            $users = $users->where(function($q) use ($search){
+                $q->where('firstname', 'like', '%' .$search. '%');
+                $q->orWhere('lastname', 'like', '%' .$search. '%');
+                $q->orWhere('email', 'like', '%' .$search. '%');
+            });
+        }
+
+        $users = $users->latest()->paginate($perPage);
 
         return view('admin.users.index', compact('users'));
     }
