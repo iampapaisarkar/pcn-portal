@@ -49,7 +49,7 @@
                 
                 <div class="col-md-6 form-group mb-3">
                     <label for="picker1">User Type</label>
-                    <select required name="type" class="form-control @error('state') is-invalid @enderror">
+                    <select id="userTypeField" required name="type" class="form-control @error('state') is-invalid @enderror">
                         @foreach($roles as $role)
                         <option value="{{$role->code}}">{{$role->role}}</option>
                         @endforeach
@@ -60,7 +60,7 @@
                         </span>
                     @enderror
                 </div>
-                <div class="col-md-6 form-group mb-3">
+                <div id="stateColumn" class="col-md-6 form-group mb-3" style="display:none;">
                     @php
                         $states = app('App\Http\Controllers\HomeController')->states();
                     @endphp
@@ -85,4 +85,15 @@
     </div>
 </div>
 </div>
+<script>
+$('#userTypeField').on('change', function() {
+    var value = this.value;
+    console.log("value", value)
+    if(value && value == 'state_office'){
+        $('#stateColumn').show();
+    }else{
+        $('#stateColumn').hide();
+    }
+});
+</script>
 @endsection
