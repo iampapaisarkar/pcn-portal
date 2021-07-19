@@ -86,4 +86,18 @@ class ProfileController extends Controller
         }  
 
     }
+
+    public function removeProfilePhoto(){
+
+        dd(0);
+        $fileName = auth()->user()->photo;
+        $destinationPath = 'images/';
+        File::delete($destinationPath.auth()->user()->photo);
+
+        auth()->user()->update([
+            'photo' => null
+        ]);
+
+        return back()->with('success','Profile photo removed successfully');
+    }
 }

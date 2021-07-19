@@ -94,6 +94,11 @@
                     <select {{!Auth::user()->lga ? 'disabled' : ''}} id="lgaField" required name="lga" class="form-control @error('lga') is-invalid @enderror">
                         <option hidden selected value="{{Auth::user()->user_lga->id}}">{{Auth::user()->user_lga->name}}</option>
                         <option  {{!Auth::user()->lga ? 'selected' : ''}} value="">Select LGA</option>
+                        @if(Auth::user()->lga)
+                            @foreach(Auth::user()->user_state->lga as $lga)
+                            <option value="{{$lga->id}}">{{$lga->name}}</option>
+                            @endforeach
+                        @endif
                     </select>
                     @error('lga')
                         <span class="invalid-feedback" role="alert">
@@ -112,11 +117,17 @@
                 </div>
                 <div class="col-md-4 form-group mb-3">
                     <label for="picker1">Passport Photo</label>
-                    <div class="custom-file">
+                    <div class="custom-file mb-3">
                     <input name="photo" type="file" name="color_passportsize" class="custom-file-input" id="inputGroupFile02" accept="image/*">
                     <label class="custom-file-label " for="inputGroupFile02" aria-describedby="inputGroupFileAddon02">Choose file</label>
                     </div>
-                    <img src="{{asset('images/' . Auth::user()->photo)}}" alt="" class="w-25">
+                    <div class="profilePreview">
+                        <img id="profile-pic-new-preview" src="" alt="" class="w-25">
+                        <img id="profile-pic-old-preview" src="{{asset('images/' . Auth::user()->photo)}}" alt="" class="w-25">
+                        <!-- @if(Auth::user()->photo)
+                            <a href="#">Remove photo</a>
+                        @endif -->
+                    </div>
                 </div>
                 @endcan
                 <div class="col-md-12">
@@ -132,7 +143,7 @@
     if(value && value.length != null){
         $('#lgaField').removeAttr('disabled');
         var lgas = <?php echo $lgas ?>;
-        var optionsHTML = '';
+        var optionsHTML = '<option selected value="">Select LGA</option>';
         lgas.forEach(lga => {
             if(lga.state_id == value){
                 optionsHTML += '<option value="'+lga.id+'">'+lga.name+'</option>'
@@ -144,5 +155,19 @@
         $('#lgaField').attr('disabled');
     }
 	});
+
+    // Passport Photo on upload preview 
+    inputGroupFile02.onchange = evt => {
+        const [file] = inputGroupFile02.files
+        if (file) {
+            $('#profile-pic-old-preview').hide();
+            $('#profile-pic-new-preview').attr('src', URL.createObjectURL(file));
+        }
+    }
 </script>
+<style>
+    .profilePreview img{
+        border-radius: 100%;
+    }
+</style>
 @endsection
