@@ -27,7 +27,7 @@
                 @endif
                 @if(Auth::user()->hasRole(['state_office']))
                 <h6>PCN State Office</h6>
-                <p>State Office</p>
+                <p>{{ucfirst(Auth::user()->user_state->name)}} State</p>
                 @endif
                 @if(Auth::user()->hasRole(['pharmacy_practice']))
                 <h6>PCN HQ Abuja</h6>
