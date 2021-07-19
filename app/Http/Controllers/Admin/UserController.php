@@ -68,7 +68,6 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        // dd($request->all());
         try {
             DB::beginTransaction();
 
@@ -107,8 +106,6 @@ class UserController extends Controller
                 'activation_url' =>env('APP_URL') . '/' . 'active-account?t=' . $user->activation_token . '&e=' . $request->email
             ];
 
-            // dd($data);
-
             // Send invitation email 
             Mail::to($request->email)->send(new InvitationEmail($data));
 
@@ -131,7 +128,18 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::with('role', 'user_state')
+        ->where('id', '!=', Auth::user()->id)
+        ->where('id', $id)
+        ->first();
+
+        $roles = Role::where('code', '!=', 'vendor')->get();
+
+        if($user){
+            return view('admin.users.show', compact('user', 'roles'));
+        }else{
+            return abort(404);
+        }
     }
 
     /**

@@ -58,7 +58,7 @@
                         @else
                         <td><span class="badge badge-warning">DISABLED</span></td>
                         @endif
-                        <td><a href="admin-users-view.php"><button class="btn btn-info" type="button">VIEW</button></a></td>
+                        <td><a href="{{route('users.show', $user->id)}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
                     </tr>
                     @endforeach
                 </tbody>
