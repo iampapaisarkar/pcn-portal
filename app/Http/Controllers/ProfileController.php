@@ -165,7 +165,7 @@ class ProfileController extends Controller
 
             DB::commit();
                 if($reponse == true){
-                    return redirect()->route('dashboard')->with('success','Password set and login successfully');
+                    return redirect()->route('dashboard')->with('success','Congratulations Account successfully activated');
                 }else{
                     return back()->with('error','There is something error, please try after some time');
                 }

@@ -34,7 +34,7 @@
                                 <label for="password-confirm">{{ __('Confirm Password') }}</label>
                                 <input class="form-control" name="password_confirmation" id="password-confirm" type="password" required autocomplete="password-confirm">
                             </div>
-                            <button type="submit" class="btn btn-primary btn-block btn mt-3">{{ __('Set Password') }}</button>
+                            <button type="submit" class="btn btn-primary btn-block btn mt-3">{{ __('Set Password & Active Account') }}</button>
                         </form>
                     </div>
                 </div>
