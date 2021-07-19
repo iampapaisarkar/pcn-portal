@@ -74,7 +74,9 @@
                     @endphp
                     <label for="picker1">State</label>
                     <select id="stateField" required name="state" class="form-control @error('state') is-invalid @enderror">
+                        @if(Auth::user()->state)
                         <option hidden selected value="{{Auth::user()->user_state->id}}">{{Auth::user()->user_state->name}}</option>
+                        @endif
                         <option {{!Auth::user()->state ? 'selected' : ''}} value="">Select State</option>
                         @foreach($states as $state)
                         <option value="{{$state->id}}">{{$state->name}}</option>
@@ -92,8 +94,10 @@
                     @endphp
                     <label for="picker1">LGA</label>
                     <select {{!Auth::user()->lga ? 'disabled' : ''}} id="lgaField" required name="lga" class="form-control @error('lga') is-invalid @enderror">
-                        <option hidden selected value="{{Auth::user()->user_lga->id}}">{{Auth::user()->user_lga->name}}</option>
-                        <option  {{!Auth::user()->lga ? 'selected' : ''}} value="">Select LGA</option>
+                    @if(Auth::user()->lga)
+                    <option hidden selected value="{{Auth::user()->user_lga->id}}">{{Auth::user()->user_lga->name}}</option>
+                    @endif
+                    <option  {{!Auth::user()->lga ? 'selected' : ''}} value="">Select LGA</option>
                         @if(Auth::user()->lga)
                             @foreach(Auth::user()->user_state->lga as $lga)
                             <option value="{{$lga->id}}">{{$lga->name}}</option>

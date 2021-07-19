@@ -78,7 +78,11 @@ class ProfileController extends Controller
 
             DB::commit();
 
-            return back()->with('success','Profile updated successfully');
+            if(Auth::user()->hasRole(['vendor'])){
+                return redirect()->route('dashboard')->with('success','Profile updated successfully');
+            }else{
+                return back()->with('success','Profile updated successfully');
+            }
 
         }catch(Exception $e) {
             DB::rollback();
@@ -87,17 +91,16 @@ class ProfileController extends Controller
 
     }
 
-    public function removeProfilePhoto(){
+    // public function removeProfilePhoto(){
 
-        dd(0);
-        $fileName = auth()->user()->photo;
-        $destinationPath = 'images/';
-        File::delete($destinationPath.auth()->user()->photo);
+    //     $fileName = auth()->user()->photo;
+    //     $destinationPath = 'images/';
+    //     File::delete($destinationPath.auth()->user()->photo);
 
-        auth()->user()->update([
-            'photo' => null
-        ]);
+    //     auth()->user()->update([
+    //         'photo' => null
+    //     ]);
 
-        return back()->with('success','Profile photo removed successfully');
-    }
+    //     return back()->with('success','Profile photo removed successfully');
+    // }
 }
