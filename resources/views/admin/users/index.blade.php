@@ -42,7 +42,7 @@
                         <th>Email</th>
                         <th>Type</th>
                         <th>State</th>
-                        <!-- <th>Status</th> -->
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -52,8 +52,12 @@
                         <td>{{$user->firstname . ' ' . $user->lastname}}</td>
                         <td>{{$user->email}}</td>
                         <td>{{$user->role->role}}</td>
-                        <td>{{$user->state ? $user->state : ''}}</td>
-                        <!-- <td><span class="badge badge-success">ACTIVE</span></td> -->
+                        <td>{{$user->user_state ? $user->user_state->name : '-'}}</td>
+                        @if($user->status == true)
+                        <td><span class="badge badge-success">ACTIVE</span></td>
+                        @else
+                        <td><span class="badge badge-warning">DISABLED</span></td>
+                        @endif
                         <td><a href="admin-users-view.php"><button class="btn btn-info" type="button">VIEW</button></a></td>
                     </tr>
                     @endforeach

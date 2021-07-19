@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -19,7 +20,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {   
-        $users = User::with('role');
+        $users = User::with('role', 'user_state')->where('id', '!=', Auth::user()->id);
 
         if($request->page){
             $perPage = (integer) $request->page;

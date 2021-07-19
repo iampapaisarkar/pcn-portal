@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
             'phone' => '+919002090020',
             'email' => 'admin@test.com',
             'email_verified_at' => now(),
+            'state' => null,
             'password' => Hash::make('123456'),
             'created_at' => now(),
             'updated_at' => now()
@@ -33,8 +34,9 @@ class UserSeeder extends Seeder
             'email' => 'state@test.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123456'),
+            'state' => 3,
             'created_at' => now(),
-            'updated_at' => now()
+            'updated_at' => now(),
             ],
             [
             'firstname' => 'Pharmacy',
@@ -43,6 +45,7 @@ class UserSeeder extends Seeder
             'email' => 'pharmacy@test.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123456'),
+            'state' => null,
             'created_at' => now(),
             'updated_at' => now()
             ],
@@ -53,6 +56,7 @@ class UserSeeder extends Seeder
             'email' => 'licence@test.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123456'),
+            'state' => null,
             'created_at' => now(),
             'updated_at' => now()
             ],
@@ -63,6 +67,7 @@ class UserSeeder extends Seeder
             'email' => 'vendor@test.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123456'),
+            'state' => null,
             'created_at' => now(),
             'updated_at' => now()
             ]
