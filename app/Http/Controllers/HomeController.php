@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\State;
+use App\Models\Lga;
 
 class HomeController extends Controller
 {
@@ -31,5 +32,11 @@ class HomeController extends Controller
     {
         $states = State::get();
         return $states;
+    }
+
+    public function lgas()
+    {
+        $lgas = Lga::get();
+        return $lgas;
     }
 }

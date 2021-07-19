@@ -61,11 +61,14 @@
                     @enderror
                 </div>
                 <div class="col-md-6 form-group mb-3">
+                    @php
+                        $states = app('App\Http\Controllers\HomeController')->states();
+                    @endphp
                     <label for="picker1">State (State Office)</label>
                     <select required name="state" class="form-control @error('state') is-invalid @enderror">
                         <option  value="">Select State</option>
-                        @foreach(config('custom.states') as $state)
-                        <option value="{{$state}}">{{$state}}</option>
+                        @foreach($states as $state)
+                        <option value="{{$state->id}}">{{$state->name}}</option>
                         @endforeach
                     </select>
                     @error('state')

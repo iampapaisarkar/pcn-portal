@@ -69,12 +69,15 @@
                     @enderror
                 </div>
                 <div class="col-md-4 form-group mb-3">
+                    @php
+                        $states = app('App\Http\Controllers\HomeController')->states();
+                    @endphp
                     <label for="picker1">State</label>
-                    <select required name="state" class="form-control @error('state') is-invalid @enderror">
-                        <option hidden selected value="{{Auth::user()->state}}">{{Auth::user()->state}}</option>
+                    <select id="stateField" required name="state" class="form-control @error('state') is-invalid @enderror">
+                        <option hidden selected value="{{Auth::user()->user_state->id}}">{{Auth::user()->user_state->name}}</option>
                         <option {{!Auth::user()->state ? 'selected' : ''}} value="">Select State</option>
-                        @foreach(config('custom.states') as $state)
-                        <option value="{{$state}}">{{$state}}</option>
+                        @foreach($states as $state)
+                        <option value="{{$state->id}}">{{$state->name}}</option>
                         @endforeach
                     </select>
                     @error('state')
@@ -84,13 +87,13 @@
                     @enderror
                 </div>
                 <div class="col-md-4 form-group mb-3">
+                    @php
+                        $lgas = app('App\Http\Controllers\HomeController')->lgas();
+                    @endphp
                     <label for="picker1">LGA</label>
-                    <select required name="lga" class="form-control @error('lga') is-invalid @enderror">
-                        <option hidden selected value="{{Auth::user()->lga}}">{{Auth::user()->lga}}</option>
+                    <select {{!Auth::user()->lga ? 'disabled' : ''}} id="lgaField" required name="lga" class="form-control @error('lga') is-invalid @enderror">
+                        <option hidden selected value="{{Auth::user()->user_lga->id}}">{{Auth::user()->user_lga->name}}</option>
                         <option  {{!Auth::user()->lga ? 'selected' : ''}} value="">Select LGA</option>
-                        @foreach(config('custom.lga') as $lga)
-                        <option value="{{$lga}}">{{$lga}}</option>
-                        @endforeach
                     </select>
                     @error('lga')
                         <span class="invalid-feedback" role="alert">
@@ -100,7 +103,7 @@
                 </div>
                 <div class="col-md-4 form-group mb-3">
                     <label for="picker2">Date of Birth</label>
-                    <input name="dob" class="form-control @error('dob') is-invalid @enderror" id="picker2" value="{{Auth::user()->dob}}" placeholder="dd-mm-yyyy" name="dp" required />
+                    <input type="date" name="dob" class="form-control @error('dob') is-invalid @enderror" id="picker2" value="{{Auth::user()->dob}}" placeholder="dd-mm-yyyy" name="dp" required />
                     @error('dob')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -123,4 +126,23 @@
         </form>
     </div>
 </div>
+<script>
+	$('#stateField').on('change', function() {
+	var value = this.value;
+    if(value && value.length != null){
+        $('#lgaField').removeAttr('disabled');
+        var lgas = <?php echo $lgas ?>;
+        var optionsHTML = '';
+        lgas.forEach(lga => {
+            if(lga.state_id == value){
+                optionsHTML += '<option value="'+lga.id+'">'+lga.name+'</option>'
+            }
+        });
+        $('#lgaField').html(optionsHTML);
+    }else{
+        $('#lgaField').html('<option selected value="">Select LGA</option>');
+        $('#lgaField').attr('disabled');
+    }
+	});
+</script>
 @endsection

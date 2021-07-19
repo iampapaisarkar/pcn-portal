@@ -12,4 +12,8 @@ class State extends Model
     protected $fillable = [
         'name'
     ];
+
+    public function lga() {
+        return $this->hasMany(Lga::class,'state_id', 'id');
+    }
 }
