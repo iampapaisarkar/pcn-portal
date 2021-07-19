@@ -4,9 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use App\Rules\CurrentPasswordCheckRule;
 use Storage;
 use DB;
 
@@ -103,4 +106,28 @@ class ProfileController extends Controller
 
     //     return back()->with('success','Profile photo removed successfully');
     // }
+
+    public function updatePassword(Request $request){
+
+        $authUser = Auth::user();
+
+        $user = User::find(auth()->user()->id);
+
+        $this->validate($request, [
+            'old_password' => ['required', new CurrentPasswordCheckRule],
+            'password' => ['confirmed','min:8','required_with:confirmed_password', 'different:old_password'],
+        ]);
+
+        if(!Hash::check($request->old_password, Auth::user()->password)){
+            // return redirect()->back()->withInput($request->only('password'))->with('error','Can not set old password as a new password');
+            return back()->with('error','Can not set old password as a new password');
+        }
+
+        auth()->user()->update([
+            'password' => Hash::make($request->get('password')),
+        ]);
+
+
+        return back()->with('success','Password updated successfully');
+    }
 }
