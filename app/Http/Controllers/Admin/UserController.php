@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\State;
 use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\User\UserStoreRequest;
+use DB;
+use App\Mail\InvitationEmail;
+use Mail;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -63,48 +68,57 @@ class UserController extends Controller
      */
     public function store(UserStoreRequest $request)
     {
-        // if($request->type == 'state_office'){
-        //     $this->validate($request, [
-        //         'firstname' => [
-        //             'required', 'min:3', 'max:255'
-        //         ],
-        //         'lastname' => [
-        //             'required', 'min:3', 'max:255'
-        //         ],
-        //         'email' => [
-        //             'required', Rule::unique((new User)->getTable())->ignore($this->route()->user ?? null)
-        //         ],
-        //         'phone' => [
-        //             'required'
-        //         ],
-        //         'type' => [
-        //             'required'
-        //         ],
-        //         'state' => [
-        //             'required'
-        //         ]
-        //     ]);
-        // }else{
-        //     $this->validate($request, [
-        //         'firstname' => [
-        //             'required', 'min:3', 'max:255'
-        //         ],
-        //         'lastname' => [
-        //             'required', 'min:3', 'max:255'
-        //         ],
-        //         'email' => [
-        //             'required', Rule::unique((new User)->getTable())->ignore($this->route()->user ?? null)
-        //         ],
-        //         'phone' => [
-        //             'required'
-        //         ],
-        //         'type' => [
-        //             'required'
-        //         ]
-        //     ]);
-        // }
+        // dd($request->all());
+        try {
+            DB::beginTransaction();
 
-        return back()->with('success','User added successfully');
+            // Get role 
+            $role = Role::where('code', $request->type)->first();
+
+            // Get State 
+            if($request->type == 'state_office'){
+                $state = State::where('id', $request->state)->first();
+            }
+
+            // Store user 
+            $user = User::create([
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'state' => $request->type == 'state_office' ? $request->state : null,
+                'activation_token' => Hash::make($request->email)
+            ]);
+
+            // Store role or type 
+            UserRole::create([
+                'user_id' => $user->id,
+                'role_id' => $role->id
+            ]);
+
+            $data = [
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'state' => $request->type == 'state_office' ? $state->name : null,
+                'role' => $role,
+                'activation_url' =>env('APP_URL') . '/' . 'active-account?t=' . $user->activation_token . '&e=' . $request->email
+            ];
+
+            // dd($data);
+
+            // Send invitation email 
+            Mail::to($request->email)->send(new InvitationEmail($data));
+
+            DB::commit();
+
+            return back()->with('success','User added & invitation email successfully send');
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
        
     }
 
