@@ -103,8 +103,12 @@
                     @enderror
                 </div>
                 @endif
+                <div class="col-md-6 form-group mb-2">
+                    <label for="">Status</label> <br>
+                    <input name="status" {{$user->status == true ? 'checked' : ''}} class="text-white" type="checkbox" data-toggle="toggle" data-on="ACTIVE" data-off="DISABLED" data-onstyle="success" data-offstyle="warning">
+                </div>
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </div>
         </form>
@@ -123,4 +127,12 @@ $('#userTypeField').on('change', function() {
     }
 });
 </script>
+<style>
+    .toggle-on{
+        color: white!important;
+    }
+    .toggle-off{
+        color: white!important;
+    }
+</style>
 @endsection

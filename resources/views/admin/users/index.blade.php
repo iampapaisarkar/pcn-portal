@@ -68,7 +68,7 @@
                         <th>Email</th>
                         <th>Type</th>
                         <th>State</th>
-                        <!-- <th>Status</th> -->
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>

@@ -163,8 +163,6 @@ class UserController extends Controller
      */
     public function update(UserUpdateRequest $request, $id)
     {
-        // dd($request->all());
-
         try {
             DB::beginTransaction();
 
@@ -176,6 +174,13 @@ class UserController extends Controller
                 $state = State::where('id', $request->state)->first();
             }
 
+            // Status 
+            if($request->status == 'on'){
+                $status = true;
+            }else{
+                $status = false;
+            }
+
             // Store user 
             User::where('id', $id)->update([
                 'firstname' => $request->firstname,
@@ -184,6 +189,7 @@ class UserController extends Controller
                 'phone' => $request->phone,
                 'state' => $request->type == 'state_office' ? $request->state : null,
                 'activation_token' => Hash::make($request->email),
+                'status' => $status
             ]);
 
             // Delete old role 
