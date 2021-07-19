@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserRole;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\User\UserStoreRequest;
 
 class UserController extends Controller
 {
@@ -60,9 +61,51 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(UserStoreRequest $request)
     {
-        //
+        // if($request->type == 'state_office'){
+        //     $this->validate($request, [
+        //         'firstname' => [
+        //             'required', 'min:3', 'max:255'
+        //         ],
+        //         'lastname' => [
+        //             'required', 'min:3', 'max:255'
+        //         ],
+        //         'email' => [
+        //             'required', Rule::unique((new User)->getTable())->ignore($this->route()->user ?? null)
+        //         ],
+        //         'phone' => [
+        //             'required'
+        //         ],
+        //         'type' => [
+        //             'required'
+        //         ],
+        //         'state' => [
+        //             'required'
+        //         ]
+        //     ]);
+        // }else{
+        //     $this->validate($request, [
+        //         'firstname' => [
+        //             'required', 'min:3', 'max:255'
+        //         ],
+        //         'lastname' => [
+        //             'required', 'min:3', 'max:255'
+        //         ],
+        //         'email' => [
+        //             'required', Rule::unique((new User)->getTable())->ignore($this->route()->user ?? null)
+        //         ],
+        //         'phone' => [
+        //             'required'
+        //         ],
+        //         'type' => [
+        //             'required'
+        //         ]
+        //     ]);
+        // }
+
+        return back()->with('success','User added successfully');
+       
     }
 
     /**
