@@ -6,8 +6,9 @@
 <div class="col-lg-12 col-md-12">
     <div class="card-body">
         <div class="card-title mb-3">Edit User</div>
-        <form method="PUT" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data" novalidate>
+        <form method="post" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data" novalidate>
         @csrf
+        @method('put')
             <div class="row">
             <div class="col-md-6 form-group mb-3">
                     <label for="firstName1">First name</label>

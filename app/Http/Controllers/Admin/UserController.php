@@ -10,6 +10,7 @@ use App\Models\UserRole;
 use App\Models\Role;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\User\UserStoreRequest;
+use App\Http\Requests\User\UserUpdateRequest;
 use DB;
 use App\Mail\InvitationEmail;
 use Mail;
@@ -160,9 +161,48 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UserUpdateRequest $request, $id)
     {
-        //
+        // dd($request->all());
+
+        try {
+            DB::beginTransaction();
+
+            // Get role 
+            $role = Role::where('code', $request->type)->first();
+
+            // Get State 
+            if($request->type == 'state_office'){
+                $state = State::where('id', $request->state)->first();
+            }
+
+            // Store user 
+            User::where('id', $id)->update([
+                'firstname' => $request->firstname,
+                'lastname' => $request->lastname,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'state' => $request->type == 'state_office' ? $request->state : null,
+                'activation_token' => Hash::make($request->email),
+            ]);
+
+            // Delete old role 
+            UserRole::where('user_id', $id)->delete();
+
+            // Store role or type 
+            UserRole::create([
+                'user_id' => $id,
+                'role_id' => $role->id
+            ]);
+
+            DB::commit();
+
+            return back()->with('success','User updated successfully');
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
     }
 
     /**
