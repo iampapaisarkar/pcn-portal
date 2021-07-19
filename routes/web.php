@@ -20,6 +20,8 @@ Route::get('/', function () {
         return view('auth.login');
     }
 });
+Route::get('/active-account', 'App\Http\Controllers\ProfileController@activeAccount')->name('active-account');
+Route::post('/activision-account', 'App\Http\Controllers\ProfileController@activisionAccount')->name('activision-account');
 
 Auth::routes(['verify' => true]);
 

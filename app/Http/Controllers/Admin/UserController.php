@@ -87,7 +87,8 @@ class UserController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'state' => $request->type == 'state_office' ? $request->state : null,
-                'activation_token' => Hash::make($request->email)
+                'activation_token' => Hash::make($request->email),
+                'email_verified_at' => now()
             ]);
 
             // Store role or type 

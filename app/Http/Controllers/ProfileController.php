@@ -119,7 +119,6 @@ class ProfileController extends Controller
         ]);
 
         if(!Hash::check($request->old_password, Auth::user()->password)){
-            // return redirect()->back()->withInput($request->only('password'))->with('error','Can not set old password as a new password');
             return back()->with('error','Can not set old password as a new password');
         }
 
@@ -129,5 +128,50 @@ class ProfileController extends Controller
 
 
         return back()->with('success','Password updated successfully');
+    }
+
+    public function activeAccount(Request $request){
+
+        if(User::where(['email' => $request->e, 'activation_token' => $request->t])->exists()){
+            $user = User::where(['email' => $request->e, 'activation_token' => $request->t])->first();
+            return view('active-account', compact($user));
+        }else{
+            return abort(404);
+        }
+    }
+
+    public function activisionAccount(Request $request){
+
+        try {
+            DB::beginTransaction();
+
+            if(User::where(['email' => $request->email, 'activation_token' => $request->token])->exists()){
+                $this->validate($request, [
+                    'password' => ['required', 'string', 'min:8', 'confirmed']
+                ]);
+
+                $user = User::where(['email' => $request->email, 'activation_token' => $request->token])->update([
+                    'activation_token' => null,
+                    'password' => Hash::make($request->password)
+                ]);
+
+                Auth::logout();
+                Auth::loginUsingId(User::where(['email' => $request->email])->first()->id);
+
+                $reponse = true;
+            }else{
+                $reponse = false;
+            }
+
+            DB::commit();
+                if($reponse == true){
+                    return redirect()->route('dashboard')->with('success','Password set and login successfully');
+                }else{
+                    return back()->with('error','There is something error, please try after some time');
+                }
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
     }
 }
