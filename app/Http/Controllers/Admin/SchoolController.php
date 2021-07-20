@@ -89,7 +89,15 @@ class SchoolController extends Controller
      */
     public function show($id)
     {
-        //
+        $school = School::with('school_state')
+        ->where('id', $id)
+        ->first();
+
+        if($school){
+            return view('admin.schools.show', compact('school'));
+        }else{
+            return abort(404);
+        }
     }
 
     /**
@@ -110,9 +118,27 @@ class SchoolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SchoolUpdateRequest $request, $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            // Update school 
+            School::where('id', $id)->update([
+                'name' => $request->name,
+                'code' => $this->sanitize($request->code),
+                'state' => $request->state,
+                'status' => $request->status == 'on' ? true : false
+            ]);
+
+            DB::commit();
+
+            return back()->with('success','School updated successfully');
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
     }
 
     public function sanitize($value) {

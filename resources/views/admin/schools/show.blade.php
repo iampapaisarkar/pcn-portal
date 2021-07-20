@@ -1,77 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-@include('layouts.navbars.breadcrumb', ['page' => 'Edit & View Users', 'route' => 'users.index'])
+@include('layouts.navbars.breadcrumb', ['page' => 'Edit Schools', 'route' => 'schools.index'])
 <div class="row">
 <div class="col-lg-12 col-md-12">
     <div class="card-body">
-        <div class="card-title mb-3">Edit User</div>
-        <form method="post" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data" novalidate>
+        <div class="card-title mb-3">Edit School</div>
+        <form method="POST" action="{{ route('schools.update', $school->id) }}" enctype="multipart/form-data" novalidate>
         @csrf
-        @method('put')
+        @method('PUT')
             <div class="row">
             <div class="col-md-6 form-group mb-3">
-                    <label for="firstName1">First name</label>
-                    <input value="{{ $user->firstname }}" name="firstname" class="form-control @error('firstname') is-invalid @enderror" id="firstName1" type="text" placeholder="Enter your first name" />
-                    @error('firstname')
+                    <label for="name1">School Name</label>
+                    <input value="{{ $school->name }}" name="name" class="form-control @error('name') is-invalid @enderror" id="name1" type="text" placeholder="Enter school name" />
+                    @error('name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
                 <div class="col-md-6 form-group mb-3">
-                    <label for="middleName1">Last name</label>
-                    <input value="{{ $user->lastname }}" name="lastname" class="form-control @error('lastname') is-invalid @enderror" id="middleName1" type="text" placeholder="Enter your middle name" />
-                    @error('lastname')
+                    <label for="code1">School Code</label>
+                    <input onkeyup="onCode(this)" value="{{ $school->code }}" name="code" class="form-control @error('code') is-invalid @enderror" id="code1" type="text" placeholder="Enter unique school code" />
+                    <small id="codeHelp" class="form-text text-muted">*please ensure that. code should look like, e.g: "test_test" OR "test-test"</small> 
+                    @error('code')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                     @enderror
                 </div>
                 <div class="col-md-6 form-group mb-3">
-                    <label for="exampleInputEmail1">Email address</label>
-                    <input value="{{ $user->email }}" name="email" class="form-control @error('email') is-invalid @enderror" id="exampleInputEmail1" type="email" placeholder="Enter email"/>
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> 
-                    @error('email')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div class="col-md-6 form-group mb-3">
-                    <label for="phone">Phone</label>
-                    <input value="{{ $user->phone }}" name="phone" class="form-control @error('phone') is-invalid @enderror" id="phone" placeholder="Enter phone"/>
-                    @error('phone')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                
-                <div class="col-md-6 form-group mb-3">
-                    <label for="picker1">User Type</label>
-                    <select id="userTypeField" required name="type" class="form-control @error('type') is-invalid @enderror">
-                        @foreach($roles as $role)
-                            @if($user->role->code && $user->role->code == $role->code)
-                            <option hidden selected value="{{$role->code}}">{{$role->role}}</option>
-                            @endif
-                        <option value="{{$role->code}}">{{$role->role}}</option>
-                        @endforeach
-                    </select>
-                    @error('type')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                <div id="stateColumn" class="col-md-6 form-group mb-3" style="display: none;">
                     @php
                         $states = app('App\Http\Controllers\HomeController')->states();
                     @endphp
-                    <label for="picker1">State (State Office)</label>
+                    <label for="picker1">State</label>
                     <select value="" required name="state" class="form-control @error('state') is-invalid @enderror">
                         <option  value="">Select State</option>
                         @foreach($states as $state)
+                        <option hidden {{ $school->state == $state->id ? 'selected' : '' }} value="{{$state->id}}">{{$state->name}}</option>
                         <option value="{{$state->id}}">{{$state->name}}</option>
                         @endforeach
                     </select>
@@ -81,52 +47,18 @@
                         </span>
                     @enderror
                 </div>
-                @if($user->role->code == 'state_office')
-                <div id="oldStateColumn" class="col-md-6 form-group mb-3">
-                    @php
-                        $states = app('App\Http\Controllers\HomeController')->states();
-                    @endphp
-                    <label for="picker1">State (State Office)</label>
-                    <select value="" required name="state" class="form-control @error('state') is-invalid @enderror">
-                        <option  value="">Select State</option>
-                        @foreach($states as $state)
-                            @if($user->state == $state->id)
-                            <option hidden selected value="{{$state->id}}">{{$state->name}}</option>
-                            @endif
-                        <option value="{{$state->id}}">{{$state->name}}</option>
-                        @endforeach
-                    </select>
-                    @error('state')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                </div>
-                @endif
-                <div class="col-md-6 form-group mb-2">
+                <div class="col-md-6 form-group mb-3">
                     <label for="">Status</label> <br>
-                    <input name="status" {{$user->status == true ? 'checked' : ''}} class="text-white" type="checkbox" data-toggle="toggle" data-on="ACTIVE" data-off="DISABLED" data-onstyle="success" data-offstyle="warning">
+                    <input name="status" {{$school->status == true ? 'checked' : ''}} class="text-white" type="checkbox" data-toggle="toggle" data-on="ACTIVE" data-off="DISABLED" data-onstyle="success" data-offstyle="warning">
                 </div>
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </div>
         </form>
     </div>
 </div>
 </div>
-<script>
-$('#userTypeField').on('change', function() {
-    var value = this.value;
-    if(value && value == 'state_office'){
-        $('#stateColumn').show();
-        $('#oldStateColumn').hide();
-    }else{
-        $('#stateColumn').hide();
-        $('#oldStateColumn').hide();
-    }
-});
-</script>
 <style>
     .toggle-on{
         color: white!important;
@@ -135,4 +67,25 @@ $('#userTypeField').on('change', function() {
         color: white!important;
     }
 </style>
+
+<script>
+function onCode(){
+    var str = $("#code1").val()
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+
+    // remove accents, swap ñ for n, etc
+    var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
+    var to   = "aaaaaeeeeeiiiiooooouuuunc------";
+    for (var i=0, l=from.length ; i<l ; i++) {
+    str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+    .replace(/-+/g, '-'); // collapse dashes
+    
+    $("#code1").val(str)
+}
+</script>
 @endsection
