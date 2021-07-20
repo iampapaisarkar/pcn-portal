@@ -78,7 +78,14 @@ class BatchController extends Controller
      */
     public function show($id)
     {
-        //
+        $batch = Batch::where('id', $id)
+        ->first();
+
+        if($batch){
+            return view('admin.batches.show', compact('batch'));
+        }else{
+            return abort(404);
+        }
     }
 
     /**
@@ -101,7 +108,32 @@ class BatchController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            DB::beginTransaction();
+
+            if(Batch::where(['id' => $id, 'status', true])){
+                // Update batch 
+                Batch::where('id', $id)->update([
+                    'status' => false
+                ]);
+                $response = true;
+            }else{
+                $response = false;
+            }
+           
+
+            DB::commit();
+
+            if($response == true){
+                return redirect()->route('batches.index')->with('success','Batch closed successfully');
+            }else{
+                return abort(404);
+            }
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
     }
 
     /**
