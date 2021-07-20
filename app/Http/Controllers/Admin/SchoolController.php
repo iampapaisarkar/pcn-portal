@@ -4,6 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\State;
+use App\Models\School;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\School\SchoolStoreRequest;
+use App\Http\Requests\School\SchoolUpdateRequest;
+use DB;
 
 class SchoolController extends Controller
 {
@@ -12,9 +18,27 @@ class SchoolController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $schools = School::with('school_state');
+
+        if($request->page){
+            $perPage = (integer) $request->page;
+        }else{
+            $perPage = 10;
+        }
+
+        if(!empty($request->search)){
+            $search = $request->search;
+            $schools = $schools->where(function($q) use ($search){
+                $q->where('name', 'like', '%' .$search. '%');
+                $q->orWhere('code', 'like', '%' .$search. '%');
+            });
+        }
+
+        $schools = $schools->latest()->paginate($perPage);
+
+        return view('admin.schools.index', compact('schools'));
     }
 
     /**
@@ -24,7 +48,7 @@ class SchoolController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.schools.create');
     }
 
     /**
@@ -33,9 +57,28 @@ class SchoolController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SchoolStoreRequest $request)
     {
-        //
+        // dd($request->all());
+        try {
+            DB::beginTransaction();
+
+            // Store school 
+            School::create([
+                'name' => $request->name,
+                'code' => $this->sanitize($request->code),
+                'state' => $request->state,
+                'status' => $request->status == 'on' ? true : false
+            ]);
+
+            DB::commit();
+
+            return back()->with('success','School added successfully');
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
     }
 
     /**
@@ -70,6 +113,26 @@ class SchoolController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function sanitize($value) {
+        $value = strip_tags($value);
+        // Preserve escaped octets.
+        $value = preg_replace('|%([a-fA-F0-9][a-fA-F0-9])|', '---$1---', $value);
+        // Remove percent signs that are not part of an octet.
+        $value = str_replace('%', '', $value);
+        // Restore octets.
+        $value = preg_replace('|---([a-fA-F0-9][a-fA-F0-9])---|', '%$1', $value);
+    
+        $value = strtolower($value);
+        $value = preg_replace('/&.+?;/', '', $value); // kill entities
+        $value = str_replace('.', '-', $value);
+        $value = preg_replace('/[^%a-z0-9 _-]/', '', $value);
+        $value = preg_replace('/\s+/', '-', $value);
+        $value = preg_replace('|-+|', '-', $value);
+        $value = trim($value, '-');
+    
+        return $value;
     }
 
     /**

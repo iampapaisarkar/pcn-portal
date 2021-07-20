@@ -17,7 +17,7 @@ class CreateSchoolsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code')->unique();
-            $table->integer('location');
+            $table->integer('state');
             $table->boolean('status')->default(true);
             $table->timestamps();
         });

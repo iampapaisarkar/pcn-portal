@@ -10,6 +10,10 @@ class School extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'code', 'location', 'status'
+        'name', 'code', 'state', 'status'
     ];
+
+    public function school_state() {
+        return $this->hasOne(State::class,'id', 'state');
+    }
 }

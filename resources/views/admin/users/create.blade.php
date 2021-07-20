@@ -20,7 +20,7 @@
                 </div>
                 <div class="col-md-6 form-group mb-3">
                     <label for="middleName1">Last name</label>
-                    <input value="{{ old('lastname') }}" name="lastname" class="form-control @error('lastname') is-invalid @enderror" id="middleName1" type="text" placeholder="Enter your middle name" />
+                    <input value="{{ old('lastname') }}" name="lastname" class="form-control @error('lastname') is-invalid @enderror" id="middleName1" type="text" placeholder="Enter your last name" />
                     @error('lastname')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>

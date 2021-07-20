@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-@include('layouts.navbars.breadcrumb', ['page' => 'Users', 'route' => 'users.index'])
+@include('layouts.navbars.breadcrumb', ['page' => 'Schools', 'route' => 'schools.index'])
 <div class="row">
 <div class="col-lg-12 col-md-12">
     <div class="card text-left">
     <div class="card-body">
-        <a href="{{route('users.create')}}"><button class="btn btn-primary" type="button">ADD USER</button></a>
+        <a href="{{route('schools.create')}}"><button class="btn btn-primary" type="button">ADD SCHOOL</button></a>
         <hr>
         <div class="table-responsive">
             <div class="row m-0">
@@ -38,42 +38,39 @@
             <table class="display table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Type</th>
+                        <th>School Name</th>
+                        <th>School Code</th>
                         <th>State</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($users as $user)
+                    @foreach($schools as $school)
                     <tr>
-                        <td>{{$user->firstname . ' ' . $user->lastname}}</td>
-                        <td>{{$user->email}}</td>
-                        <td>{{$user->role->role}}</td>
-                        <td>{{$user->user_state ? $user->user_state->name : '-'}}</td>
-                        @if($user->status == true)
+                        <td>{{$school->name}}</td>
+                        <td>{{$school->code}}</td>
+                        <td>{{$school->school_state ? $school->school_state->name : '-'}}</td>
+                        @if($school->status == true)
                         <td><span class="badge badge-success">ACTIVE</span></td>
                         @else
                         <td><span class="badge badge-warning">DISABLED</span></td>
                         @endif
-                        <td><a href="{{route('users.show', $user->id)}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
+                        <td><a href="{{route('schools.show', $school->id)}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
                     </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Type</th>
+                        <th>School Name</th>
+                        <th>School Code</th>
                         <th>State</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>
             </table>
-            {{$users->links('pagination')}}
+            {{$schools->links('pagination')}}
         </div>
     </div>
 </div>

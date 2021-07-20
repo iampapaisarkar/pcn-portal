@@ -38,5 +38,5 @@ Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], functi
 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
     Route::resource('users', 'App\Http\Controllers\Admin\UserController');
-    Route::resource('schools', 'App\Http\Controllers\Admin\LocationController');
+    Route::resource('schools', 'App\Http\Controllers\Admin\SchoolController');
 });
