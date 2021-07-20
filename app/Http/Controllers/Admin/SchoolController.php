@@ -59,7 +59,6 @@ class SchoolController extends Controller
      */
     public function store(SchoolStoreRequest $request)
     {
-        // dd($request->all());
         try {
             DB::beginTransaction();
 
