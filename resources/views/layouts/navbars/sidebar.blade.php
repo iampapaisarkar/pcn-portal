@@ -78,7 +78,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}">
+                    <a href="{{route('services.index')}}">
                         <i class="nav-icon i-Receipt-4"></i>
                         <span class="item-name">Service Fees</span>
                     </a>

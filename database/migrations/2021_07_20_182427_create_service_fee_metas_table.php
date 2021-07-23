@@ -15,7 +15,7 @@ class CreateServiceFeeMetasTable extends Migration
     {
         Schema::create('service_fee_metas', function (Blueprint $table) {
             $table->id();
-            $table->integer('service_fee_id');
+            $table->integer('service_id');
             $table->string('description');
             $table->float('amount', 10, 2);
             $table->boolean('status')->default(true);

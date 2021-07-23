@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\ServiceFee;
+use App\Models\Service;
 
-class ServiceFeeSeeder extends Seeder
+class ServiceSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,18 +14,21 @@ class ServiceFeeSeeder extends Seeder
      */
     public function run()
     {
-        $fees = [
+        $services = [
             [
             'description' => 'MEPTP Training Fees',
+            'updated_at' => now()
             ],
             [
             'description' => 'Tiered PPMV Registration Fees',
+            'updated_at' => now()
             ],
             [
             'description' => 'Tiered PPMV Renewal Fees',
+            'updated_at' => now()
             ],
         ];
 
-        ServiceFee::insert($fees);
+        Service::insert($services);
     }
 }
