@@ -27,7 +27,12 @@ class UserController extends Controller
 
     public function index(Request $request)
     {   
-        $users = User::with('role', 'user_state')->where('id', '!=', Auth::user()->id);
+        $users = User::select('users.*')
+        ->with('role', 'user_state')
+        ->join('user_roles', 'users.id', 'user_roles.user_id')
+        ->join('roles', 'user_roles.role_id', 'roles.id')
+        ->where('roles.code', '!=', 'vendor')
+        ->where('users.id', '!=', Auth::user()->id);
 
         if($request->page){
             $perPage = (integer) $request->page;
@@ -38,9 +43,9 @@ class UserController extends Controller
         if(!empty($request->search)){
             $search = $request->search;
             $users = $users->where(function($q) use ($search){
-                $q->where('firstname', 'like', '%' .$search. '%');
-                $q->orWhere('lastname', 'like', '%' .$search. '%');
-                $q->orWhere('email', 'like', '%' .$search. '%');
+                $q->where('users.firstname', 'like', '%' .$search. '%');
+                $q->orWhere('users.lastname', 'like', '%' .$search. '%');
+                $q->orWhere('users.email', 'like', '%' .$search. '%');
             });
         }
 
@@ -82,7 +87,7 @@ class UserController extends Controller
 
             // Store user 
             $user = User::create([
-                'firstname' => $request->firstname,
+                'users.firstname' => $request->firstname,
                 'lastname' => $request->lastname,
                 'email' => $request->email,
                 'phone' => $request->phone,
