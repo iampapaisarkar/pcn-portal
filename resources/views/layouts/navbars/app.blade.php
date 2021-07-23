@@ -25,8 +25,7 @@
                     </div>
                     <a class="dropdown-item" href="{{route('profile')}}">Profile Settings</a>
                     <a class="dropdown-item" href="#">Billing History</a>
-                    <a onclick="event.preventDefault();
-                    document.getElementById('logout-form').submit();" class="dropdown-item" href="#">Sign Out</a>
+                    <a onclick="logout(event)" class="dropdown-item" href="#">Sign Out</a>
                 </div>
             </div>
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -35,3 +34,28 @@
         </div>
     </div>
 </div>
+
+<script>
+	function logout(event){
+		event.preventDefault();
+
+		$.confirm({
+			title: 'Logout',
+			content: 'Are you sure want to logout?',
+			buttons: {   
+				ok: {
+					text: "YES",
+					btnClass: 'btn-primary',
+					keys: ['enter'],
+					action: function(){
+						document.getElementById('logout-form').submit();
+					}
+				},
+				cancel: function(){
+						console.log('the user clicked cancel');
+				}
+			}
+		});
+
+	}
+</script>
