@@ -6,29 +6,37 @@
     <div class="col-lg-12 col-md-12">
         <div class="card text-left">
             <div class="card-body">
-                <h2 class=" mb-6">Services Fees Management</h2>
+                <a href="{{route('services-fee.create', 'service=' . $service->id)}}"><button class="btn btn-primary" type="button">ADD FEE</button></a>
+                <hr>
+                @if(!$service->fees->isEmpty())
                 <div class="table-responsive">
                     <table class="display table table-striped table-bordered" style="width:100%">
                         <thead>
                             <tr>
                                 <th>Description</th>
-                                <th>Last Updated</th>
+                                <th>Amount</th>
+                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($serviceFees as $service)
-                            <tr>
-                                <td>{{$service->description}}</td>
-                                <td> <p><span class="rounded badge w-badge badge-success">
-                                        Updated {{$service->updated_at->format('d-M-Y')}}
+                                @foreach($service->fees as $fee)
+                                <tr>
+                                    <td>{{$fee->description}}</td>
+                                    <td>N{{$fee->amount}}</td>
+                                    <td><p><span
+                                    class="badge badge-pill m-1 {{ $fee->status ? 'badge-success' : 'badge-warning' }}">
+                                    {{ $fee->status ? 'ACTIVE' : 'DISABLED' }}
                                     </span></p></td>
-                                <td><a href="{{route('services-fee.index', $service->id)}}"><button class="btn btn-info" type="button">MANAGE</button></a></td>
-                            </tr>
-                            @endforeach
+                                    <td><a href="{{route('services-fee.show', $fee->id)}}?service={{$service->id}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
+                                </tr>
+                                @endforeach
                         </tbody>
                     </table>
                 </div>
+                @else
+                <span>No results found!</span>
+                @endif
             </div>
         </div>
     </div>

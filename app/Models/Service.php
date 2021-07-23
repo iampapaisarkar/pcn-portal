@@ -13,7 +13,11 @@ class Service extends Model
         'description'
     ];
 
-    public function metas() {
-        return $this->hasMany(ServiceFeeMeta::class,'service_fee_id', 'id');
+    public function fees() {
+        return $this->hasMany(ServiceFeeMeta::class,'service_id', 'id');
+    }
+
+    public function isServiceExist($id){
+        return $this->where('id', $id)->exists();
     }
 }
