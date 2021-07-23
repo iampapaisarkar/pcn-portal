@@ -35,7 +35,11 @@ class BatchController extends Controller
      */
     public function create()
     {
-        return view('admin.batches.create');
+        if(!Batch::where('status', true)->exists()){
+            return view('admin.batches.create');
+        }else{
+            return back()->with('error','You can\'t create a new batch. while another batch is activate');
+        }
     }
 
     /**
@@ -54,15 +58,26 @@ class BatchController extends Controller
         try {
             DB::beginTransaction();
 
-            // Store batch 
-            Batch::create([
-                'batch_no' => $request->batch_no,
-                'year' => $request->year,
-            ]);
+            if(!Batch::where('status', true)->exists()){
+                // Store batch 
+                Batch::create([
+                    'batch_no' => $request->batch_no,
+                    'year' => $request->year,
+                ]);
+
+                $response = true;
+            }else{
+                $response = false;
+            }
+            
 
             DB::commit();
 
-            return back()->with('success','Batch added successfully');
+            if($response == true){
+                return back()->with('success','Batch added successfully');
+            }else{
+                return back()->with('error','You can\'t create a new batch. while another batch is activate');
+            }
 
         }catch(Exception $e) {
             DB::rollback();
@@ -114,7 +129,8 @@ class BatchController extends Controller
             if(Batch::where(['id' => $id, 'status', true])){
                 // Update batch 
                 Batch::where('id', $id)->update([
-                    'status' => false
+                    'status' => false,
+                    'closed_at' => now(),
                 ]);
                 $response = true;
             }else{

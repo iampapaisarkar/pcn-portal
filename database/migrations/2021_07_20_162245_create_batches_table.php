@@ -18,6 +18,7 @@ class CreateBatchesTable extends Migration
             $table->integer('batch_no');
             $table->integer('year');
             $table->boolean('status')->default(true);
+            $table->date('closed_at')->nullable();
             $table->timestamps();
         });
     }

@@ -17,10 +17,13 @@
                         <div class="card-body text-center"><i class="i-Students"></i>
                             <p class="text-muted mt-2 mb-2">Batch Number</p>
                             <p class="text-primary text-40 line-height-1 m-0">{{$batch->year}}</p>
-                            <p><span class="badge badge-pill p-2 m-1 {{ $batch->status ? 'badge-outline-success' : 'badge-outline-danger' }}">
-                            {{ $batch->status ? 'ACTIVE' : 'DISABLED' }}
-                            </span></p>
-                            <p><span class="badge w-badge {{ $batch->status ? 'badge-success' : 'badge-danger' }}">{{$batch->created_at->format('d-M-Y')}}</span></p>
+                            <p><span
+                                    class="badge badge-pill p-2 m-1 {{ $batch->status ? 'badge-outline-success' : 'badge-outline-danger' }}">
+                                    {{ $batch->status ? 'ACTIVE' : 'DISABLED' }}
+                                </span></p>
+                            <p><span class="badge w-badge {{ $batch->status ? 'badge-success' : 'badge-danger' }}">
+                                    {{ $batch->status ? $batch->created_at->format('d-M-Y') : $batch->closed_at->format('d-M-Y')}}
+                                </span></p>
                         </div>
                     </a>
                 </div>

@@ -9,7 +9,11 @@ class Batch extends Model
 {
     use HasFactory;
 
+    protected $dates = [
+        'closed_at'
+    ];
+
     protected $fillable = [
-        'batch_no', 'year', 'status'
+        'batch_no', 'year', 'status', 'closed_at'
     ];
 }
