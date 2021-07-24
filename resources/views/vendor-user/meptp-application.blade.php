@@ -6,10 +6,8 @@
     <div class="col-lg-12 col-md-12">
         <div class="card-body">
             <!--begin::form-->
-            <form method="POST" action="tppmv-metpt-invoice.php" enctype="multipart/form-data"><input name="_token"
-                    type="hidden">
-                <input type="hidden" name="_token" value="8abYHncZyjFCfeQqdvp891Ipt7qgcQc0beYIZXOu">
-
+            <form method="POST" action="{{ route('meptp-application-submit') }}" enctype="multipart/form-data" novalidate>
+            @csrf
                 <h4>Vendor Details</h4>
                 <div class="row">
                     <div class="form-group col-md-6">
@@ -168,8 +166,8 @@
 
                     <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Shop Email:</label>
-                        <input name="shop_phone" class="form-control @error('shop_email') is-invalid @enderror"
-                        value="{{ old('shop_phone') }}"
+                        <input type="email" name="shop_email" class="form-control @error('shop_email') is-invalid @enderror"
+                        value="{{ old('shop_email') }}"
                         id="shop_email" placeholder="Enter shop email" />
                         @error('shop_email')
                         <span class="invalid-feedback" role="alert">
@@ -206,13 +204,18 @@
                         @php
                         $states = app('App\Http\Services\BasicInformation')->states();
                         @endphp
+                        @foreach($states as $state)
+                            @if(old('state') == $state->id)
+                            @php $old_state = $state; @endphp
+                            @endif
+                        @endforeach
                         <select id="stateField" required name="state"
                             class="form-control @error('state') is-invalid @enderror">
-                            <option {{ old('state') ? '' : 'seleted' }} hidden value="">Select State</option>
+                            @if(isset($old_state))
+                            <option seleted hidden value="{{ $old_state->id }}">{{ $old_state->name }}</option>
+                            @endif
+                            <option {{ !isset($old_state) ? 'seleted' : '' }} hidden value="">Select State</option>
                             @foreach($states as $state)
-                                @if(old('state') == $state->id)
-                                <option {{ old('state') ? 'seleted' : '' }} hidden value="{{ $state->id }}">{{ $state->name }}</option>
-                                @endif
                             <option value="{{$state->id}}">{{$state->name}}</option>
                             @endforeach
                         </select>
@@ -223,19 +226,27 @@
                         @enderror
                     </div>
 
-                    @if(old('state'))
+                    @if(isset($old_state))
                     <div class="form-group col-md-3">
                         <label for="lgaField" class="ul-form__label">LGA: </label>
                         @php
                         $lgas = app('App\Http\Services\BasicInformation')->lgas();
                         @endphp
+                        @foreach($lgas as $lga)
+                            @if(old('lga') == $lga->id)
+                            @php $old_lga = $lga; @endphp
+                            @endif
+                        @endforeach
                         <select id="lgaField" required name="lga"
                             class="form-control @error('lga') is-invalid @enderror">
+                            @if(isset($old_lga))
+                            <option seleted hidden value="{{ $old_lga->id }}">{{ $old_lga->name }}</option>
+                            @endif
+                            <option {{ !isset($old_lga) ? 'seleted' : '' }} hidden value="">Select Lga</option>
                             @foreach($lgas as $lga)
-                            @if(old('state') == $lga->state_id)
+                            @if($old_state->id == $lga->state_id)
                             <option value="{{$lga->id}}">{{$lga->name}}</option>
                             @endif
-                            <option value="{{$lga->id}}">{{$lga->name}}</option>
                             @endforeach
                         </select>
                         @error('lga')
@@ -273,10 +284,10 @@
                         <label for="inputEmail3" class="ul-form__label">Are you registered? </label>
                         <select id="is_registeredField" required name="is_registered"
                             class="form-control @error('is_registered') is-invalid @enderror">
-                            <option {{old('is_registered') ? '' : 'selected'}} hidden value="">Select</option>
+                            <option selected hidden value="">Select</option>
                             @if(old('is_registered') == 'yes')
                             <option selected hidden value="yes">Yes</option>
-                            @else
+                            @elseif(old('is_registered') == 'no')
                             <option selected hidden value="no">No</option>
                             @endif
                             <option value="yes">Yes</option>
@@ -289,7 +300,7 @@
                         @enderror
                     </div>
 
-                    <div id="ppmvl_noField" style="{{old('ppmvl_no') ? old('ppmvl_no') : 'display: none;'}}" class="form-group col-md-4">
+                    <div id="ppmvl_noField" style="{{old('is_registered') == 'yes' ? 'display: block;' : 'display: none;'}}" class="form-group col-md-4">
                         <label for="inputEmail3" class="ul-form__label">PPMVL Number :</label>
                         <input name="ppmvl_no" class="form-control @error('ppmvl_no') is-invalid @enderror"
                         value="{{old('ppmvl_no')}}"
@@ -313,13 +324,18 @@
                         @php
                         $schools = app('App\Http\Services\BasicInformation')->schools();
                         @endphp
+                        @foreach($schools as $school)
+                            @if(old('school') == $school->id)
+                            @php $old_school = $school; @endphp
+                            @endif
+                        @endforeach
                         <select id="schoolField" required name="school"
                             class="form-control @error('school') is-invalid @enderror">
-                            <option {{ old('school') ? '' : 'seleted' }} hidden value="">Select school</option>
+                            @if(isset($old_school))
+                            <option seleted hidden value="{{ $old_school->id }}">{{ $old_school->name }}</option>
+                            @endif
+                            <option {{ !isset($old_school) ? 'seleted' : '' }} hidden value="">Select School</option>
                             @foreach($schools as $school)
-                                @if(old('school') == $school->id)
-                                <option {{ old('school') ? 'seleted' : '' }} hidden value="{{ $school->id }}">{{ $school->name }}</option>
-                                @endif
                             <option value="{{$school->id}}">{{$school->name}}</option>
                             @endforeach
                         </select>
@@ -336,7 +352,6 @@
                             <div class="col-lg-12">
                                 <button type="submit" class="btn  btn-primary m-1" id="save" name="save">Submit MEPTP
                                     Application</button>
-
                             </div>
                         </div>
                     </div>

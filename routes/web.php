@@ -46,5 +46,8 @@ Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
 
 Route::group(['middleware' => ['auth','verified', 'can:isVendor']], function () {
     Route::resource('services-fee', 'App\Http\Controllers\Admin\Service\ServiceFeeController');
+
 	Route::get('/meptp-application', function () { return view('vendor-user.meptp-application'); })->name('meptp-application');
+    Route::post('/meptp-application-submit', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationSubmit')->name('meptp-application-submit');
+
 });
