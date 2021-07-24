@@ -188,7 +188,7 @@
                 <!-- Vendor routes start  -->
                 @can('isVendor')
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}">
+                    <a href="{{route('meptp-application')}}">
                         <i class="nav-icon i-Receipt-4"></i>
                         <span class="item-name">MEPTP Application</span>
                     </a>

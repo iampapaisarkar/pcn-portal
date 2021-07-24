@@ -79,7 +79,7 @@
                 </div>
                 <div class="col-md-4 form-group mb-3">
                     @php
-                    $states = app('App\Http\Controllers\HomeController')->states();
+                    $states = app('App\Http\Services\BasicInformation')->states();
                     @endphp
                     <label for="picker1">State</label>
                     <select id="stateField" required name="state"
@@ -101,7 +101,7 @@
                 </div>
                 <div class="col-md-4 form-group mb-3">
                     @php
-                    $lgas = app('App\Http\Controllers\HomeController')->lgas();
+                    $lgas = app('App\Http\Services\BasicInformation')->lgas();
                     @endphp
                     <label for="picker1">LGA</label>
                     <select {{!Auth::user()->lga ? 'disabled' : ''}} id="lgaField" required name="lga"

@@ -66,7 +66,7 @@
                 </div>
                 <div id="stateColumn" class="col-md-6 form-group mb-3" style="display: none;">
                     @php
-                        $states = app('App\Http\Controllers\HomeController')->states();
+                        $states = app('App\Http\Services\BasicInformation')->states();
                     @endphp
                     <label for="picker1">State (State Office)</label>
                     <select value="" required name="state" class="form-control @error('state') is-invalid @enderror">
@@ -84,7 +84,7 @@
                 @if($user->role->code == 'state_office')
                 <div id="oldStateColumn" class="col-md-6 form-group mb-3">
                     @php
-                        $states = app('App\Http\Controllers\HomeController')->states();
+                        $states = app('App\Http\Services\BasicInformation')->states();
                     @endphp
                     <label for="picker1">State (State Office)</label>
                     <select value="" required name="state" class="form-control @error('state') is-invalid @enderror">

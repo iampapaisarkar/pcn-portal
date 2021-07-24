@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-md-6 form-group mb-3">
                     @php
-                        $states = app('App\Http\Controllers\HomeController')->states();
+                        $states = app('App\Http\Services\BasicInformation')->states();
                     @endphp
                     <label for="picker1">State</label>
                     <select value="" required name="state" class="form-control @error('state') is-invalid @enderror">
