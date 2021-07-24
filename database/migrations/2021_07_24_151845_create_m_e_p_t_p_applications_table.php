@@ -27,7 +27,7 @@ class CreateMEPTPApplicationsTable extends Migration
             $table->integer('state');
             $table->integer('lga');
             $table->boolean('is_registered')->default(false);
-            $table->string('ppmvl_no');
+            $table->string('ppmvl_no')->nullable();
             $table->integer('traing_centre');
             $table->string('status');
             $table->timestamps();
