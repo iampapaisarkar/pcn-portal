@@ -23,7 +23,7 @@
                                 @foreach($service->fees as $fee)
                                 <tr>
                                     <td>{{$fee->description}}</td>
-                                    <td>N{{$fee->amount}}</td>
+                                    <td>N{{number_format($fee->amount)}}</td>
                                     <td><p><span
                                     class="badge badge-pill m-1 {{ $fee->status ? 'badge-success' : 'badge-warning' }}">
                                     {{ $fee->status ? 'ACTIVE' : 'DISABLED' }}

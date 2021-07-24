@@ -74,7 +74,7 @@ class BatchController extends Controller
             DB::commit();
 
             if($response == true){
-                return back()->with('success','Batch added successfully');
+                return redirect()->route('batches.index')->with('success','Batch added successfully');
             }else{
                 return back()->with('error','You can\'t create a new batch. while another batch is activate');
             }

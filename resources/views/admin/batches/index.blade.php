@@ -16,7 +16,7 @@
                     <a href="{{ $batch->status ? route('batches.show', $batch->id) : '#' }}">
                         <div class="card-body text-center"><i class="i-Students"></i>
                             <p class="text-muted mt-2 mb-2">Batch Number</p>
-                            <p class="text-primary text-40 line-height-1 m-0">{{$batch->year}}</p>
+                            <p class="text-primary text-40 line-height-1 m-0">{{$batch->batch_no}}-{{$batch->year}}</p>
                             <p><span
                                     class="badge badge-pill p-2 m-1 {{ $batch->status ? 'badge-outline-success' : 'badge-outline-danger' }}">
                                     {{ $batch->status ? 'ACTIVE' : 'DISABLED' }}
