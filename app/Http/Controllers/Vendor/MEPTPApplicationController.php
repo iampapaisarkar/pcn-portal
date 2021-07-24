@@ -15,6 +15,7 @@ use Storage;
 class MEPTPApplicationController extends Controller
 {
     public function applicationForm(){
+
         return view('vendor-user.meptp-application');
     }
     
