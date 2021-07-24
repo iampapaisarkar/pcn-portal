@@ -414,9 +414,4 @@ $('#is_registeredField').on('change', function() {
     }
 });
 </script>
-<style>
-.profilePreview img {
-    border-radius: 100%;
-}
-</style>
 @endsection

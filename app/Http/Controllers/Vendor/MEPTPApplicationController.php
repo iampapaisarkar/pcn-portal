@@ -8,11 +8,16 @@ use App\Http\Services\FileUpload;
 use App\Http\Requests\MEPTP\MEPTPApplicationRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MEPTPApplication;
+use App\Models\Batch;
 use DB;
 use Storage;
 
 class MEPTPApplicationController extends Controller
 {
+    public function applicationForm(){
+        return view('vendor-user.meptp-application');
+    }
+    
     public function applicationSubmit(MEPTPApplicationRequest $request){
 
         try {
@@ -44,6 +49,7 @@ class MEPTPApplicationController extends Controller
                 'is_registered' => $request->is_registered == 'yes' ? true : false,
                 'ppmvl_no' => $request->is_registered == 'yes' ? $request->ppmvl_no : NULL,
                 'traing_centre' => $request->school,
+                'batch_id' => Batch::where('status', true)->first()->id,
                 'status' => 'pending',
             ]);
 
@@ -55,5 +61,9 @@ class MEPTPApplicationController extends Controller
             DB::rollback();
             return back()->with('error','There is something error, please try after some time');
         }  
+    }
+
+    public function applicationStatus(){
+        return view('vendor-user.meptp-application-status');
     }
 }
