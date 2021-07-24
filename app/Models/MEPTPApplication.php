@@ -12,6 +12,23 @@ class MEPTPApplication extends Model
     protected $fillable = [
         'vendor_id', 'birth_certificate', 'educational_certificate', 'academic_certificate',
         'shop_name', 'shop_phone', 'shop_email', 'shop_address', 'city', 
-        'state', 'lga', 'is_registered', 'ppmvl_no', 'traing_centre', 'status'
+        'state', 'lga', 'is_registered', 'ppmvl_no','traing_centre', 'batch_id',  'status'
     ];
+
+    public function user_state() {
+        return $this->hasOne(State::class,'id', 'state');
+    }
+
+    public function user_lga() {
+        return $this->hasOne(Lga::class,'id', 'lga');
+    }
+
+    public function school() {
+        return $this->hasOne(School::class,'id', 'traing_centre');
+    }
+
+    public function batch() {
+        return $this->hasOne(Batch::class,'id', 'batch_id');
+    }
+
 }
