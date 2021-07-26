@@ -27,42 +27,57 @@ class BasicInformation
 
         $vendorApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id])
                             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id');
-                            // ->where('batches.status', '=', false);
-                            // ->where('m_e_p_t_p_applications.status', '=', 'approved_card_generated');
-
-                            // dd($batches->exists());
+                            
        if($vendorApplication->exists() && $vendorApplication->where('m_e_p_t_p_applications.payment', false)->exists()){
             return $response = [
                 'success' => false,
                 'message' => 'Application already submited but there have an payment issue. please re-payment from "Invoice" tab.',
             ];
-        }else if($vendorApplication->exists() && $vendorApplication->where('batches.status', '=', true)->exists()){
+        }if($vendorApplication->exists() && $vendorApplication->where('batches.status', '=', true)->exists()){
             return $response = [
                 'success' => false,
                 'message' => 'Currently not able to able submit new application. Your previous application still inprogress.',
             ];
-        }else if($vendorApplication->exists() && $vendorApplication->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')->exists()){
+        }
+        if($vendorApplication->exists() && $vendorApplication->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')->exists()){
             return $response = [
                 'success' => false,
                 'message' => 'Currently not able to able submit new application. Your previous application still inprogress.',
             ];
-        }else if($vendorApplication->exists() && $vendorApplication->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')->exists() && $batches->exists()){
+        }
+        if($vendorApplication->exists() && $vendorApplication->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')->exists() && $batches->exists()){
             return $response = [
                 'success' => false,
                 'message' => 'Currently not able to able submit new application. Your previous application still inprogress.',
             ];
-        }else if(!$batches->exists()){
+        }
+        if(!$batches->exists()){
             return $response = [
                 'success' => false,
                 'message' => 'No active batch found.',
             ];
         }
-        else{
+        
             return $response = [
                 'success' => true
             ];
-        }
-        
+            
+        //    if($vendorApplication->exists() && 
+        //    $vendorApplication->where('m_e_p_t_p_applications.payment', false)->exists() ||
+        //    $vendorApplication->where('batches.status', '=', true)->exists() ||
+        //    $vendorApplication->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')->exists() ||
+        //    ($vendorApplication->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')->exists() && $batches->exists()) ||
+        //    !$batches->exists()
+        //    ){
+        //         return $response = [
+        //             'success' => false,
+        //             'message' => 'No active batch found OR Application already submited.',
+        //         ];
+        //     }else{
+        //         return $response = [
+        //             'success' => true
+        //         ];
+        //     }
 
     }
 

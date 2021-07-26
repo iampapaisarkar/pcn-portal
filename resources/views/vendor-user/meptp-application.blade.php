@@ -13,7 +13,7 @@
                 <h4>Vendor Details</h4>
                 <div class="row">
                     <div class="form-group col-md-6">
-                        <img style="width: 25%;" src="{{Auth::user()->photo ? asset(Auth::user()->photo) : asset('admin/dist-assets/images/avatar.jpg') }}" alt="">
+                        <img style="width: 25%;" src="{{Auth::user()->photo ? asset('images/' . Auth::user()->photo) : asset('admin/dist-assets/images/avatar.jpg') }}" alt="">
                     </div>
                     <div class="form-group col-md-6">
                         <h3>Batch Details: {{app('App\Http\Services\BasicInformation')->activeBatch()->batch_no . '/' . app('App\Http\Services\BasicInformation')->activeBatch()->year}}<h3>

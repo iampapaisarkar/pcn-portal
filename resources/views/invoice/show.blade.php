@@ -5,10 +5,10 @@
 <div class="row">
     <div class="col-lg-12 col-md-12">
         <div class="d-sm-flex mb-5" data-view="print"><span class="m-auto"></span>
-            <button class="btn btn-primary mb-sm-0 mb-3 print-invoice">Print Invoice</button>
+            <button type="button" onclick="printDiv('invoiceWrapper')" class="btn btn-primary mb-sm-0 mb-3 print-invoice">Print Invoice</button>
         </div>
         <!-- -===== Print Area =======-->
-        <div id="print-area">
+        <div id="invoiceWrapper">
             <div class="row">
                 <div class="col-md-6">
                     <h4 class="font-weight-bold">INVOICE DETAILS</h4>
@@ -56,9 +56,13 @@
                         </thead>
                         <tbody>
                             <tr>
-
-                                <td>APPLICATION FOR {{$invoice->service->description}} 
-                                    (Batch: {{$invoice->service_type == 'meptp_training' ? $invoice->application->batch->batch_no .'/'. $invoice->application->batch->year : ''}})
+                                
+                                <td>
+                                @if($invoice->service_type == 'meptp_training')
+                                    APPLICATION FOR {{$invoice->service->description}} 
+                                    (Batch: {{$invoice->application->batch->batch_no .'/'. $invoice->application->batch->year}})
+                                @endif
+                                   
                                 </td>
 
                                 <td>{{number_format($invoice->amount)}}</td>
@@ -121,4 +125,19 @@
     }
 </script>
 @endif
+
+<script>
+    function printDiv(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        console.log("html", originalContents)
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+</script>
 @endsection

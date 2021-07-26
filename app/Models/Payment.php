@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Payment;
 
 class Payment extends Model
 {
@@ -23,8 +24,9 @@ class Payment extends Model
     }
 
     public function application() {
-        // if($this->service_type == 'meptp_training'){
+        $invoice = $this->hasOne(Payment::class,'id', 'id')->first();
+        if($invoice->service_type == 'meptp_training'){
             return $this->hasOne(MEPTPApplication::class,'id', 'application_id');
-        // }
+        }
     }
 }
