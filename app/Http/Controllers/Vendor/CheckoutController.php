@@ -33,9 +33,9 @@ class CheckoutController extends Controller
             $order = Payment::where('token', $token)
             ->with('user', 'service')->first();
 
-            Payment::where('token', $token)->update([
-                'token' => null
-            ]);
+            // Payment::where('token', $token)->update([
+            //     'token' => null
+            // ]);
 
             return view('checkout.error', compact('order'));
         }else{
@@ -50,8 +50,6 @@ class CheckoutController extends Controller
 
             $order = Payment::where('token', $token)
             ->with('user', 'service')->first();
-
-            // dd($request->all());
 
             // amount: 317.5
             // message: ""
