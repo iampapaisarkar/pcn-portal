@@ -51,4 +51,6 @@ Route::group(['middleware' => ['auth','verified', 'can:isVendor']], function () 
     Route::post('/meptp-application-submit', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationSubmit')->name('meptp-application-submit');
     Route::get('/meptp-application-status', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationStatus')->name('meptp-application-status');
 
+    // Checkout 
+    Route::get('/checkout-meptp', 'App\Http\Controllers\Vendor\CheckoutController@checkoutMEPTP')->name('checkout-meptp');
 });

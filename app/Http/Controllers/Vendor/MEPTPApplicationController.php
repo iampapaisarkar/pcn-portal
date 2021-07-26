@@ -19,7 +19,10 @@ class MEPTPApplicationController extends Controller
         return view('vendor-user.meptp-application');
     }
     
-    public function applicationSubmit(MEPTPApplicationRequest $request){
+    // public function applicationSubmit(MEPTPApplicationRequest $request){
+    public function applicationSubmit(Request $request){
+
+        return redirect()->route('checkout-meptp');
 
         try {
             DB::beginTransaction();
