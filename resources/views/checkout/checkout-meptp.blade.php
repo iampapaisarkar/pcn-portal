@@ -33,7 +33,7 @@
                 console.log('callback Close Response', response);
                 setTimeout(function(){ 
                     window.location.href = "{{ route('payment-failed', $token) }}";
-                }, 3000);
+                }, 2000);
             }
         });
         paymentEngine.showPaymentWidget();
