@@ -6,6 +6,8 @@
     <div class="col-lg-12 col-md-12">
         <div class="card-body">
             <!--begin::form-->
+
+            @if(app('App\Http\Services\BasicInformation')->canSubmitMEPTPApplication()['success'] == true)
             <form method="POST" action="{{ route('meptp-application-submit') }}" enctype="multipart/form-data" novalidate>
             @csrf
                 <h4>Vendor Details</h4>
@@ -359,6 +361,11 @@
                     </div>
                 </div>
             </form>
+            @else
+                <div class="alert alert-card alert-warning" role="alert">
+                    {{app('App\Http\Services\BasicInformation')->canSubmitMEPTPApplication()['message']}}
+                </div>
+            @endif
         </div>
     </div>
 </div>

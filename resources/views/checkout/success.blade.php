@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="d-flex justify-content-center">
-                            <button class="btn btn-primary btn-rounded w-100">View Status</button>
+                            <a href="{{ route('meptp-application-status') }}" class="btn btn-primary btn-rounded w-100">View Status</a>
                         </div>
                     </div>
                 </div>

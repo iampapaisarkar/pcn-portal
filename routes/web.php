@@ -32,9 +32,8 @@ Route::post('/profile-update', 'App\Http\Controllers\ProfileController@update')-
 Route::post('/profile-password-update', 'App\Http\Controllers\ProfileController@updatePassword')->name('profile-password-update')->middleware('auth', 'verified');
 // Route::post('/remove-photo', 'App\Http\Controllers\ProfileController@removeProfilePhoto')->name('remove-profile-photo')->middleware('auth', 'verified');
 
-Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], function () {
-	Route::get('/', function () { return view('index'); })->name('dashboard');
-});
+// Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], function () {
+// });
 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
     Route::resource('users', 'App\Http\Controllers\Admin\UserController');
@@ -44,8 +43,11 @@ Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
     Route::resource('services-fee', 'App\Http\Controllers\Admin\Service\ServiceFeeController');
 });
 
-Route::group(['middleware' => ['auth','verified', 'can:isVendor']], function () {
-    Route::resource('services-fee', 'App\Http\Controllers\Admin\Service\ServiceFeeController');
+Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
+
+	Route::get('/', function () { return view('index'); })->name('dashboard');
+
+    // Route::resource('services-fee', 'App\Http\Controllers\Admin\Service\ServiceFeeController');
 
 	Route::get('/meptp-application', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationForm')->name('meptp-application');
     Route::post('/meptp-application-submit', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationSubmit')->name('meptp-application-submit');
@@ -57,4 +59,6 @@ Route::group(['middleware' => ['auth','verified', 'can:isVendor']], function () 
     Route::get('/payment-success/{token}', 'App\Http\Controllers\Vendor\CheckoutController@paymentSuccess')->name('payment-success');
     // Route::get('/payment-failed', function () { return view('checkout.error'); });
     // Route::get('/payment-success', function () { return view('checkout.success'); });
+	Route::get('/invoices', 'App\Http\Controllers\InvoiceController@index')->name('invoices.index');
+	Route::get('/invoices/{id}', 'App\Http\Controllers\InvoiceController@show')->name('invoices.show');
 });

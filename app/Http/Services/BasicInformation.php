@@ -26,15 +26,44 @@ class BasicInformation
         $batches = Batch::where(['status' => true]);
 
         $vendorApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-                            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                            ->where('batches.status', '=', false)
-                            ->exists();
+                            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id');
+                            // ->where('batches.status', '=', false);
+                            // ->where('m_e_p_t_p_applications.status', '=', 'approved_card_generated');
 
-        if($batches->exists()){
-           return true;
-        }else{
-            return false;
+                            // dd($batches->exists());
+       if($vendorApplication->exists() && $vendorApplication->where('m_e_p_t_p_applications.payment', false)->exists()){
+            return $response = [
+                'success' => false,
+                'message' => 'Application already submited but there have an payment issue. please re-payment from "Invoice" tab.',
+            ];
+        }else if($vendorApplication->exists() && $vendorApplication->where('batches.status', '=', true)->exists()){
+            return $response = [
+                'success' => false,
+                'message' => 'Currently not able to able submit new application. Your previous application still inprogress.',
+            ];
+        }else if($vendorApplication->exists() && $vendorApplication->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')->exists()){
+            return $response = [
+                'success' => false,
+                'message' => 'Currently not able to able submit new application. Your previous application still inprogress.',
+            ];
+        }else if($vendorApplication->exists() && $vendorApplication->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')->exists() && $batches->exists()){
+            return $response = [
+                'success' => false,
+                'message' => 'Currently not able to able submit new application. Your previous application still inprogress.',
+            ];
+        }else if(!$batches->exists()){
+            return $response = [
+                'success' => false,
+                'message' => 'No active batch found.',
+            ];
         }
+        else{
+            return $response = [
+                'success' => true
+            ];
+        }
+        
+
     }
 
     public static function states()
