@@ -9,7 +9,7 @@
             lastName: 'sarkar',
             email: 'iampapaisarkar@gmail.com',
             amount: 500,
-            narration: 'Test',
+            narration: '<?php echo env('REMITA_NARRATION') ?>',
             onSuccess: function(response) {
                 console.log('callback Successful Response', response);
             },

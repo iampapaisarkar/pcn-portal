@@ -31,6 +31,7 @@ class CreateMEPTPApplicationsTable extends Migration
             $table->integer('traing_centre');
             $table->integer('batch_id');
             $table->string('status');
+            $table->boolean('payment')->default(false);
             $table->timestamps();
         });
     }
