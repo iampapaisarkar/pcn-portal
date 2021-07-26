@@ -23,11 +23,6 @@ class MEPTPApplicationController extends Controller
     // public function applicationSubmit(MEPTPApplicationRequest $request){
     public function applicationSubmit(Request $request){
 
-        // $application = [
-        //     'vendor' => Auth::user(),
-        //     'application_id' => 1,
-        // ];
-
         try {
             DB::beginTransaction();
 
@@ -62,10 +57,13 @@ class MEPTPApplicationController extends Controller
             //     'status' => 'pending',
             // ]);
 
+            Checkout::checkoutMEPTP($application = ['id' => 1]);
+
+            // return redirect()->route('checkout-meptp', ['token' => rand(1,100)]);
+
             DB::commit();
 
             // return back()->with('success','MEPTP Application successfully submited to state office');
-            Checkout::checkoutMEPTP(1);
 
         }catch(Exception $e) {
             DB::rollback();

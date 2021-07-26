@@ -10,8 +10,18 @@ use DB;
 
 class CheckoutController extends Controller
 {
-    public function checkoutMEPTP($data){
+    public function checkoutMEPTP($token){
 
+        $service = Service::where('id', 1)
+        ->with('netFees')
+        ->first();
+
+        $totalAmount = 0;
+
+        foreach($service->netFees as $fee){
+            $totalAmount += $fee->amount;
+        }
         
+        return $totalAmount;
     }
 }
