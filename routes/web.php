@@ -53,4 +53,8 @@ Route::group(['middleware' => ['auth','verified', 'can:isVendor']], function () 
 
     // Checkout 
     Route::get('/checkout-meptp/{token}', 'App\Http\Controllers\Vendor\CheckoutController@checkoutMEPTP')->name('checkout-meptp');
+    Route::get('/payment-failed/{token}', 'App\Http\Controllers\Vendor\CheckoutController@paymentError')->name('payment-failed');
+    Route::get('/payment-success/{token}', 'App\Http\Controllers\Vendor\CheckoutController@paymentSuccess')->name('payment-success');
+    // Route::get('/payment-failed', function () { return view('checkout.error'); });
+    // Route::get('/payment-success', function () { return view('checkout.success'); });
 });
