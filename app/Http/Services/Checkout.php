@@ -7,10 +7,6 @@ use App\Models\ServiceFeeMeta;
 use App\Models\Payment;
 use App\Models\MEPTPApplication;
 use DB;
-use File;
-use Storage;
-use Session;
-use URL;
 
 class Checkout
 {
@@ -22,7 +18,6 @@ class Checkout
             $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => false])->first();
 
             if($meptp){
-
                 $service = Service::where('id', 1)
                 ->with('netFees')
                 ->first();
@@ -32,21 +27,27 @@ class Checkout
                     $totalAmount += $fee->amount;
                 }
 
+                $token = md5(uniqid(rand(), true));
+                $order_id = date('m-Y') . '-' .rand(10,1000);
+
                 Payment::create([
-                    'order_id' => 1,
-                    // 'reference_id' => 1,
-                    'application_id' => 1,
-                    'service_id' => 1,
-                    'service_type' => 1,
-                    // 'amount' => 1,
-                    // 'service_charge' => 1,
-                    'total_amount' => 1,
-                    // 'status' => 1,
-                    'token' => 1,
+                    'vendor_id' => Auth::user()->id,
+                    'order_id' => $order_id,
+                    'application_id' => $application['id'],
+                    'service_id' => $service->id,
+                    'service_type' => 'meptp_training',
+                    'amount' => $totalAmount,
+                    'token' => $token,
                 ]);
 
+                $response = [
+                    'success' => true,
+                    'order_id' => $order_id,
+                    'token' => $token,
+                ];
+
             }else{
-                $response = ['sucess' => false];
+                $response = ['success' => false];
             }
 
             DB::commit();

@@ -57,13 +57,15 @@ class MEPTPApplicationController extends Controller
             //     'status' => 'pending',
             // ]);
 
-            Checkout::checkoutMEPTP($application = ['id' => 1]);
-
-            // return redirect()->route('checkout-meptp', ['token' => rand(1,100)]);
+            $response = Checkout::checkoutMEPTP($application = ['id' => 1]);
 
             DB::commit();
 
-            // return back()->with('success','MEPTP Application successfully submited to state office');
+            if($response['success'] == true){
+                return redirect()->route('checkout-meptp', ['token' => $response['token']]);
+            }else{
+               return redirect('/')->with('error','There is something error, please try after some time');
+            }
 
         }catch(Exception $e) {
             DB::rollback();
