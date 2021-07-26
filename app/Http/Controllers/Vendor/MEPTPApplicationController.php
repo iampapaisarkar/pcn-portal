@@ -54,7 +54,7 @@ class MEPTPApplicationController extends Controller
                 'status' => 'pending',
             ]);
 
-            $response = Checkout::checkoutMEPTP($application = ['id' => 1]);
+            $response = Checkout::checkoutMEPTP($application = ['id' => $application->id]);
 
             DB::commit();
 

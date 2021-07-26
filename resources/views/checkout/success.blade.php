@@ -25,10 +25,10 @@
                                 <h5 class="text-muted">Please be patient, we will contact you soon</h5>
 
                                 <div class="mt-3">
-                                    <h5 class="text-muted">Order ID: <strong>124555</strong></h5>
-                                    <h5 class="text-muted">Name: <strong>Papai Sarkar</strong></h5>
-                                    <h5 class="text-muted">Email: <strong>iampapaisarkar@gmail.com</strong></h5>
-                                    <h5 class="text-muted">Service Type: <strong>MEPTP Registration</strong></h5>
+                                <h5 class="text-muted">Order ID: <strong>{{$order->order_id}}</strong></h5>
+                                    <h5 class="text-muted">Name: <strong>{{$order->user->firstname . ' ' . $order->user->lastname }}</strong></h5>
+                                    <h5 class="text-muted">Email: <strong>{{$order->user->email}}</strong></h5>
+                                    <h5 class="text-muted">Service Type: <strong>{{$order->service->description}}</strong></h5>
                                 </div>
                             </div>
                         </div>

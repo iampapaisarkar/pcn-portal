@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Vendor;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\MEPTPApplication;
 use App\Models\Service;
 use App\Models\ServiceFeeMeta;
 use App\Models\Payment;
@@ -43,16 +44,34 @@ class CheckoutController extends Controller
         
     }
 
-    public function paymentSuccess($token){
+    public function paymentSuccess($token, Request $request){
 
         if(Payment::where('token', $token)->exists()){
 
             $order = Payment::where('token', $token)
             ->with('user', 'service')->first();
 
+            // dd($request->all());
+
+            // amount: 317.5
+            // message: ""
+            // paymentReference: "280008234371"
+            // processorId: ""
+            // transactionId: "b06fc14a6a534a41b1578b98e7a69101"
+            $reference_id = $request->ref;
+            $total_amount = $request->am;
+            $service_charge = floatval($request->am - $order->amount);
+
             Payment::where('token', $token)->update([
                 'token' => null,
-                'token' => null,
+                'status' => true,
+                'reference_id' => $reference_id,
+                'total_amount' => $total_amount,
+                'service_charge' => $service_charge,
+            ]);
+
+            MEPTPApplication::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->update([
+                'payment' => true
             ]);
 
             return view('checkout.success', compact('order'));

@@ -17,7 +17,7 @@ class CreatePaymentsTable extends Migration
             $table->id();
             $table->integer('vendor_id');
             $table->string('order_id');
-            $table->integer('reference_id')->nullable();
+            $table->string('reference_id')->nullable();
             $table->integer('application_id');
             $table->integer('service_id');
             $table->string('service_type');
