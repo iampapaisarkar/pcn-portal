@@ -124,8 +124,8 @@
                     @enderror
                 </div>
                 <div class="col-md-4 form-group mb-3">
-                    <label for="picker2">Date of Birth</label>
-                    <input type="date" name="dob" class="form-control @error('dob') is-invalid @enderror" id="picker2"
+                    <label for="datepicker">Date of Birth</label>
+                    <input name="dob" class="form-control @error('dob') is-invalid @enderror" id="datepicker"
                         value="{{Auth::user()->dob}}" placeholder="dd-mm-yyyy" name="dp" required />
                     @error('dob')
                     <span class="invalid-feedback" role="alert">
@@ -197,6 +197,14 @@
     </div>
 </div>
 <script>
+
+$("#datepicker").datepicker({
+  dateFormat: 'dd-mm-yy',
+  changeMonth: true,
+  changeYear: true,
+  yearRange: '-99:-18'
+});
+
 $('#stateField').on('change', function() {
     var value = this.value;
     if (value && value.length != null) {
