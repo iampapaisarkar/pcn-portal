@@ -38,7 +38,7 @@ class BatchController extends Controller
         if(!Batch::where('status', true)->exists()){
             return view('admin.batches.create');
         }else{
-            return back()->with('error','You can\'t create a new batch. while another batch is activate');
+            return back()->with('error','NO NEW BATCH CAN BE CREATED UNTIL THE CURRENT BATCH HAS BEEN CLOSED');
         }
     }
 
@@ -50,6 +50,9 @@ class BatchController extends Controller
      */
     public function store(Request $request)
     {
+        if(Batch::where(['batch_no' => $request->batch_no, 'year' => $request->year])->exists()){
+            return back()->with('error','You can\'t use same batch no for current year.');
+        }
         $this->validate($request, [
             'batch_no' => ['required'],
             'year' => ['required'],
@@ -76,7 +79,7 @@ class BatchController extends Controller
             if($response == true){
                 return redirect()->route('batches.index')->with('success','Batch added successfully');
             }else{
-                return back()->with('error','You can\'t create a new batch. while another batch is activate');
+                return back()->with('error','NO NEW BATCH CAN BE CREATED UNTIL THE CURRENT BATCH HAS BEEN CLOSED');
             }
 
         }catch(Exception $e) {

@@ -24,7 +24,7 @@ class BatchSeeder extends Seeder
             'updated_at' => now(),
             ],
             [
-            'batch_no' => 3,
+            'batch_no' => 2,
             'year' => '2021',
             'status' => false,
             'closed_at' => now(),
