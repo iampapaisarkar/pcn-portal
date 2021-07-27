@@ -25,13 +25,16 @@ class MEPTPApplicationRequest extends FormRequest
     {
         return [
             'birth_certificate' => [
-                'required', 'mimes:jpg,jpeg,png,bmp,tiff'
+                // 'required', 'mimes:jpg,jpeg,png,bmp,tiff'
+                'required'
             ],
             'educational_certificate' => [
-                'required', 'mimes:jpg,jpeg,png,bmp,tiff'
+                // 'required', 'mimes:jpg,jpeg,png,bmp,tiff'
+                'required'
             ],
             'academic_certificate' => [
-                'required', 'mimes:jpg,jpeg,png,bmp,tiff'
+                // 'required', 'mimes:jpg,jpeg,png,bmp,tiff'
+                'required'
             ],
             'shop_name' => [
                 'required', 'min:3', 'max:255'
