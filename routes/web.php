@@ -54,6 +54,7 @@ Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileS
 	Route::get('/meptp-application', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationForm')->name('meptp-application');
     Route::post('/meptp-application-submit', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationSubmit')->name('meptp-application-submit');
     Route::get('/meptp-application-status', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationStatus')->name('meptp-application-status');
+    Route::get('/meptp-application-result', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationResult')->name('meptp-application-result');
 
     // Checkout 
     Route::get('/checkout-meptp/{token}', 'App\Http\Controllers\Vendor\CheckoutController@checkoutMEPTP')->name('checkout-meptp');

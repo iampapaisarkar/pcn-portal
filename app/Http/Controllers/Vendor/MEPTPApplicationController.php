@@ -81,4 +81,13 @@ class MEPTPApplicationController extends Controller
 
         return view('vendor-user.meptp-application-status', compact('application'));
     }
+
+    public function applicationResult(){
+
+        $application = MEPTPApplication::where('vendor_id', Auth::user()->id)
+        ->with('user_state', 'user_lga', 'school', 'batch')
+        ->first();
+
+        return view('vendor-user.meptp-application-status', compact('application'));
+    }
 }
