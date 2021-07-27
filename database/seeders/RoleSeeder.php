@@ -20,7 +20,7 @@ class RoleSeeder extends Seeder
             'code' => 'sadmin',
             ],
             [
-            'role' => 'State Offcie',
+            'role' => 'State Office',
             'code' => 'state_office',
             ],
             [

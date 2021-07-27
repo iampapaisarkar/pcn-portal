@@ -28,6 +28,6 @@ class InvitationEmail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mail.invitation',['data'=>$this->newData])->subject(env('APP_NAME') . ' - Invitation to join PCN');
+        return $this->markdown('mail.invitation',['data'=>$this->newData])->subject(env('APP_NAME') . ' - Invitation as user');
     }
 }
