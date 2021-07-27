@@ -34,8 +34,12 @@ class VendorMEPTPApplication extends Component
             // do stuff
         }else{
             // $id = Auth::user()->id;
+            $application = MEPTPApplication::where('vendor_id', Auth::user()->id)
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')->where('batches.status', '=', true)
+            ->with('user.user_state','user.user_lga', 'user_state', 'user_lga')
+            ->first();
 
-            $application = User::where('id', Auth::user()->id)->with('active_meptp_application', 'user_state', 'user_lga')->first();
+            // $application = User::where('id', Auth::user()->id)->with('active_meptp_application', 'user_state', 'user_lga')->first();
 
             // dd($application);
         }

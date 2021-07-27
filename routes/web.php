@@ -34,6 +34,8 @@ Route::post('/profile-password-update', 'App\Http\Controllers\ProfileController@
 
 Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], function () {
     Route::get('/', function () { return view('index'); })->name('dashboard');
+
+    Route::get('/download-meptp-application-document', 'App\Http\Controllers\Vendor\MEPTPApplicationController@downloadMEPTPDocument')->name('download-meptp-application-document');
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {

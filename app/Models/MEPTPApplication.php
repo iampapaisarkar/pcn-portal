@@ -15,6 +15,10 @@ class MEPTPApplication extends Model
         'state', 'lga', 'is_registered', 'ppmvl_no','traing_centre', 'batch_id',  'status', 'payment'
     ];
 
+    public function user() {
+        return $this->hasOne(User::class,'id', 'vendor_id');
+    }
+
     public function user_state() {
         return $this->hasOne(State::class,'id', 'state');
     }

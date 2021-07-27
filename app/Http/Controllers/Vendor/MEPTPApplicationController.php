@@ -29,11 +29,6 @@ class MEPTPApplicationController extends Controller
             $educational_certificate = FileUpload::upload($request->file('educational_certificate'), $private = true);
             $academic_certificate = FileUpload::upload($request->file('academic_certificate'), $private = true);
 
-            // // Download Method 
-            // $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
-            // DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $filename);
-            // return response()->download($path);
-            
             // Store MEPTP application 
             $application = MEPTPApplication::create([
                 'vendor_id' => Auth::user()->id,
@@ -76,6 +71,7 @@ class MEPTPApplicationController extends Controller
     public function applicationStatus(){
 
         $application = MEPTPApplication::where('vendor_id', Auth::user()->id)
+        ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')->where('batches.status', '=', true)
         ->with('user_state', 'user_lga', 'school', 'batch')
         ->first();
 
@@ -86,8 +82,49 @@ class MEPTPApplicationController extends Controller
 
         $application = MEPTPApplication::where('vendor_id', Auth::user()->id)
         ->with('user_state', 'user_lga', 'school', 'batch')
+        ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')->where('batches.status', '=', true)
         ->first();
 
-        return view('vendor-user.meptp-application-status', compact('application'));
+        return view('vendor-user.meptp-application-result', compact('application'));
+    }
+
+    public function downloadMEPTPDocument(Request $request){
+
+        // birth_certificate
+        // educational_certificate
+        // academic_certificate
+
+        if(Auth::user()->hasRole(['vendor'])){
+            if($request->type == 'birth_certificate'){
+                $filename = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'id' => $request->id])->first()->birth_certificate;
+            }
+            if($request->type == 'educational_certificate'){
+                $filename = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'id' => $request->id])->first()->educational_certificate;
+            }
+            if($request->type == 'academic_certificate'){
+                $filename = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'id' => $request->id])->first()->academic_certificate;
+            }
+
+            $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
+            DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $filename);
+            return response()->download($path);
+
+        }else{
+            if($request->type == 'birth_certificate'){
+                $filename = MEPTPApplication::where(['vendor_id' => $request->user_id, 'id' => $request->id])->first()->birth_certificate;
+            }
+            if($request->type == 'educational_certificate'){
+                $filename = MEPTPApplication::where(['vendor_id' => $request->user_id, 'id' => $request->id])->first()->educational_certificate;
+            }
+            if($request->type == 'academic_certificate'){
+                $filename = MEPTPApplication::where(['vendor_id' => $request->user_id, 'id' => $request->id])->first()->academic_certificate;
+            }
+
+            $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
+            DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . $filename);
+            return response()->download($path);
+        }
+
+        return view('vendor-user.meptp-application-result', compact('application'));
     }
 }
