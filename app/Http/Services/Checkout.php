@@ -30,7 +30,7 @@ class Checkout
                 $token = md5(uniqid(rand(), true));
                 $order_id = date('m-Y') . '-' .rand(10,1000);
 
-                Payment::create([
+                $payment = Payment::create([
                     'vendor_id' => Auth::user()->id,
                     'order_id' => $order_id,
                     'application_id' => $application['id'],
@@ -44,6 +44,7 @@ class Checkout
                     'success' => true,
                     'order_id' => $order_id,
                     'token' => $token,
+                    'id' => $payment->id,
                 ];
 
             }else{

@@ -58,11 +58,14 @@ class MEPTPApplicationController extends Controller
 
             DB::commit();
 
-            if($response['success'] == true){
-                return redirect()->route('checkout-meptp', ['token' => $response['token']]);
-            }else{
-               return redirect('/')->with('error','There is something error, please try after some time');
-            }
+                return redirect()->route('invoices.show', ['id' => $response['id']])
+                ->with('success', 'Application successfully submitted. Please pay amount for further action');
+
+            // if($response['success'] == true){
+            //     return redirect()->route('checkout-meptp', ['token' => $response['token']]);
+            // }else{
+            //    return redirect('/')->with('error','There is something error, please try after some time');
+            // }
 
         }catch(Exception $e) {
             DB::rollback();

@@ -36,7 +36,7 @@
                         </div>
 
                         <div class="d-flex justify-content-center">
-                            <a href="{{ route('meptp-application-status') }}" class="btn btn-primary btn-rounded w-100">Go to Invoice & Re-try</a>
+                            <a href="{{ route('invoices.index') }}" class="btn btn-primary btn-rounded w-100">Go to Invoice & Re-try</a>
                         </div>
                     </div>
                 </div>
