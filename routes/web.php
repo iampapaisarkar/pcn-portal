@@ -36,6 +36,8 @@ Route::post('/profile-password-update', 'App\Http\Controllers\ProfileController@
 // });
 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
+    Route::get('/', function () { return view('index'); })->name('dashboard');
+    
     Route::resource('users', 'App\Http\Controllers\Admin\UserController');
     Route::resource('schools', 'App\Http\Controllers\Admin\SchoolController');
     Route::resource('batches', 'App\Http\Controllers\Admin\BatchController');
