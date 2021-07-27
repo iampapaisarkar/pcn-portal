@@ -44,7 +44,7 @@
         <span>No application found!</span>
         @endif
         </div>
-        {{--  <x-vendor-m-e-p-t-p-application/> --}}
+        <x-vendor-m-e-p-t-p-application/>
 
     </div>
 </div>

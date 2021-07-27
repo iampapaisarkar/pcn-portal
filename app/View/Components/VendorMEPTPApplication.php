@@ -3,6 +3,13 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use Illuminate\Support\Facades\Auth;
+use App\Models\MEPTPApplication;
+use App\Models\Service;
+use App\Models\ServiceFeeMeta;
+use App\Models\Payment;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class VendorMEPTPApplication extends Component
 {
@@ -22,8 +29,17 @@ class VendorMEPTPApplication extends Component
      * @return \Illuminate\Contracts\View\View|\Closure|string
      */
     public function render()
-    {
-        $test = 'hello';
-        return view('components.vendor-m-e-p-t-p-application', compact('test'));
+    {   
+        if(!Auth::user()->hasRole(['vendor'])){
+            // do stuff
+        }else{
+            // $id = Auth::user()->id;
+
+            $application = User::where('id', Auth::user()->id)->with('active_meptp_application', 'user_state', 'user_lga')->first();
+
+            // dd($application);
+        }
+
+        return view('components.vendor-m-e-p-t-p-application', compact('application'));
     }
 }

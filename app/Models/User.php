@@ -69,9 +69,17 @@ class User extends Authenticatable implements MustVerifyEmail
             return false;
         }
     }
+
     public function role() {
         return $this->hasOne(UserRole::class,'user_id', 'id')
         ->join('roles', 'roles.id', 'user_roles.role_id')
         ->select('roles.code', 'roles.role', 'roles.id as role_id', 'user_roles.role_id', 'user_roles.user_id');
+    }
+
+    public function active_meptp_application() {
+        return $this->hasOne(MEPTPApplication::class,'vendor_id', 'id')
+        ->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')
+        ->orWhere('m_e_p_t_p_applications.status', '!=', 'rejected')
+        ->with('user_state', 'user_lga', 'school', 'batch');
     }
 }

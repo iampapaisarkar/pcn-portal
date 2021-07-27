@@ -2,40 +2,40 @@
     <div class="card-body">
         <div class="row">
             <div class="form-group col-md-6">
-                {{$test}}
+                <img style="width: 25%;" src="{{$application->photo ? asset('images/' . $application->photo) : asset('admin/dist-assets/images/avatar.jpg') }}" alt="">
             </div>
             <div class="form-group col-md-6">
-                <h3>Batch Details: 1/2021<h3>
+                <h3>Batch Details: {{$application->active_meptp_application->batch->batch_no}}/{{$application->active_meptp_application->batch->year}}<h3>
                 <h3>Tier: Tier-3<h3>
             </div>
             <div class="col-md-4">
                 <label for="inputEmail1" class="ul-form__label"><strong>First Name:</strong></label>
-                <div>Hadiza </div>
+                <div>{{$application->firstname}} </div>
             </div>
 
             <div class="col-md-4">
-                <label for="inputEmail1" class="ul-form__label"><strong>Middle Name:</strong></label>
-                <div>Olubunmi</div>
+                <label for="inputEmail1" class="ul-form__label"><strong>Last Name:</strong></label>
+                <div>{{$application->lastname}}</div>
             </div>
 
-            <div class="col-md-4">
+            <!-- <div class="col-md-4">
                 <label for="inputEmail1" class="ul-form__label"><strong>Surname:</strong></label>
                 <div>Ikechukwu </div>
-            </div>
+            </div> -->
             
             <div class="col-md-4">
                 <label for="inputEmail3" class="ul-form__label"><strong>Address:</strong></label>
-                <div>57 Campbell Street </div>
+                <div>{{$application->address}} </div>
             </div>
 
             <div class="col-md-4">
                 <label for="inputEmail3" class="ul-form__label"><strong>State:</strong></label>
-                <div>Lagos </div>
+                <div>{{$application->user_state->name}} </div>
             </div>
 
             <div class="col-md-4">
                 <label for="inputEmail3" class="ul-form__label"><strong>LGA:</strong> </label>
-                <div>Lagos Island</div>
+                <div>{{$application->user_lga->name}}</div>
             </div>
         </div>
 
@@ -65,47 +65,49 @@
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="inputEmail3" class="ul-form__label"><strong>Shop Name:</strong></label>
-                <div>ABC Medicine Shop</div>
+                <div>{{$application->active_meptp_application->shop_name}}</div>
             </div>
             <div class="form-group col-md-4">
                 <label for="inputEmail3" class="ul-form__label"><strong>Shop Phone:</strong></label>
-                <div>08029089895</div>
+                <div>{{$application->active_meptp_applicationshop_phone}}</div>
             </div>
 
             <div class="form-group col-md-4">
                 <label for="inputEmail3" class="ul-form__label"><strong>Shop Email:</strong></label>
-                <div>email@domain.com</div>
+                <div>{{$application->active_meptp_applicationshop_email}}</div>
             </div>
             <div class="form-group col-md-3">
                 <label for="inputEmail3" class="ul-form__label"><strong>Shop Address:</strong></label>
-                <div> 42 Airport Road,
+                <div> {{$application->active_meptp_applicationshop_address}}
                 </div>
             </div>
 
             <div class="form-group col-md-3">
                 <label for="inputEmail3" class="ul-form__label"><strong>Town/City:</strong></label>
-                <div>Shogunle</div>
+                <div>{{$application->active_meptp_applicationcity}}</div>
             </div>
 
             <div class="form-group col-md-3">
                 <label for="inputEmail3" class="ul-form__label"><strong>State:</strong></label>
-                <div>Lagos</div>
+                <div>{{$application->active_meptp_application->user_state->name}}</div>
             </div>
 
             <div class="form-group col-md-3">
                 <label for="inputEmail3" class="ul-form__label"><strong>LGA:</strong></label>
-                <div>Ikeja</div>
+                <div>{{$application->active_meptp_application->user_lga->name}}</div>
             </div>
 
             <div class="form-group col-md-4">
                 <label for="inputEmail3" class="ul-form__label"><strong>Are you registered?</strong> </label>
-                <div>YES</div>
+                <div>{{$application->active_meptp_application->is_registered ? 'Yes' : 'No'}}</div>
             </div>
 
+            @if($application->active_meptp_application->is_registered)
             <div class="form-group col-md-4">
                 <label for="inputEmail3" class="ul-form__label"><strong>PPMVL Number :</strong></label>
-                <div>FG123535342523</div>
+                <div>{{$application->active_meptp_application->ppmvl_no}}</div>
             </div>
+            @endif
         </div>
 
         <div class="custom-separator"></div>
@@ -114,7 +116,7 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="inputEmail3" class="ul-form__label"><strong>Preferred Training Centre</strong></label>
-                <div class="input-right-icon">Lagos Training Center 2</div>
+                <div class="input-right-icon">{{$application->active_meptp_application->school->name}}</div>
             </div>
         </div>
     </div>
