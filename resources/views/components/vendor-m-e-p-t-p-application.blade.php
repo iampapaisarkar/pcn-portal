@@ -2,7 +2,7 @@
     <div class="card-body">
         <div class="row">
             <div class="form-group col-md-6">
-                <img style="width: 25%;" src="{{$application->photo ? asset('images/' . $application->photo) : asset('admin/dist-assets/images/avatar.jpg') }}" alt="">
+                <img style="width: 25%;" src="{{$application->user->photo ? asset('images/' . $application->user->photo) : asset('admin/dist-assets/images/avatar.jpg') }}" alt="">
             </div>
             <div class="form-group col-md-6">
                 <h3>Batch Details: {{$application->batch->batch_no}}/{{$application->batch->year}}<h3>
