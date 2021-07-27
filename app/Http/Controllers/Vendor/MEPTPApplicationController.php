@@ -90,6 +90,9 @@ class MEPTPApplicationController extends Controller
 
     public function downloadMEPTPDocument(Request $request){
 
+
+        // dd($request->all());
+
         // birth_certificate
         // educational_certificate
         // academic_certificate
@@ -105,6 +108,8 @@ class MEPTPApplicationController extends Controller
                 $filename = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'id' => $request->id])->first()->academic_certificate;
             }
 
+            // dd($filename);
+
             $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
             DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $filename);
             return response()->download($path);
@@ -119,12 +124,13 @@ class MEPTPApplicationController extends Controller
             if($request->type == 'academic_certificate'){
                 $filename = MEPTPApplication::where(['vendor_id' => $request->user_id, 'id' => $request->id])->first()->academic_certificate;
             }
+            // dd($filename);
 
             $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
             DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . $filename);
             return response()->download($path);
         }
 
-        return view('vendor-user.meptp-application-result', compact('application'));
+        // return view('vendor-user.meptp-application-result', compact('application'));
     }
 }
