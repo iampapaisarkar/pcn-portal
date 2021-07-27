@@ -50,7 +50,7 @@
                             <tr>
 
                                 <th scope="col">Description</th>
-
+                                <th scope="col">Services</th>
                                 <th scope="col">Cost</th>
                             </tr>
                         </thead>
@@ -62,8 +62,14 @@
                                     APPLICATION FOR {{$invoice->service->description}} 
                                     (Batch: {{$invoice->application->batch->batch_no .'/'. $invoice->application->batch->year}})
                                 @endif
-                                   
                                 </td>
+
+                                <td>
+                                    @foreach($invoice->service->netFees as $fee)
+                                    <div>{{$fee->description}}: N{{number_format($fee->amount)}}</div>
+                                    @endforeach
+                                </td>
+
 
                                 <td>{{number_format($invoice->amount)}}</td>
                             </tr>

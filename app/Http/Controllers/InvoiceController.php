@@ -28,7 +28,7 @@ class InvoiceController extends Controller
     public function show($id){
         $authUser = Auth::user();
 
-        $invoice = Payment::with('user', 'service', 'application.batch')->where('id', $id);
+        $invoice = Payment::with('user', 'service.netFees', 'application.batch')->where('id', $id);
 
         if($authUser->hasRole(['sadmin'])){
             // do stuff
