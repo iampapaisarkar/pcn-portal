@@ -70,8 +70,9 @@
 <script>
 function onCode(){
     var str = $("#code1").val()
-    str = str.replace(/^\s+|\s+$/g, ''); // trim
-    str = str.toLowerCase();
+    // str = str.replace(/^\s+|\s+$/g, ''); // trim
+    // str = str.toLowerCase();
+    str = str.replace(/[\. ,:-]+/g, "-")
 
     // remove accents, swap ñ for n, etc
     var from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;";
@@ -80,9 +81,9 @@ function onCode(){
     str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
     }
 
-    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-    .replace(/\s+/g, '-') // collapse whitespace and replace by -
-    .replace(/-+/g, '-'); // collapse dashes
+    str = str.replace(/[^\wèéòàùì\s]/gi, '') // remove invalid chars
+    str = str.replace(/\s+/g, '-') // collapse whitespace and replace by -
+    str = str.replace(/-+/g, '-'); // collapse dashes
     
     $("#code1").val(str)
 }
