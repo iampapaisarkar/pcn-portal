@@ -11,15 +11,31 @@ use App\Models\Payment;
 
 class InvoiceController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $authUser = Auth::user();
 
         $invoices = Payment::with('user', 'service');
 
         if($authUser->hasRole(['sadmin'])){
-            // do stuff
+            
+            if($request->page){
+                $perPage = (integer) $request->page;
+            }else{
+                $perPage = 10;
+            }
+    
+            if(!empty($request->search)){
+                $search = $request->search;
+                $invoices = $invoices->where(function($q) use ($search){
+                    $q->where('order_id', 'like', '%' .$search. '%');
+                    // $q->orWhere('code', 'like', '%' .$search. '%');
+                });
+            }
+            $invoices = $invoices->latest()->paginate($perPage);
+
         }else if($authUser->hasRole(['vendor'])){
-            $invoices = $invoices->where('vendor_id', $authUser->id)->get();
+
+            $invoices = $invoices->latest()->where('vendor_id', $authUser->id)->get();
         }
 
         return view('invoice.index', compact('invoices'));
@@ -31,7 +47,7 @@ class InvoiceController extends Controller
         $invoice = Payment::with('user', 'service.netFees', 'application.batch')->where('id', $id);
 
         if($authUser->hasRole(['sadmin'])){
-            // do stuff
+            $invoice = $invoice->first();
         }else if($authUser->hasRole(['vendor'])){
             $invoice = $invoice->where('vendor_id', $authUser->id)->first();
         }

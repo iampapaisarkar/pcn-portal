@@ -42,6 +42,9 @@ Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
     Route::resource('batches', 'App\Http\Controllers\Admin\BatchController');
     Route::resource('services', 'App\Http\Controllers\Admin\Service\ServiceController');
     Route::resource('services-fee', 'App\Http\Controllers\Admin\Service\ServiceFeeController');
+
+    Route::get('/payments', 'App\Http\Controllers\InvoiceController@index')->name('payments.index');
+	Route::get('/payments/{id}', 'App\Http\Controllers\InvoiceController@show')->name('payments.show');
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
