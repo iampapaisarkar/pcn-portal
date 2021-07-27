@@ -35,16 +35,6 @@ Route::post('/profile-password-update', 'App\Http\Controllers\ProfileController@
 // Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], function () {
 // });
 
-Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
-    Route::get('/', function () { return view('index'); })->name('dashboard');
-    
-    Route::resource('users', 'App\Http\Controllers\Admin\UserController');
-    Route::resource('schools', 'App\Http\Controllers\Admin\SchoolController');
-    Route::resource('batches', 'App\Http\Controllers\Admin\BatchController');
-    Route::resource('services', 'App\Http\Controllers\Admin\Service\ServiceController');
-    Route::resource('services-fee', 'App\Http\Controllers\Admin\Service\ServiceFeeController');
-});
-
 Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
 
 	Route::get('/', function () { return view('index'); })->name('dashboard');
@@ -63,4 +53,14 @@ Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileS
     // Route::get('/payment-success', function () { return view('checkout.success'); });
 	Route::get('/invoices', 'App\Http\Controllers\InvoiceController@index')->name('invoices.index');
 	Route::get('/invoices/{id}', 'App\Http\Controllers\InvoiceController@show')->name('invoices.show');
+});
+
+Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
+    Route::get('/', function () { return view('index'); })->name('dashboard');
+    
+    Route::resource('users', 'App\Http\Controllers\Admin\UserController');
+    Route::resource('schools', 'App\Http\Controllers\Admin\SchoolController');
+    Route::resource('batches', 'App\Http\Controllers\Admin\BatchController');
+    Route::resource('services', 'App\Http\Controllers\Admin\Service\ServiceController');
+    Route::resource('services-fee', 'App\Http\Controllers\Admin\Service\ServiceFeeController');
 });
