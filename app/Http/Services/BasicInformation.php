@@ -58,7 +58,7 @@ class BasicInformation
                ->exists()){
                     return $response = [
                             'success' => false,
-                            'edit' => true,
+                            // 'edit' => true,
                             'message' => 'CAN\'T SUBMIT NEW APPLICATION. YOUR PREVIOUS APPLICATION IS IN PROGRESS (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.')',
                         ];
                 }
@@ -171,6 +171,7 @@ class BasicInformation
                         'is_status' => true,
                         'application_id' => $isSubmittedApplication->id,
                         'vendor_id' => Auth::user()->id,
+                        'edit' => true,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
                         'caption' => $isSubmittedApplication->query,
                     ];

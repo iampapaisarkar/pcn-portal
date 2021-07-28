@@ -18,6 +18,9 @@
                     </div>
                 </div>
             </div>
+            @if(isset(app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['edit']) && app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['edit'] == true)
+            <a href="{{route('meptp-application-edit')}}" class="btn  btn-primary m-1" name="save">Update MEPTP Application</a>
+            @endif
             <x-vendor-m-e-p-t-p-application 
             :applicationID="app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['application_id']" 
             :vendorID="app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['vendor_id']"
