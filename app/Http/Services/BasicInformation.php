@@ -118,9 +118,13 @@ class BasicInformation
                 // ->exists();
 
                 if($isResultPASS){
+                    $batch = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->where('m_e_p_t_p_results.status', '=', 'pass')
+                    ->first();
                     return $response = [
                             'success' => false,
-                            'message' => 'YOU ARE LAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.')',
+                            'message' => 'YOU ARE LAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$batch->batch_no.'/'.$batch->year.')',
                         ];
                 }else{
                     return $response = [
