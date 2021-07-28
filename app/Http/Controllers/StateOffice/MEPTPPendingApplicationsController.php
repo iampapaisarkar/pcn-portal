@@ -20,7 +20,7 @@ class MEPTPPendingApplicationsController extends Controller
         })
         ->get();
 
-        return view('stateoffice.meptp.meptp-pending-batches', compact('batches'));
+        return view('stateoffice.meptp.pending.meptp-pending-batches', compact('batches'));
     }
 
     public function centre($batchID){
@@ -39,7 +39,7 @@ class MEPTPPendingApplicationsController extends Controller
             $schools[$key]['batch_id'] =  $batchID;
         }
 
-        return view('stateoffice.meptp.meptp-pending-centre', compact('schools'));
+        return view('stateoffice.meptp.pending.meptp-pending-centre', compact('schools'));
     }
 
     public function lists(Request $request){
@@ -66,7 +66,7 @@ class MEPTPPendingApplicationsController extends Controller
     
             $applications = $applications->latest()->paginate($perPage);
 
-            return view('stateoffice.meptp.meptp-pending-lists', compact('applications'));
+            return view('stateoffice.meptp.pending.meptp-pending-lists', compact('applications'));
         }else{
             return abort(404);
         }
@@ -90,7 +90,7 @@ class MEPTPPendingApplicationsController extends Controller
             ->where('payment', true)
             ->first();
 
-            return view('stateoffice.meptp.meptp-pending-show', compact('application'));
+            return view('stateoffice.meptp.pending.meptp-pending-show', compact('application'));
         }else{
             return abort(404);
         }

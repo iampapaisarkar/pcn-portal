@@ -101,7 +101,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}">
+                    <a href="{{route('meptp-approve-batches')}}">
                         <i class="nav-icon i-Receipt-4"></i>
                         <span class="item-name">MEPTP - Doc. Review Approved </span>
                     </a>

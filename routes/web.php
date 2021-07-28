@@ -50,12 +50,18 @@ Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isSOffice']], function () {
+
+    // MEPTP PENDING 
 	Route::get('/meptp-pending-batches', 'App\Http\Controllers\StateOffice\MEPTPPendingApplicationsController@batches')->name('meptp-pending-batches');
 	Route::get('/meptp-pending-centre/{batch_id}', 'App\Http\Controllers\StateOffice\MEPTPPendingApplicationsController@centre')->name('meptp-pending-centre');
 	Route::get('/meptp-pending-lists', 'App\Http\Controllers\StateOffice\MEPTPPendingApplicationsController@lists')->name('meptp-pending-lists');
 	Route::get('/meptp-pending-show', 'App\Http\Controllers\StateOffice\MEPTPPendingApplicationsController@show')->name('meptp-pending-show');
 	Route::get('/meptp-pending-approve', 'App\Http\Controllers\StateOffice\MEPTPPendingApplicationsController@approve')->name('meptp-pending-approve');
 	Route::post('/meptp-pending-query', 'App\Http\Controllers\StateOffice\MEPTPPendingApplicationsController@query')->name('meptp-pending-query');
+
+    // MEPTP APPROVE
+	Route::get('/meptp-approve-batches', 'App\Http\Controllers\StateOffice\MEPTPApproveApplicationsController@batches')->name('meptp-approve-batches');
+
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
