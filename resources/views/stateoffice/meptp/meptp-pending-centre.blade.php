@@ -9,7 +9,7 @@
             @foreach($schools as $school)
             <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="card card-icon mb-4">
-                    <a href="state-meptp-docrev-pending.php">
+                    <a href="{{ route('meptp-pending-lists') }}?batch_id={{$school->batch_id}}&school_id={{$school->id}}">
                     <div class="card-body text-center"><i class="i-Diploma"></i>
                         <p class="text-muted mt-2 mb-2">{{$school->name}}</p>
                         <p class="text-primary text-20 line-height-1 m-0">{{$school->total_application}}</p>

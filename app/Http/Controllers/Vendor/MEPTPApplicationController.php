@@ -83,15 +83,15 @@ class MEPTPApplicationController extends Controller
 
     public function applicationResult(){
 
-        $application = MEPTPApplication::where('vendor_id', Auth::user()->id)
-        ->with('user_state', 'user_lga', 'school', 'batch')
-        ->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')
-        ->orWhere('m_e_p_t_p_applications.status', '!=', 'rejected')
-        ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')->where('batches.status', '=', true)
-        ->select('m_e_p_t_p_applications.*')
-        ->first();
+        // $application = MEPTPApplication::where('vendor_id', Auth::user()->id)
+        // ->with('user_state', 'user_lga', 'school', 'batch')
+        // ->where('m_e_p_t_p_applications.status', '!=', 'approved_card_generated')
+        // ->orWhere('m_e_p_t_p_applications.status', '!=', 'rejected')
+        // ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')->where('batches.status', '=', true)
+        // ->select('m_e_p_t_p_applications.*')
+        // ->first();
 
-        return view('vendor-user.meptp-application-result', compact('application'));
+        return view('vendor-user.meptp-application-result');
     }
 
     public function downloadMEPTPDocument(Request $request){

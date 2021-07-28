@@ -25,12 +25,6 @@ class MEPTPPendingApplicationsController extends Controller
 
     public function centre($batchID){
 
-        // $batches = Batch::whereHas('meptpApplication', function($q){
-        //     $q->where('status', 'send_to_state_offcie');
-        //     $q->where('payment', true);
-        // })
-        // ->get();
-
         $schools = School::where('state', Auth::user()->state)
         ->get();
 
@@ -42,10 +36,115 @@ class MEPTPPendingApplicationsController extends Controller
             ->count();
 
             $schools[$key]['total_application'] =  $totalApplication;
+            $schools[$key]['batch_id'] =  $batchID;
         }
 
-        // dd($schools);
-
         return view('stateoffice.meptp.meptp-pending-centre', compact('schools'));
+    }
+
+    public function lists(Request $request){
+
+        if(School::where('state', Auth::user()->state)->where('id', $request->school_id)->exists()){
+
+            $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
+            ->with('user_state', 'user_lga', 'school', 'batch', 'user')
+            ->where('status', 'send_to_state_offcie');
+            
+            if($request->page){
+                $perPage = (integer) $request->page;
+            }else{
+                $perPage = 10;
+            }
+    
+            if(!empty($request->search)){
+                $search = $request->search;
+                $applications = $applications->where(function($q) use ($search){
+                    $q->where('m_e_p_t_p_applications.shop_name', 'like', '%' .$search. '%');
+                    $q->orWhere('m_e_p_t_p_applications.shop_address', 'like', '%' .$search. '%');
+                });
+            }
+    
+            $applications = $applications->latest()->paginate($perPage);
+
+            return view('stateoffice.meptp.meptp-pending-lists', compact('applications'));
+        }else{
+            return abort(404);
+        }
+    }
+
+    public function show(Request $request){
+
+        if(MEPTPApplication::where('id', $request->application_id)
+        ->where('batch_id', $request->batch_id)
+        ->where('traing_centre', $request->school_id)
+        ->where('vendor_id', $request->vendor_id)
+        ->where('status', 'send_to_state_offcie')
+        ->exists()){
+
+            $application = MEPTPApplication::where('id', $request->application_id)
+            ->where('batch_id', $request->batch_id)
+            ->where('traing_centre', $request->school_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('status', 'send_to_state_offcie')
+            ->first();
+
+            return view('stateoffice.meptp.meptp-pending-show', compact('application'));
+        }else{
+            return abort(404);
+        }
+    }
+
+    public function approve(Request $request){
+
+        if(MEPTPApplication::where('id', $request->application_id)
+        ->where('batch_id', $request->batch_id)
+        ->where('traing_centre', $request->school_id)
+        ->where('vendor_id', $request->vendor_id)
+        ->where('status', 'send_to_state_offcie')
+        ->exists()){
+
+            $application = MEPTPApplication::where('id', $request->application_id)
+            ->where('batch_id', $request->batch_id)
+            ->where('traing_centre', $request->school_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('status', 'send_to_state_offcie')
+            ->update([
+                'status' => 'send_to_pharmacy_practice',
+                'query' => null,
+            ]);
+
+            return redirect()->route('meptp-pending-batches')->with('success', 'Application Approved successfully done');
+        }else{
+            return abort(404);
+        }
+    }
+
+    public function query(Request $request){
+
+        $this->validate($request, [
+            'query' => ['required'],
+        ]);
+
+        if(MEPTPApplication::where('id', $request->application_id)
+        ->where('batch_id', $request->batch_id)
+        ->where('traing_centre', $request->school_id)
+        ->where('vendor_id', $request->vendor_id)
+        ->where('status', 'send_to_state_offcie')
+        ->exists()){
+
+            $application = MEPTPApplication::where('id', $request->application_id)
+            ->where('batch_id', $request->batch_id)
+            ->where('traing_centre', $request->school_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('status', 'send_to_state_offcie')
+            ->update([
+                'status' => 'reject_by_state_offcie',
+                'query' => $request->query,
+            ]);
+
+            return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');
+        }else{
+            return back('error', 'There is something error, please try after some time');
+        }
     }
 }

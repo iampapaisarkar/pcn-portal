@@ -32,6 +32,7 @@ class CreateMEPTPApplicationsTable extends Migration
             $table->integer('batch_id');
             $table->integer('tier_id')->nullable();
             $table->string('status');
+            $table->string('query')->nullable();
             $table->boolean('payment')->default(false);
             $table->timestamps();
         });

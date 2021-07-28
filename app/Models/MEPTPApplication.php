@@ -12,7 +12,7 @@ class MEPTPApplication extends Model
     protected $fillable = [
         'vendor_id', 'birth_certificate', 'educational_certificate', 'academic_certificate',
         'shop_name', 'shop_phone', 'shop_email', 'shop_address', 'city', 
-        'state', 'lga', 'is_registered', 'ppmvl_no','traing_centre', 'batch_id',  'status', 'payment'
+        'state', 'lga', 'is_registered', 'ppmvl_no','traing_centre', 'batch_id',  'status', 'query', 'payment'
     ];
 
     public function user() {
