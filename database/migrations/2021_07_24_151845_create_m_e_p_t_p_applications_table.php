@@ -30,6 +30,7 @@ class CreateMEPTPApplicationsTable extends Migration
             $table->string('ppmvl_no')->nullable();
             $table->integer('traing_centre');
             $table->integer('batch_id');
+            $table->integer('tier_id')->nullable();
             $table->string('status');
             $table->boolean('payment')->default(false);
             $table->timestamps();

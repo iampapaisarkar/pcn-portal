@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         $this->call([ServiceFeeMetaSeeder::class]);
         $this->call([BatchSeeder::class]);
         $this->call([SchoolSeeder::class]);
+        $this->call([TierSeeder::class]);
     }
 }
