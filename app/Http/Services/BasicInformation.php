@@ -7,6 +7,7 @@ use App\Models\Batch;
 use App\Models\State;
 use App\Models\Lga;
 use App\Models\School;
+use App\Models\MEPTPResult;
 
 class BasicInformation
 {
@@ -30,6 +31,8 @@ class BasicInformation
         // approved_tier_selected
         // index_generated
 
+        // dd();
+
         $activeBatch = Batch::where('status', true)->first();
 
         if($activeBatch){
@@ -44,7 +47,7 @@ class BasicInformation
                ->exists()){
                     return $response = [
                             'success' => false,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
+                            'message' => 'CAN\'T SUBMIT NEW APPLICATION. YOUR PREVIOUS APPLICATION IS IN PROGRESS (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.')',
                         ];
                 }
 
@@ -56,7 +59,7 @@ class BasicInformation
                     return $response = [
                             'success' => false,
                             'edit' => true,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
+                            'message' => 'CAN\'T SUBMIT NEW APPLICATION. YOUR PREVIOUS APPLICATION IS IN PROGRESS (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.')',
                         ];
                 }
 
@@ -67,7 +70,7 @@ class BasicInformation
                ->exists()){
                      return $response = [
                             'success' => false,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
+                            'message' => 'CAN\'T SUBMIT NEW APPLICATION. YOUR PREVIOUS APPLICATION IS IN PROGRESS (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.')',
                         ];
                 }
 
@@ -76,9 +79,9 @@ class BasicInformation
                ->where('batches.status', true)
                ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
                ->exists()){
-                    return  return $response = [
+                    return $response = [
                             'success' => false,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
+                            'message' => 'CAN\'T SUBMIT NEW APPLICATION. YOUR PREVIOUS APPLICATION IS IN PROGRESS (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.')',
                         ];
                 }
 
@@ -90,7 +93,7 @@ class BasicInformation
                ->exists()){
                     return $response = [
                             'success' => false,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved',
+                            'message' => 'CAN\'T SUBMIT NEW APPLICATION. YOUR PREVIOUS APPLICATION IS IN PROGRESS (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.')',
                         ];
                 }
 
@@ -101,7 +104,7 @@ class BasicInformation
                ->exists()){
                     return $response = [
                             'success' => false,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved and Examination Card Generated',
+                            'message' => 'CAN\'T SUBMIT NEW APPLICATION. YOUR PREVIOUS APPLICATION IS IN PROGRESS (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.')',
                         ];
                 }
 
@@ -151,6 +154,7 @@ class BasicInformation
            ->exists()){
                 return $response = [
                         'color' => 'warning',
+                        'is_status' => true,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
                     ];
             }
@@ -162,7 +166,7 @@ class BasicInformation
            ->exists()){
                 return $response = [
                         'color' => 'danger',
-                        'edit' => true,
+                        'is_status' => true,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
                         'caption' => 'Document Verification Queried Reason',
                     ];
@@ -175,6 +179,7 @@ class BasicInformation
            ->exists()){
                  return $response = [
                         'color' => 'warning',
+                        'is_status' => true,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
                     ];
             }
@@ -184,8 +189,9 @@ class BasicInformation
            ->where('batches.status', true)
            ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
            ->exists()){
-                return  return $response = [
+                return $response = [
                         'color' => 'danger',
+                        'is_status' => true,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
                         'caption' => 'Document Verification Queried Reason',
                     ];
@@ -199,6 +205,7 @@ class BasicInformation
            ->exists()){
                 return $response = [
                         'color' => 'success',
+                        'is_status' => true,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved',
                     ];
             }
@@ -210,6 +217,7 @@ class BasicInformation
            ->exists()){
                 return $response = [
                         'color' => 'success',
+                        'is_status' => true,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved and Examination Card Generated',
                     ];
             }
@@ -220,6 +228,7 @@ class BasicInformation
             //     ->exists();
             return $response = [
                 'color' => 'warning',
+                'is_status' => false,
                 'message' => 'No application Found!',
             ];
 
@@ -233,9 +242,10 @@ class BasicInformation
         // fail
 
         $activeBatch = Batch::where('status', true)->first();
-        $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->exists();
+        $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->first();
+        $isResult = MEPTPResult::where(['vendor_id' => Auth::user()->id, 'application_id' => $isSubmittedApplication->id])->exists();
 
-        if($isSubmittedApplication){
+        if($isResult){
 
             if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
@@ -245,8 +255,8 @@ class BasicInformation
            ->exists()){
                 return $response = [
                         'color' => 'warning',
+                        'is_result' => true,
                         'message' => 'MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
-                        'download_result' => ''
                     ];
             }
 
@@ -258,8 +268,8 @@ class BasicInformation
            ->exists()){
                 return $response = [
                         'color' => 'danger',
+                        'is_result' => true,
                         'message' => 'Sorry! You were unsuccessful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
-                        'download_result' => ''
                     ];
             }
 
@@ -271,6 +281,7 @@ class BasicInformation
            ->exists()){
                 return $response = [
                         'color' => 'success',
+                        'is_result' => true,
                         'message' => 'Congratulation! You were successful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
                         'download_result' => ''
                     ];
@@ -280,6 +291,7 @@ class BasicInformation
         }else{
             return $response = [
                 'color' => 'warning',
+                'is_result' => false,
                 'message' => 'No results Found!',
             ];
 
@@ -341,7 +353,7 @@ class BasicInformation
     //            ->where('batches.status', true)
     //            ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
     //            ->exists()){
-    //                 return  return $response = [
+    //                 return $response = [
     //                         'success' => false,
     //                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
     //                     ];
