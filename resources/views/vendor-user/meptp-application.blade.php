@@ -86,7 +86,7 @@
                             @error('birth_certificate') is-invalid @enderror" accept="application/pdf"
                                 id="inputGroupFile01" accept="image/*">
                             <label class="custom-file-label " for="inputGroupFile01"
-                                aria-describedby="inputGroupFileAddon02">Choose file</label>
+                                aria-describedby="inputGroupFileAddon02" id="inputGroupFile01previewLabel">Choose file</label>
                             @error('birth_certificate')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -106,7 +106,7 @@
                             @error('educational_certificate') is-invalid @enderror" accept="application/pdf"
                                 id="inputGroupFile02" accept="image/*">
                             <label class="custom-file-label " for="inputGroupFile02"
-                                aria-describedby="inputGroupFileAddon02">Choose file</label>
+                                aria-describedby="inputGroupFileAddon02" id="inputGroupFile02previewLabel">Choose file</label>
                             @error('educational_certificate')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -128,7 +128,7 @@
                             @error('academic_certificate') is-invalid @enderror" accept="application/pdf"
                                 id="inputGroupFile03" accept="image/*">
                             <label class="custom-file-label " for="inputGroupFile03"
-                                aria-describedby="inputGroupFileAddon02">Choose file</label>
+                                aria-describedby="inputGroupFileAddon02" id="inputGroupFile03previewLabel">Choose file</label>
                             @error('academic_certificate')
                             <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
@@ -375,6 +375,7 @@ inputGroupFile01.onchange = evt => {
     const [file] = inputGroupFile01.files
     if (file) {
         $('#inputGroupFile01preview').attr('src', URL.createObjectURL(file));
+        $('#inputGroupFile01previewLabel').html(file.name);
     }
 }
 
@@ -383,6 +384,7 @@ inputGroupFile02.onchange = evt => {
     const [file] = inputGroupFile02.files
     if (file) {
         $('#inputGroupFile02preview').attr('src', URL.createObjectURL(file));
+        $('#inputGroupFile02previewLabel').html(file.name);
     }
 }
 
@@ -391,6 +393,7 @@ inputGroupFile03.onchange = evt => {
     const [file] = inputGroupFile03.files
     if (file) {
         $('#inputGroupFile03preview').attr('src', URL.createObjectURL(file));
+        $('#inputGroupFile03previewLabel').html(file.name);
     }
 }
 

@@ -79,6 +79,7 @@ class MEPTPPendingApplicationsController extends Controller
         ->where('traing_centre', $request->school_id)
         ->where('vendor_id', $request->vendor_id)
         ->where('status', 'send_to_state_offcie')
+        ->where('payment', true)
         ->exists()){
 
             $application = MEPTPApplication::where('id', $request->application_id)
@@ -86,6 +87,7 @@ class MEPTPPendingApplicationsController extends Controller
             ->where('traing_centre', $request->school_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('status', 'send_to_state_offcie')
+            ->where('payment', true)
             ->first();
 
             return view('stateoffice.meptp.meptp-pending-show', compact('application'));
@@ -101,6 +103,7 @@ class MEPTPPendingApplicationsController extends Controller
         ->where('traing_centre', $request->school_id)
         ->where('vendor_id', $request->vendor_id)
         ->where('status', 'send_to_state_offcie')
+        ->where('payment', true)
         ->exists()){
 
             $application = MEPTPApplication::where('id', $request->application_id)
@@ -108,6 +111,7 @@ class MEPTPPendingApplicationsController extends Controller
             ->where('traing_centre', $request->school_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('status', 'send_to_state_offcie')
+            ->where('payment', true)
             ->update([
                 'status' => 'send_to_pharmacy_practice',
                 'query' => null,
@@ -130,16 +134,17 @@ class MEPTPPendingApplicationsController extends Controller
         ->where('traing_centre', $request->school_id)
         ->where('vendor_id', $request->vendor_id)
         ->where('status', 'send_to_state_offcie')
+        ->where('payment', true)
         ->exists()){
-
             $application = MEPTPApplication::where('id', $request->application_id)
             ->where('batch_id', $request->batch_id)
             ->where('traing_centre', $request->school_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('status', 'send_to_state_offcie')
+            ->where('payment', true)
             ->update([
                 'status' => 'reject_by_state_offcie',
-                'query' => $request->query,
+                'query' => $request['query'],
             ]);
 
             return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');

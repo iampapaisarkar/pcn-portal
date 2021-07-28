@@ -6,7 +6,9 @@
             </div>
             <div class="form-group col-md-6">
                 <h3>Batch Details: {{$application->batch->batch_no}}/{{$application->batch->year}}<h3>
+                @if($application->tier)
                 <h3>Tier: Tier-3<h3>
+                @endif
             </div>
             <div class="col-md-4">
                 <label for="inputEmail1" class="ul-form__label"><strong>First Name:</strong></label>

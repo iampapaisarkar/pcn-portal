@@ -172,7 +172,7 @@ class BasicInformation
                         'application_id' => $isSubmittedApplication->id,
                         'vendor_id' => Auth::user()->id,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
-                        'caption' => 'Rejected by State Office',
+                        'caption' => $isSubmittedApplication->query,
                     ];
             }
 
@@ -201,7 +201,7 @@ class BasicInformation
                         'application_id' => $isSubmittedApplication->id,
                         'vendor_id' => Auth::user()->id,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
-                        'caption' => 'Rejected by Pharmacy Practice',
+                        'caption' => $isSubmittedApplication->query,
                     ];
             }
 
