@@ -40,6 +40,7 @@ Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], functi
 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
     Route::resource('users', 'App\Http\Controllers\Admin\UserController');
+    Route::resource('vendor-profiles', 'App\Http\Controllers\Admin\VendorController');
     Route::resource('schools', 'App\Http\Controllers\Admin\SchoolController');
     Route::resource('batches', 'App\Http\Controllers\Admin\BatchController');
     Route::resource('services', 'App\Http\Controllers\Admin\Service\ServiceController');
