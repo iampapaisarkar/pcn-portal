@@ -18,7 +18,10 @@
                     </div>
                 </div>
             </div>
-            <x-vendor-m-e-p-t-p-application/>
+            <x-vendor-m-e-p-t-p-application 
+            :applicationID="app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['application_id']" 
+            :vendorID="app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['vendor_id']"
+            />
         @else
         <span>No result found!</span>
         @endif

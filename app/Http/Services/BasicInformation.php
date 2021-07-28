@@ -144,7 +144,7 @@ class BasicInformation
 
     public static function MEPTPApplicationStatus(){
         $activeBatch = Batch::where('status', true)->first();
-        $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->exists();
+        $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->first();
 
         if($isSubmittedApplication){
             if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
@@ -155,6 +155,8 @@ class BasicInformation
                 return $response = [
                         'color' => 'warning',
                         'is_status' => true,
+                        'application_id' => $isSubmittedApplication->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
                     ];
             }
@@ -167,8 +169,10 @@ class BasicInformation
                 return $response = [
                         'color' => 'danger',
                         'is_status' => true,
+                        'application_id' => $isSubmittedApplication->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
-                        'caption' => 'Document Verification Queried Reason',
+                        'caption' => 'Rejected by State Office',
                     ];
             }
 
@@ -180,6 +184,8 @@ class BasicInformation
                  return $response = [
                         'color' => 'warning',
                         'is_status' => true,
+                        'application_id' => $isSubmittedApplication->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
                     ];
             }
@@ -192,8 +198,10 @@ class BasicInformation
                 return $response = [
                         'color' => 'danger',
                         'is_status' => true,
+                        'application_id' => $isSubmittedApplication->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
-                        'caption' => 'Document Verification Queried Reason',
+                        'caption' => 'Rejected by Pharmacy Practice',
                     ];
             }
 
@@ -206,6 +214,8 @@ class BasicInformation
                 return $response = [
                         'color' => 'success',
                         'is_status' => true,
+                        'application_id' => $isSubmittedApplication->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved',
                     ];
             }
@@ -218,6 +228,8 @@ class BasicInformation
                 return $response = [
                         'color' => 'success',
                         'is_status' => true,
+                        'application_id' => $isSubmittedApplication->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved and Examination Card Generated',
                     ];
             }
@@ -256,6 +268,8 @@ class BasicInformation
                 return $response = [
                         'color' => 'warning',
                         'is_result' => true,
+                        'application_id' => $isSubmittedApplication->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
                     ];
             }
@@ -269,6 +283,8 @@ class BasicInformation
                 return $response = [
                         'color' => 'danger',
                         'is_result' => true,
+                        'application_id' => $isSubmittedApplication->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'Sorry! You were unsuccessful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
                     ];
             }
@@ -282,6 +298,8 @@ class BasicInformation
                 return $response = [
                         'color' => 'success',
                         'is_result' => true,
+                        'application_id' => $isSubmittedApplication->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'Congratulation! You were successful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
                         'download_result' => ''
                     ];
@@ -297,120 +315,6 @@ class BasicInformation
 
         }
     }
-
-    // public static function canSubmitMEPTPApplication(){
-        
-    //     // send_to_state_offcie
-    //     // reject_by_state_offcie
-    //     // send_to_pharmacy_practice
-    //     // reject_by_pharmacy_practice
-    //     // approved_tier_selected
-    //     // index_generated
-
-    //     $activeBatch = Batch::where('status', true)->first();
-
-    //     if($activeBatch){
-    //         $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->exists();
-
-    //         if($isSubmittedApplication){
-
-    //             if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-    //            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-    //            ->where('batches.status', true)
-    //            ->where('m_e_p_t_p_applications.status', 'send_to_state_offcie')
-    //            ->exists()){
-    //                 return $response = [
-    //                         'success' => false,
-    //                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
-    //                     ];
-    //             }
-
-    //             if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-    //            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-    //            ->where('batches.status', true)
-    //            ->where('m_e_p_t_p_applications.status', 'reject_by_state_offcie')
-    //            ->exists()){
-    //                 return $response = [
-    //                         'success' => false,
-    //                         'edit' => true,
-    //                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
-    //                     ];
-    //             }
-
-    //             if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-    //            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-    //            ->where('batches.status', true)
-    //            ->where('m_e_p_t_p_applications.status', 'send_to_pharmacy_practice')
-    //            ->exists()){
-    //                  return $response = [
-    //                         'success' => false,
-    //                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
-    //                     ];
-    //             }
-
-    //             if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-    //            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-    //            ->where('batches.status', true)
-    //            ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
-    //            ->exists()){
-    //                 return $response = [
-    //                         'success' => false,
-    //                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
-    //                     ];
-    //             }
-
-
-    //             if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-    //            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-    //            ->where('batches.status', true)
-    //            ->where('m_e_p_t_p_applications.status', 'approved_tier_selected')
-    //            ->exists()){
-    //                 return $response = [
-    //                         'success' => false,
-    //                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved',
-    //                     ];
-    //             }
-
-    //             if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-    //            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-    //            ->where('batches.status', true)
-    //            ->where('m_e_p_t_p_applications.status', 'index_generated')
-    //            ->exists()){
-    //                 return $response = [
-    //                         'success' => false,
-    //                         'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved and Examination Card Generated',
-    //                     ];
-    //             }
-
-
-    //         }else{
-    //             $isResultPASS = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
-    //             ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-    //             ->where('m_e_p_t_p_results.status', '=', 'pass')
-    //             ->exists();
-
-    //             // $isApplicationRejected = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
-    //             // ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-    //             // ->where('m_e_p_t_p_applications.status', '=', 'reject_by_pharmacy_practice')
-    //             // ->exists();
-
-    //             if($isResultPASS){
-    //                 return $response = [
-    //                         'success' => false,
-    //                         'message' => 'YOU ARE LAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.')',
-    //                     ];
-    //             }else{
-    //                 return $response = [
-    //                         'success' => true,
-    //                     ];
-    //             }
-    //         }
-    //     }else{
-    //         return $response = [
-    //             'success' => true,
-    //         ];
-    //     }
-    // }
 
     public static function states()
     {
