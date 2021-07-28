@@ -16,4 +16,9 @@ class Batch extends Model
     protected $fillable = [
         'batch_no', 'year', 'status', 'closed_at'
     ];
+
+    public function meptpApplication() {
+        return $this->hasMany(MEPTPApplication::class,'batch_id', 'id');
+        // ->where('status', 'send_to_state_offcie');
+    }
 }

@@ -49,9 +49,13 @@ Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
 	Route::get('/payments/{id}', 'App\Http\Controllers\InvoiceController@show')->name('payments.show');
 });
 
-Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
+Route::group(['middleware' => ['auth','verified', 'can:isSOffice']], function () {
+    // Route::resource('users', 'App\Http\Controllers\Admin\UserController');
+	Route::get('/meptp-pending-batches', 'App\Http\Controllers\StateOffice\MEPTPPendingApplicationsController@batches')->name('meptp-pending-batches');
+	Route::get('/meptp-pending-centre/{batch_id}', 'App\Http\Controllers\StateOffice\MEPTPPendingApplicationsController@centre')->name('meptp-pending-centre');
+});
 
-    // Route::resource('services-fee', 'App\Http\Controllers\Admin\Service\ServiceFeeController');
+Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
 
 	Route::get('/meptp-application', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationForm')->name('meptp-application');
     Route::post('/meptp-application-submit', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationSubmit')->name('meptp-application-submit');

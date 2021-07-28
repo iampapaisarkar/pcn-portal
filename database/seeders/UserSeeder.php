@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
             'email' => 'state@test.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123456'),
-            'state' => 3,
+            'state' => 2,
             'created_at' => now(),
             'updated_at' => now(),
             ],

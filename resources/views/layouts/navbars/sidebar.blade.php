@@ -95,7 +95,7 @@
                 <!-- State office routes start  -->
                 @can('isSOffice')
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}">
+                    <a href="{{route('meptp-pending-batches')}}">
                         <i class="nav-icon i-Receipt-4"></i>
                         <span class="item-name">MEPTP - Doc. Review Pending </span>
                     </a>
