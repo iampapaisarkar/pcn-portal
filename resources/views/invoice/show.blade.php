@@ -80,9 +80,9 @@
                 <div class="col-md-12">
                     <div class="invoice-summary">
                         <p>Sub total: <span>NGN {{number_format($invoice->amount)}}</span></p>
-                        <p>Service charge: <span>NGN {{number_format($invoice->service_charge)}}</span></p>
+                        <!-- <p>Service charge: <span>NGN {{number_format($invoice->service_charge)}}</span></p> -->
 
-                        <h5 class="font-weight-bold">Grand Total: <span>NGN {{number_format($invoice->total_amount)}}</span></h5>
+                        <h5 class="font-weight-bold">Grand Total: <span>NGN {{number_format($invoice->amount)}}</span></h5>
                     </div>
                 </div>
 
