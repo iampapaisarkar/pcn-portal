@@ -80,6 +80,15 @@ Route::group(['middleware' => ['auth','verified', 'can:isPPractice']], function 
 	Route::get('/meptp-approval-show', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@show')->name('meptp-approval-show');
 	Route::post('/meptp-select-tier', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@selectForTier')->name('meptp-select-tier');
 	Route::post('/meptp-approval-query', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@query')->name('meptp-approval-query');
+
+    // MEPTP APPROVED ROUTES
+	Route::get('/meptp-approved-batches', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@batches')->name('meptp-approved-batches');
+	// Route::get('/meptp-approved-states', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@states')->name('meptp-approved-states');
+	// Route::get('/meptp-approved-centre/{state_id}', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@centre')->name('meptp-approved-centre');
+	// Route::get('/meptp-approved-lists', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@lists')->name('meptp-approved-lists');
+	// Route::get('/meptp-approved-show', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@show')->name('meptp-approved-show');
+	// Route::post('/meptp-select-tier', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@selectForTier')->name('meptp-select-tier');
+	// Route::post('/meptp-approval-query', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@query')->name('meptp-approval-query');
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
