@@ -40,11 +40,13 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        @if(Request::get('status') == 'false')
                         <th>
                             <label class="checkbox checkbox-success">
                                 <input id="check_box_bulk_action_select_all"  type="checkbox"  /><span class="checkmark"></span>
                             </label>
                         </th>
+                        @endif
                         <th>Tier</th>
                         <th>Vendor Name</th>
                         <th>Shop Name</th>
@@ -57,11 +59,13 @@
                     @foreach($applications as $key => $application)
                     <tr>    
                         <td>{{$key+1}}</td>
+                        @if(Request::get('status') == 'false')
                         <td>
                             <label class="checkbox checkbox-success">
                                 <input class="check_box_bulk_action" id="check_box_bulk_action-{{$application->id}}" type="checkbox" name="check_box_bulk_action[{{$application->id}}]" /><span class="checkmark"></span>
                             </label>
                         </td>
+                        @endif
                         <td>{{$application->tier->name}}</td>
                         <td>{{$application->user->firstname}} {{$application->user->lastname}}</td>
                         <td>{{$application->shop_name}}</td>
@@ -74,11 +78,13 @@
                 <tfoot>
                     <tr>
                         <th>#</th>
+                        @if(Request::get('status') == 'false')
                         <th>
                             <label class="checkbox checkbox-success">
                                 <input id="check_box_bulk_action_select_all" type="checkbox"  /><span class="checkmark"></span>
                             </label>
                         </th>
+                        @endif
                         <th>Tier</th>
                         <th>Vendor Name</th>
                         <th>Shop Name</th>
@@ -90,8 +96,9 @@
             </table>
             {{$applications->links('pagination')}}
         </div>
-
+        @if(Request::get('status') == 'false')
         <button onclick="generateIndexNumber(event)" type="button" class="btn btn-primary mt-5">GENERATE INDEX NUMBERS AND EXAMINATION CARDS</button>
+        @endif
     </div>
 </div>
 </form>

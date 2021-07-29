@@ -17,93 +17,149 @@ class MEPTPApprovedApplicationsController extends Controller
 {
     public function batches(){
 
-        $batches = Batch::whereHas('meptpApplication', function($q){
+        $withoutIndexBatches = Batch::whereHas('meptpApplication', function($q){
             $q->where('status', 'approved_tier_selected');
+            $q->where('index_number_id', null);
             $q->where('payment', true);
         })
         ->with('meptpApplication')
         ->get();
 
-        foreach($batches as $key => $batch){
+        foreach($withoutIndexBatches as $key => $batch){
             foreach($batch->meptpApplication as $application){
-                if($application->index_number_id != null){
-                    $batches[$key]['index_number_generated'] = true;
-                }else{
-                    $batches[$key]['index_number_generated'] = false;
+                if($application->index_number_id == null){
+                    $withoutIndexBatches[$key]['index_number_generated'] = false;
+                    $withoutIndexBatches[$key]['status'] = 'false';
                 }
             }
         }
 
+        $withIndexBatches = Batch::whereHas('meptpApplication', function($q){
+            $q->where('status', 'approved_tier_selected');
+            $q->where('index_number_id', '!=', null);
+            $q->where('payment', true);
+        })
+        ->with('meptpApplication')
+        ->get();
+
+        foreach($withIndexBatches as $key => $batch){
+            foreach($batch->meptpApplication as $application){
+                if($application->index_number_id != null){
+                    $withIndexBatches[$key]['index_number_generated'] = true;
+                    $withIndexBatches[$key]['status'] = 'true';
+                }
+            }
+        }
+
+        $batches = (object) array_merge(
+            (array) $withoutIndexBatches->toArray(), (array) $withIndexBatches->toArray());
+
+        // dd($batches);
+
         return view('pharmacypractice.meptp.approved.meptp-approved-batches', compact('batches'));
     }
 
-    public function states($batchID){
+    public function states($batchID, Request $request){
 
-        $states = State::get();
+        if($request->status == 'false' || $request->status == 'true'){
 
-        foreach($states as $key => $state){
-            $totalApplication = MEPTPApplication::where('status', 'approved_tier_selected')
-            ->where('payment', true)
-            ->where('index_number_id', null)
-            ->whereHas('user.user_state', function($q) use($state){
-                $q->where('states.id', $state->id);
-            })
-            ->count();
+            $states = State::get();
 
-            $states[$key]['total_application'] =  $totalApplication;
+            foreach($states as $key => $state){
+                $totalApplication = MEPTPApplication::where('payment', true);
+
+                if($request->status == 'true'){
+                    $totalApplication = $totalApplication->where('status', 'index_generated')
+                    ->where('index_number_id', '!=', null);
+                }else{
+                    $totalApplication = $totalApplication->where('status', 'approved_tier_selected')
+                    ->where('index_number_id', null);
+                }
+                $totalApplication = $totalApplication->whereHas('user.user_state', function($q) use($state){
+                    $q->where('states.id', $state->id);
+                })
+                ->count();
+
+                $states[$key]['total_application'] =  $totalApplication;
+            }
+            return view('pharmacypractice.meptp.approved.meptp-approved-states', compact('states'));
+        }else{
+            return abort(404);
         }
-        return view('pharmacypractice.meptp.approved.meptp-approved-states', compact('states'));
+
     }
 
-    public function centre($stateID){
+    public function centre($stateID, Request $request){
+        if($request->status == 'false' || $request->status == 'true'){
 
-        $schools = School::where('state', $stateID)
-        ->where('status', true)
-        ->get();
+            $schools = School::where('state', $stateID)
+            ->where('status', true)
+            ->get();
 
-        foreach($schools as $key => $school){
-            $totalApplication = MEPTPApplication::where('status', 'approved_tier_selected')
-            ->where('payment', true)
-            ->where('index_number_id', null)
-            // ->where('state', $state->id)
-            ->where('traing_centre', $school->id)
-            ->count();
+            foreach($schools as $key => $school){
+                $totalApplication = MEPTPApplication::where('payment', true);
 
-            $schools[$key]['total_application'] =  $totalApplication;
+                if($request->status == 'true'){
+                    $totalApplication = $totalApplication->where('status', 'index_generated')
+                    ->where('index_number_id', '!=', null);
+                }else{
+                    $totalApplication = $totalApplication->where('status', 'approved_tier_selected')
+                    ->where('index_number_id', null);
+                }
+
+                $totalApplication = $totalApplication->where('traing_centre', $school->id)
+                ->count();
+
+                $schools[$key]['total_application'] =  $totalApplication;
+            }
+
+            return view('pharmacypractice.meptp.approved.meptp-approved-centre', compact('schools'));
+        }else{
+            return abort(404);
         }
-
-        return view('pharmacypractice.meptp.approved.meptp-approved-centre', compact('schools'));
     }
 
     public function lists(Request $request){
 
-        if(School::where('id', $request->school_id)->exists()){
+        if($request->status == 'false' || $request->status == 'true'){
 
-            $applications = MEPTPApplication::where(['traing_centre' => $request->school_id])
-            ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'tier')
-            ->where('index_number_id', null)
-            ->where('status', 'approved_tier_selected');
-            
-            if($request->page){
-                $perPage = (integer) $request->page;
+            if(School::where('id', $request->school_id)->exists()){
+
+                $applications = MEPTPApplication::where(['traing_centre' => $request->school_id])
+                ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'tier');
+
+                if($request->status == 'true'){
+                    $applications = $applications->where('status', 'index_generated')
+                    ->where('index_number_id', '!=', null);
+                }else{
+                    $applications = $applications->where('status', 'approved_tier_selected')
+                    ->where('index_number_id', null);
+                }
+                
+                if($request->page){
+                    $perPage = (integer) $request->page;
+                }else{
+                    $perPage = 10;
+                }
+        
+                if(!empty($request->search)){
+                    $search = $request->search;
+                    $applications = $applications->where(function($q) use ($search){
+                        $q->where('m_e_p_t_p_applications.shop_name', 'like', '%' .$search. '%');
+                        $q->orWhere('m_e_p_t_p_applications.shop_address', 'like', '%' .$search. '%');
+                    });
+                }
+        
+                $applications = $applications->latest()->paginate($perPage);
+
+                return view('pharmacypractice.meptp.approved.meptp-approved-lists', compact('applications'));
             }else{
-                $perPage = 10;
+                return abort(404);
             }
-    
-            if(!empty($request->search)){
-                $search = $request->search;
-                $applications = $applications->where(function($q) use ($search){
-                    $q->where('m_e_p_t_p_applications.shop_name', 'like', '%' .$search. '%');
-                    $q->orWhere('m_e_p_t_p_applications.shop_address', 'like', '%' .$search. '%');
-                });
-            }
-    
-            $applications = $applications->latest()->paginate($perPage);
-
-            return view('pharmacypractice.meptp.approved.meptp-approved-lists', compact('applications'));
         }else{
             return abort(404);
         }
+
     }
 
     public function generateIndexNumber(Request $request){

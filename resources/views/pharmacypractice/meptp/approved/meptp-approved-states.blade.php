@@ -9,7 +9,7 @@
             @foreach($states as $state)
             <div class="col-lg-2 col-md-2 col-sm-2">
                 <div class="card card-icon mb-4">
-                    <a href="{{ route('meptp-approved-centre', $state->id) }}">
+                    <a href="{{ route('meptp-approved-centre', $state->id) }}?status={{Request::get('status')}}">
                     <div class="card-body text-center"><i class="i-Diploma"></i>
                         <p class="text-muted mt-2 mb-2">{{$state->name}}</p>
                         <p class="text-primary text-20 line-height-1 m-0">{{$state->total_application}}</p>
