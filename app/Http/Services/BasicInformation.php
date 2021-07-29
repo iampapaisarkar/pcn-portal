@@ -8,6 +8,7 @@ use App\Models\State;
 use App\Models\Lga;
 use App\Models\School;
 use App\Models\MEPTPResult;
+use App\Models\Tier;
 
 class BasicInformation
 {
@@ -335,6 +336,12 @@ class BasicInformation
 
         $schools = School::where('state', $authUserState->id)->get();
         return $schools;
+    }
+
+    public static function tiers()
+    {
+        $tiers = Tier::get();
+        return $tiers;
     }
 
 }

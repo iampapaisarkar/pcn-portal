@@ -100,4 +100,54 @@ class MEPTPApprovalApplicationsController extends Controller
             return abort(404);
         }
     }
+
+    public function selectForTier(Request $request){
+        $this->validate($request, [
+            'tier' => ['required'],
+        ]);
+
+        if(MEPTPApplication::where('id', $request->application_id)
+        ->where('vendor_id', $request->vendor_id)
+        ->where('status', 'send_to_pharmacy_practice')
+        ->where('payment', true)
+        ->exists()){
+            $application = MEPTPApplication::where('id', $request->application_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('status', 'send_to_pharmacy_practice')
+            ->where('payment', true)
+            ->update([
+                'status' => 'approved_tier_selected', //reject_by_pharmacy_practice
+                'tier_id' => $request['tier'],
+            ]);
+
+            return redirect()->route('meptp-approval-states')->with('success', 'Application successfully approved & tier seleted');
+        }else{
+            return back('error', 'There is something error, please try after some time');
+        }
+    }
+
+    public function query(Request $request){
+        $this->validate($request, [
+            'query' => ['required'],
+        ]);
+
+        if(MEPTPApplication::where('id', $request->application_id)
+        ->where('vendor_id', $request->vendor_id)
+        ->where('status', 'send_to_pharmacy_practice')
+        ->where('payment', true)
+        ->exists()){
+            $application = MEPTPApplication::where('id', $request->application_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('status', 'send_to_pharmacy_practice')
+            ->where('payment', true)
+            ->update([
+                'status' => 'reject_by_pharmacy_practice',
+                'query' => $request['query'],
+            ]);
+
+            return redirect()->route('meptp-approval-states')->with('success', 'Application successfully quired & rejected');
+        }else{
+            return back('error', 'There is something error, please try after some time');
+        }
+    }
 }

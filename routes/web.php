@@ -78,6 +78,8 @@ Route::group(['middleware' => ['auth','verified', 'can:isPPractice']], function 
 	Route::get('/meptp-approval-centre/{state_id}', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@centre')->name('meptp-approval-centre');
 	Route::get('/meptp-approval-lists', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@lists')->name('meptp-approval-lists');
 	Route::get('/meptp-approval-show', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@show')->name('meptp-approval-show');
+	Route::post('/meptp-select-tier', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@selectForTier')->name('meptp-select-tier');
+	Route::post('/meptp-approval-query', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovalApplicationsController@query')->name('meptp-approval-query');
 });
 
 Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
