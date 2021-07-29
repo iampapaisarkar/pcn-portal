@@ -21,7 +21,7 @@
                         <td>{{$batch->batch_no}}/{{$batch->year}}</td>
                         <td>{{Auth::user()->user_state->name}}</td>
                         <td><span class="badge badge-pill m-1 badge-success">APPROVED</span></td>
-                        <!-- <td><a href="{{route('meptp-pending-centre', $batch->id)}}"><button class="btn btn-info" type="button">VIEW</button></a></td> -->
+                        <td><a href="{{route('meptp-approve-centre', $batch->id)}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
                     </tr>
                     @endforeach
                 </tbody>

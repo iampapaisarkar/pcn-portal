@@ -62,6 +62,9 @@ Route::group(['middleware' => ['auth','verified', 'can:isSOffice']], function ()
 
     // MEPTP APPROVE
 	Route::get('/meptp-approve-batches', 'App\Http\Controllers\StateOffice\MEPTPApproveApplicationsController@batches')->name('meptp-approve-batches');
+	Route::get('/meptp-approve-centre/{batch_id}', 'App\Http\Controllers\StateOffice\MEPTPApproveApplicationsController@centre')->name('meptp-approve-centre');
+	Route::get('/meptp-approve-lists', 'App\Http\Controllers\StateOffice\MEPTPApproveApplicationsController@lists')->name('meptp-approve-lists');
+	Route::get('/meptp-approve-show', 'App\Http\Controllers\StateOffice\MEPTPApproveApplicationsController@show')->name('meptp-approve-show');
 
 });
 
