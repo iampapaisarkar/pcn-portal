@@ -57,7 +57,7 @@ class Checkout
 
         }catch(Exception $e) {
             DB::rollback();
-            return back()->with('error','There is something error, please try after some time');
+            return ['success' => false];
         }  
     }
 

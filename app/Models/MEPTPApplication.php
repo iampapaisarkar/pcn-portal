@@ -43,4 +43,8 @@ class MEPTPApplication extends Model
         return $this->hasOne(MEPTPIndexNumber::class,'id', 'index_number_id');
     }
 
+    public function activities() {
+        return $this->hasMany(Activity::class,'application_id', 'id');
+    }
+
 }
