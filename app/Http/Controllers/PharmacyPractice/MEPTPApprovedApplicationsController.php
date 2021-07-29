@@ -35,7 +35,7 @@ class MEPTPApprovedApplicationsController extends Controller
         }
 
         $withIndexBatches = Batch::whereHas('meptpApplication', function($q){
-            $q->where('status', 'approved_tier_selected');
+            $q->where('status', 'index_generated');
             $q->where('index_number_id', '!=', null);
             $q->where('payment', true);
         })
