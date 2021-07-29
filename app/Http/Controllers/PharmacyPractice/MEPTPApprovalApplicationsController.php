@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MEPTPApplication;
+use App\Models\MEPTPResult;
 use App\Models\Batch;
 use App\Models\State;
 use App\Models\School;
+use DB;
 
 class MEPTPApprovalApplicationsController extends Controller
 {
@@ -106,24 +108,46 @@ class MEPTPApprovalApplicationsController extends Controller
             'tier' => ['required'],
         ]);
 
-        if(MEPTPApplication::where('id', $request->application_id)
-        ->where('vendor_id', $request->vendor_id)
-        ->where('status', 'send_to_pharmacy_practice')
-        ->where('payment', true)
-        ->exists()){
-            $application = MEPTPApplication::where('id', $request->application_id)
+        try {
+            DB::beginTransaction();
+
+            if(MEPTPApplication::where('id', $request->application_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('status', 'send_to_pharmacy_practice')
             ->where('payment', true)
-            ->update([
-                'status' => 'approved_tier_selected', //reject_by_pharmacy_practice
-                'tier_id' => $request['tier'],
-            ]);
+            ->exists()){
+                $application = MEPTPApplication::where('id', $request->application_id)
+                ->where('vendor_id', $request->vendor_id)
+                ->where('status', 'send_to_pharmacy_practice')
+                ->where('payment', true)
+                ->update([
+                    'status' => 'approved_tier_selected', //reject_by_pharmacy_practice
+                    'tier_id' => $request['tier'],
+                ]);
 
-            return redirect()->route('meptp-approval-states')->with('success', 'Application successfully approved & tier seleted');
-        }else{
-            return back('error', 'There is something error, please try after some time');
-        }
+                MEPTPResult::create([
+                    'application_id' => $request->application_id,
+                    'vendor_id' => $request->vendor_id,
+                    'status' => 'pending',
+                ]);
+
+                $response = true;
+            }else{
+                $response = false;
+            }
+
+            DB::commit();
+
+            if($response == true){
+                return redirect()->route('meptp-approval-states')->with('success', 'Application successfully approved & tier seleted');
+            }else{
+                return back('error', 'There is something error, please try after some time');
+            }
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
     }
 
     public function query(Request $request){
@@ -131,23 +155,43 @@ class MEPTPApprovalApplicationsController extends Controller
             'query' => ['required'],
         ]);
 
-        if(MEPTPApplication::where('id', $request->application_id)
-        ->where('vendor_id', $request->vendor_id)
-        ->where('status', 'send_to_pharmacy_practice')
-        ->where('payment', true)
-        ->exists()){
-            $application = MEPTPApplication::where('id', $request->application_id)
+        try {
+            DB::beginTransaction();
+
+            if(MEPTPApplication::where('id', $request->application_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('status', 'send_to_pharmacy_practice')
             ->where('payment', true)
-            ->update([
-                'status' => 'reject_by_pharmacy_practice',
-                'query' => $request['query'],
-            ]);
+            ->exists()){
+                $application = MEPTPApplication::where('id', $request->application_id)
+                ->where('vendor_id', $request->vendor_id)
+                ->where('status', 'send_to_pharmacy_practice')
+                ->where('payment', true)
+                ->update([
+                    'status' => 'reject_by_pharmacy_practice',
+                    'query' => $request['query'],
+                ]);
 
-            return redirect()->route('meptp-approval-states')->with('success', 'Application successfully quired & rejected');
-        }else{
-            return back('error', 'There is something error, please try after some time');
-        }
+                MEPTPResult::create([
+                    'application_id' => $request->application_id,
+                    'vendor_id' => $request->vendor_id,
+                    'status' => 'pending',
+                ]);
+                $response = true;
+            }else{
+                $response = false;
+            }
+            DB::commit();
+
+            if($response == true){
+                return redirect()->route('meptp-approval-states')->with('success', 'Application successfully quired & rejected');
+            }else{
+                return back('error', 'There is something error, please try after some time');
+            }
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
     }
 }

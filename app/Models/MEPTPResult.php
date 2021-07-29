@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class MEPTPResult extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'application_id', 'vendor_id', 'status'
+    ];
 }
