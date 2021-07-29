@@ -17,7 +17,6 @@ class CreateActivitiesTable extends Migration
             $table->id();
             $table->string('application_id');
             $table->string('admin_name');
-            $table->string('admin_name');
             $table->string('activity');
             $table->string('type');
             $table->timestamps();
