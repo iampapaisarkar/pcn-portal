@@ -15,20 +15,6 @@ use DB;
 class MEPTPApprovalApplicationsController extends Controller
 {
 
-    public function batches(){
-
-        $batches = Batch::whereHas('meptpApplication', function($q){
-            $q->where('status', 'approved_tier_selected');
-            $q->where('payment', true);
-        })
-        ->with('meptpApplication')
-        ->get();
-
-        // dd($batches);
-
-        return view('pharmacypractice.meptp.approved.meptp-approved-batches', compact('batches'));
-    }
-
     public function states(){
 
         $states = State::get();

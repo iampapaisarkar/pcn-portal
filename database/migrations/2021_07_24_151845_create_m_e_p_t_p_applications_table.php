@@ -31,7 +31,7 @@ class CreateMEPTPApplicationsTable extends Migration
             $table->integer('traing_centre');
             $table->integer('batch_id');
             $table->integer('tier_id')->nullable();
-            $table->string('index_number')->nullable();
+            $table->integer('index_number_id')->nullable();
             $table->string('status');
             $table->string('query')->nullable();
             $table->boolean('payment')->default(false);

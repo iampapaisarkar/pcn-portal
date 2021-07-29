@@ -12,7 +12,7 @@ class MEPTPApplication extends Model
     protected $fillable = [
         'vendor_id', 'birth_certificate', 'educational_certificate', 'academic_certificate',
         'shop_name', 'shop_phone', 'shop_email', 'shop_address', 'city', 
-        'state', 'lga', 'is_registered', 'ppmvl_no','traing_centre', 'batch_id', 'tier_id', 'index_number', 'status', 'query', 'payment'
+        'state', 'lga', 'is_registered', 'ppmvl_no','traing_centre', 'batch_id', 'tier_id', 'index_number_id', 'status', 'query', 'payment'
     ];
 
     public function user() {
@@ -37,6 +37,10 @@ class MEPTPApplication extends Model
 
     public function batch() {
         return $this->hasOne(Batch::class,'id', 'batch_id');
+    }
+
+    public function indexNumber() {
+        return $this->hasOne(MEPTPIndexNumber::class,'id', 'index_number_id');
     }
 
 }
