@@ -7,7 +7,7 @@
             <div class="form-group col-md-6">
                 <h3>Batch Details: {{$application->batch->batch_no}}/{{$application->batch->year}}<h3>
                 @if($application->tier)
-                <h3>Tier: Tier-3<h3>
+                <h3>Tier: {{$application->tier->name}}<h3>
                 @endif
             </div>
             <div class="col-md-4">

@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="col-md-12">
-                    <div class="alert alert-card alert-success" role="alert">{{app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['message']}}
+                    <div class="alert alert-card alert-{{app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['color']}}" role="alert">{{app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['message']}}
                         @if(isset(app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['download_result']))
                         <button class="btn btn-rounded btn-success ml-3">Download Result</button>
                         @endif

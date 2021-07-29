@@ -261,9 +261,9 @@ class BasicInformation
 
         if($isResult){
 
-            if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.appllication_id', 'm_e_p_t_p_applications.id')
+           ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
            ->where('batches.status', true)
            ->where('m_e_p_t_p_results.status', 'pending')
            ->exists()){
@@ -276,9 +276,9 @@ class BasicInformation
                     ];
             }
 
-            if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.appllication_id', 'm_e_p_t_p_applications.id')
+           ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
            ->where('batches.status', true)
            ->where('m_e_p_t_p_results.status', 'fail')
            ->exists()){
@@ -291,9 +291,9 @@ class BasicInformation
                     ];
             }
 
-            if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.appllication_id', 'm_e_p_t_p_applications.id')
+           ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
            ->where('batches.status', true)
            ->where('m_e_p_t_p_results.status', 'pass')
            ->exists()){
