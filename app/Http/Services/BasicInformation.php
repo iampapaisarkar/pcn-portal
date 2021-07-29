@@ -138,184 +138,203 @@ class BasicInformation
             }
         }else{
             return $response = [
-                'success' => true,
+                'success' => false,
+                'message' => 'CURRENTLY NO ACTIVE BATCH FOUND',
             ];
         }
     }
 
     public static function MEPTPApplicationStatus(){
         $activeBatch = Batch::where('status', true)->first();
-        $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->first();
 
-        if($isSubmittedApplication){
-            if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-           ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->where('batches.status', true)
-           ->where('m_e_p_t_p_applications.status', 'send_to_state_offcie')
-           ->exists()){
+        if($activeBatch){
+
+            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->first();
+
+            if($isSubmittedApplication){
+                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->where('batches.status', true)
+            ->where('m_e_p_t_p_applications.status', 'send_to_state_offcie')
+            ->exists()){
+                    return $response = [
+                            'color' => 'warning',
+                            'is_status' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
+                        ];
+                }
+
+                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->where('batches.status', true)
+            ->where('m_e_p_t_p_applications.status', 'reject_by_state_offcie')
+            ->exists()){
+                    return $response = [
+                            'color' => 'danger',
+                            'is_status' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'edit' => true,
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
+                            'caption' => $isSubmittedApplication->query,
+                        ];
+                }
+
+                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->where('batches.status', true)
+            ->where('m_e_p_t_p_applications.status', 'send_to_pharmacy_practice')
+            ->exists()){
+                    return $response = [
+                            'color' => 'warning',
+                            'is_status' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
+                        ];
+                }
+
+                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->where('batches.status', true)
+            ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
+            ->exists()){
+                    return $response = [
+                            'color' => 'danger',
+                            'is_status' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
+                            'caption' => $isSubmittedApplication->query,
+                        ];
+                }
+
+
+                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->where('batches.status', true)
+            ->where('m_e_p_t_p_applications.status', 'approved_tier_selected')
+            ->exists()){
+                    return $response = [
+                            'color' => 'success',
+                            'is_status' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved',
+                        ];
+                }
+
+                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->where('batches.status', true)
+            ->where('m_e_p_t_p_applications.status', 'index_generated')
+            ->exists()){
+                    return $response = [
+                            'color' => 'success',
+                            'is_status' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved and Examination Card Generated',
+                        ];
+                }
+            }else{
+                // $isApplicationRejected = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
+                //     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                //     ->where('m_e_p_t_p_applications.status', '=', 'reject_by_pharmacy_practice')
+                //     ->exists();
                 return $response = [
-                        'color' => 'warning',
-                        'is_status' => true,
-                        'application_id' => $isSubmittedApplication->id,
-                        'vendor_id' => Auth::user()->id,
-                        'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
-                    ];
+                    'color' => 'warning',
+                    'is_status' => false,
+                    'message' => 'No application Found!',
+                ];
             }
-
-            if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-           ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->where('batches.status', true)
-           ->where('m_e_p_t_p_applications.status', 'reject_by_state_offcie')
-           ->exists()){
-                return $response = [
-                        'color' => 'danger',
-                        'is_status' => true,
-                        'application_id' => $isSubmittedApplication->id,
-                        'vendor_id' => Auth::user()->id,
-                        'edit' => true,
-                        'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
-                        'caption' => $isSubmittedApplication->query,
-                    ];
-            }
-
-            if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-           ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->where('batches.status', true)
-           ->where('m_e_p_t_p_applications.status', 'send_to_pharmacy_practice')
-           ->exists()){
-                 return $response = [
-                        'color' => 'warning',
-                        'is_status' => true,
-                        'application_id' => $isSubmittedApplication->id,
-                        'vendor_id' => Auth::user()->id,
-                        'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
-                    ];
-            }
-
-            if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-           ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->where('batches.status', true)
-           ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
-           ->exists()){
-                return $response = [
-                        'color' => 'danger',
-                        'is_status' => true,
-                        'application_id' => $isSubmittedApplication->id,
-                        'vendor_id' => Auth::user()->id,
-                        'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
-                        'caption' => $isSubmittedApplication->query,
-                    ];
-            }
-
-
-            if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-           ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->where('batches.status', true)
-           ->where('m_e_p_t_p_applications.status', 'approved_tier_selected')
-           ->exists()){
-                return $response = [
-                        'color' => 'success',
-                        'is_status' => true,
-                        'application_id' => $isSubmittedApplication->id,
-                        'vendor_id' => Auth::user()->id,
-                        'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved',
-                    ];
-            }
-
-            if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-           ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->where('batches.status', true)
-           ->where('m_e_p_t_p_applications.status', 'index_generated')
-           ->exists()){
-                return $response = [
-                        'color' => 'success',
-                        'is_status' => true,
-                        'application_id' => $isSubmittedApplication->id,
-                        'vendor_id' => Auth::user()->id,
-                        'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved and Examination Card Generated',
-                    ];
-            }
+        
         }else{
-            // $isApplicationRejected = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
-            //     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-            //     ->where('m_e_p_t_p_applications.status', '=', 'reject_by_pharmacy_practice')
-            //     ->exists();
             return $response = [
-                'color' => 'warning',
+                'color' => 'light',
                 'is_status' => false,
                 'message' => 'No application Found!',
             ];
-
         }
     }
 
     public static function MEPTPApplicationResult(){
 
-        // pending
-        // pass
-        // fail
-
         $activeBatch = Batch::where('status', true)->first();
-        $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->first();
-        $isResult = MEPTPResult::where(['vendor_id' => Auth::user()->id, 'application_id' => $isSubmittedApplication->id])->exists();
 
-        if($isResult){
+        if($activeBatch){
 
-            if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
-           ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-           ->where('batches.status', true)
-           ->where('m_e_p_t_p_results.status', 'pending')
-           ->exists()){
+            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->first();
+            $isResult = MEPTPResult::where(['vendor_id' => Auth::user()->id, 'application_id' => $isSubmittedApplication->id])->exists();
+
+            if($isResult){
+
+                if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+            ->where('batches.status', true)
+            ->where('m_e_p_t_p_results.status', 'pending')
+            ->exists()){
+                    return $response = [
+                            'color' => 'warning',
+                            'is_result' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
+                        ];
+                }
+
+                if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+            ->where('batches.status', true)
+            ->where('m_e_p_t_p_results.status', 'fail')
+            ->exists()){
+                    return $response = [
+                            'color' => 'danger',
+                            'is_result' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'Sorry! You were unsuccessful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
+                        ];
+                }
+
+                if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+            ->where('batches.status', true)
+            ->where('m_e_p_t_p_results.status', 'pass')
+            ->exists()){
+                    return $response = [
+                            'color' => 'success',
+                            'is_result' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'Congratulation! You were successful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
+                            'download_result' => ''
+                        ];
+                }
+
+            
+            }else{
                 return $response = [
-                        'color' => 'warning',
-                        'is_result' => true,
-                        'application_id' => $isSubmittedApplication->id,
-                        'vendor_id' => Auth::user()->id,
-                        'message' => 'MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
-                    ];
-            }
+                    'color' => 'warning',
+                    'is_result' => false,
+                    'message' => 'No results Found!',
+                ];
 
-            if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
-           ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-           ->where('batches.status', true)
-           ->where('m_e_p_t_p_results.status', 'fail')
-           ->exists()){
-                return $response = [
-                        'color' => 'danger',
-                        'is_result' => true,
-                        'application_id' => $isSubmittedApplication->id,
-                        'vendor_id' => Auth::user()->id,
-                        'message' => 'Sorry! You were unsuccessful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
-                    ];
             }
-
-            if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
-           ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-           ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-           ->where('batches.status', true)
-           ->where('m_e_p_t_p_results.status', 'pass')
-           ->exists()){
-                return $response = [
-                        'color' => 'success',
-                        'is_result' => true,
-                        'application_id' => $isSubmittedApplication->id,
-                        'vendor_id' => Auth::user()->id,
-                        'message' => 'Congratulation! You were successful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result Pending',
-                        'download_result' => ''
-                    ];
-            }
-
-           
         }else{
             return $response = [
-                'color' => 'warning',
+                'color' => 'light',
                 'is_result' => false,
-                'message' => 'No results Found!',
+                'message' => 'No application Found!',
             ];
 
         }
+
     }
 
     public static function states()

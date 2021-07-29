@@ -121,7 +121,7 @@ class MEPTPApprovalApplicationsController extends Controller
                 ->where('status', 'send_to_pharmacy_practice')
                 ->where('payment', true)
                 ->update([
-                    'status' => 'approved_tier_selected', //reject_by_pharmacy_practice
+                    'status' => 'approved_tier_selected',
                     'tier_id' => $request['tier'],
                 ]);
 
@@ -172,11 +172,11 @@ class MEPTPApprovalApplicationsController extends Controller
                     'query' => $request['query'],
                 ]);
 
-                MEPTPResult::create([
-                    'application_id' => $request->application_id,
-                    'vendor_id' => $request->vendor_id,
-                    'status' => 'pending',
-                ]);
+                // MEPTPResult::create([
+                //     'application_id' => $request->application_id,
+                //     'vendor_id' => $request->vendor_id,
+                //     'status' => 'pending',
+                // ]);
                 $response = true;
             }else{
                 $response = false;
