@@ -150,7 +150,7 @@ class MEPTPPendingApplicationsController extends Controller
 
             return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');
         }else{
-            return back('error', 'There is something error, please try after some time');
+            return back()->with('error', 'There is something error, please try after some time');
         }
     }
 }

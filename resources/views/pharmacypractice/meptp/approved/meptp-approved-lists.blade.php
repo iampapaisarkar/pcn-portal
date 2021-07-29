@@ -1,12 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-@include('layouts.navbars.breadcrumb', ['page' => 'MEPTP Applications - Documents Review Pending', 'route' => 'meptp-pending-batches'])
+@include('layouts.navbars.breadcrumb', ['page' => 'MEPTP Applications - Documents Approved', 'route' => 'meptp-approved-batches'])
 <div class="row">
 <div class="col-lg-12 col-md-12">
+    <form id="generateIndexNumberForm" class="w-100" method="POST" action="{{ route('meptp-generate-index-number') }}" enctype="multipart/form-data">
+    @csrf
     <div class="card text-left">
     <div class="card-body">
-        <h4>MEPTP Applications - Documents Review Pending</h4>
+        <h4>Generate Index Numbers and Examination Cards for Qualified Candidates</h4>
         <div class="table-responsive">
             <div class="row m-0">
                 <div class="col-sm-12 col-md-6">
@@ -37,46 +39,62 @@
             <table class="display table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Date</th>
+                        <th>#</th>
+                        <th>
+                            <label class="checkbox checkbox-success">
+                                <input id="check_box_bulk_action_select_all"  type="checkbox"  /><span class="checkmark"></span>
+                            </label>
+                        </th>
+                        <th>Tier</th>
                         <th>Vendor Name</th>
                         <th>Shop Name</th>
                         <th>Batch</th>
                         <th>State</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Training Centre</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($applications as $application)
-                    <tr>
-                        <td>{{$application->created_at->format('d/m/Y')}}</td>
+                    @foreach($applications as $key => $application)
+                    <tr>    
+                        <td>{{$key+1}}</td>
+                        <td>
+                            <label class="checkbox checkbox-success">
+                                <input class="check_box_bulk_action" id="check_box_bulk_action-{{$application->id}}" type="checkbox" name="check_box_bulk_action[{{$application->id}}]" /><span class="checkmark"></span>
+                            </label>
+                        </td>
+                        <td>{{$application->tier->name}}</td>
                         <td>{{$application->user->firstname}} {{$application->user->lastname}}</td>
                         <td>{{$application->shop_name}}</td>
                         <td>{{$application->batch->batch_no}}/{{$application->batch->year}}</td>
                         <td>{{$application->user_state->name}}</td>
-                        <td><span class="badge badge-pill m-1 badge-warning">Pending</span></td>
-                        <td><a href="{{ route('meptp-pending-show') }}?application_id={{$application->id}}&batch_id={{$application->batch_id}}&school_id={{$application->traing_centre}}&vendor_id={{$application->user->id}}">
-                            <button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a>
-                        </td>
+                        <td>{{$application->school->name}}</td>
                     </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Date</th>
+                        <th>#</th>
+                        <th>
+                            <label class="checkbox checkbox-success">
+                                <input id="check_box_bulk_action_select_all" type="checkbox"  /><span class="checkmark"></span>
+                            </label>
+                        </th>
+                        <th>Tier</th>
                         <th>Vendor Name</th>
                         <th>Shop Name</th>
                         <th>Batch</th>
                         <th>State</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Training Centre</th>
                     </tr>
                 </tfoot>
             </table>
             {{$applications->links('pagination')}}
         </div>
+
+        <button onclick="generateIndexNumber(event)" type="button" class="btn btn-primary mt-5">GENERATE INDEX NUMBERS AND EXAMINATION CARDS</button>
     </div>
 </div>
+</form>
 </div>
 </div>
     <script type="text/javascript">
@@ -101,6 +119,35 @@
             var new_url = location.protocol + '//' + location.host + location.pathname + mParams;
             window.location.href = new_url;
         }
+    }
+
+    $(function(){
+        $("#check_box_bulk_action_select_all").click(function () {
+            $(".check_box_bulk_action").prop('checked', $(this).prop('checked'));
+        });    
+    });
+
+    function generateIndexNumber(event){
+        event.preventDefault();
+
+        $.confirm({
+            title: 'GENERATE INDEX NUMBERS AND EXAMINATION CARDS',
+            content: 'Are you sure want to generated index number & examination cards for seleted applications?',
+            buttons: {   
+                ok: {
+                    text: "YES",
+                    btnClass: 'btn-primary',
+                    keys: ['enter'],
+                    action: function(){
+                        document.getElementById('generateIndexNumberForm').submit();
+                    }
+                },
+                cancel: function(){
+                        console.log('the user clicked cancel');
+                }
+            }
+        });
+
     }
     </script>
 @endsection

@@ -19,7 +19,7 @@
                     <tr>
                         <td>{{$batch->batch_no}}/{{$batch->year}}</td>
                         <td><span class="badge badge-pill m-1 badge-{{$batch->index_number_generated ? 'success' : 'warning' }}">{{$batch->index_number_generated ? 'INDEX NUMBERS GENERATED' : 'INDEX NUMBERS PENDING'}}</span></td>
-                        <td><a href="{{route('meptp-approved-states', $batch->id)}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
+                        <td><a href="{{ route('meptp-approved-states', $batch->id) }}"><button class="btn btn-info" type="button">VIEW</button></a></td>
                     </tr>
                     @endforeach
                 </tbody>

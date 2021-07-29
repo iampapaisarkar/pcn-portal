@@ -142,7 +142,7 @@ class MEPTPApprovalApplicationsController extends Controller
             if($response == true){
                 return redirect()->route('meptp-approval-states')->with('success', 'Application successfully approved & tier seleted');
             }else{
-                return back('error', 'There is something error, please try after some time');
+                return back()->with('error', 'There is something error, please try after some time');
             }
 
         }catch(Exception $e) {
@@ -187,7 +187,7 @@ class MEPTPApprovalApplicationsController extends Controller
             if($response == true){
                 return redirect()->route('meptp-approval-states')->with('success', 'Application successfully quired & rejected');
             }else{
-                return back('error', 'There is something error, please try after some time');
+                return back()->with('error', 'There is something error, please try after some time');
             }
 
         }catch(Exception $e) {
