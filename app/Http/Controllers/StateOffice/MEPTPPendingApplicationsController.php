@@ -26,6 +26,7 @@ class MEPTPPendingApplicationsController extends Controller
     public function centre($batchID){
 
         $schools = School::where('state', Auth::user()->state)
+        ->where('status', true)
         ->get();
 
         foreach($schools as $key => $school){

@@ -1,52 +1,59 @@
 <?php
 
-namespace App\Http\Controllers\StateOffice;
+namespace App\Http\Controllers\PharmacyPractice;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MEPTPApplication;
 use App\Models\Batch;
+use App\Models\State;
 use App\Models\School;
 
-class MEPTPApproveApplicationsController extends Controller
+class MEPTPApprovalApplicationsController extends Controller
 {
-    public function batches(){
+    public function states(){
 
-        $batches = Batch::whereHas('meptpApplication', function($q){
-            $q->where('status', 'send_to_pharmacy_practice');
-            $q->where('payment', true);
-        })
-        ->get();
+        $states = State::get();
 
-        return view('stateoffice.meptp.approve.meptp-approve-batches', compact('batches'));
+        foreach($states as $key => $state){
+            $totalApplication = MEPTPApplication::where('status', 'send_to_pharmacy_practice')
+            ->where('payment', true)
+            // ->where('state', $state->id)
+            ->whereHas('user.user_state', function($q) use($state){
+                $q->where('states.id', $state->id);
+            })
+            ->count();
+
+            $states[$key]['total_application'] =  $totalApplication;
+        }
+        return view('pharmacypractice.meptp.approval.meptp-approval-states', compact('states'));
     }
 
-    public function centre($batchID){
+    public function centre($stateID){
 
-        $schools = School::where('state', Auth::user()->state)
+        $schools = School::where('state', $stateID)
         ->where('status', true)
         ->get();
 
         foreach($schools as $key => $school){
             $totalApplication = MEPTPApplication::where('status', 'send_to_pharmacy_practice')
             ->where('payment', true)
-            ->where('batch_id', $batchID)
+            // ->where('state', $state->id)
             ->where('traing_centre', $school->id)
             ->count();
 
             $schools[$key]['total_application'] =  $totalApplication;
-            $schools[$key]['batch_id'] =  $batchID;
         }
 
-        return view('stateoffice.meptp.approve.meptp-approve-centre', compact('schools'));
+        return view('pharmacypractice.meptp.approval.meptp-approval-centre', compact('schools'));
     }
 
     public function lists(Request $request){
 
-        if(School::where('state', Auth::user()->state)->where('id', $request->school_id)->exists()){
+        if(School::where('id', $request->school_id)->exists()){
 
-            $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
+            $applications = MEPTPApplication::where(['traing_centre' => $request->school_id])
             ->with('user_state', 'user_lga', 'school', 'batch', 'user')
             ->where('status', 'send_to_pharmacy_practice');
             
@@ -66,7 +73,7 @@ class MEPTPApproveApplicationsController extends Controller
     
             $applications = $applications->latest()->paginate($perPage);
 
-            return view('stateoffice.meptp.approve.meptp-approve-lists', compact('applications'));
+            return view('pharmacypractice.meptp.approval.meptp-approval-lists', compact('applications'));
         }else{
             return abort(404);
         }
@@ -75,7 +82,6 @@ class MEPTPApproveApplicationsController extends Controller
     public function show(Request $request){
 
         if(MEPTPApplication::where('id', $request->application_id)
-        ->where('batch_id', $request->batch_id)
         ->where('traing_centre', $request->school_id)
         ->where('vendor_id', $request->vendor_id)
         ->where('status', 'send_to_pharmacy_practice')
@@ -83,14 +89,13 @@ class MEPTPApproveApplicationsController extends Controller
         ->exists()){
 
             $application = MEPTPApplication::where('id', $request->application_id)
-            ->where('batch_id', $request->batch_id)
             ->where('traing_centre', $request->school_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('status', 'send_to_pharmacy_practice')
             ->where('payment', true)
             ->first();
 
-            return view('stateoffice.meptp.approve.meptp-approve-show', compact('application'));
+            return view('pharmacypractice.meptp.approval.meptp-approval-show', compact('application'));
         }else{
             return abort(404);
         }

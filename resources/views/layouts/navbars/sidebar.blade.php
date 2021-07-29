@@ -142,7 +142,7 @@
                 <!-- Pharmacy practice routes start  -->
                 @can('isPPractice')
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}">
+                    <a href="{{route('meptp-approval-states')}}">
                         <i class="nav-icon i-Receipt-4"></i>
                         <span class="item-name">MEPTP - Pending PP Approval</span>
                     </a>
