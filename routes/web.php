@@ -96,6 +96,13 @@ Route::group(['middleware' => ['auth','verified', 'can:isPPractice']], function 
 	Route::get('/meptp-approved-centre/{state_id}', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovedApplicationsController@centre')->name('meptp-approved-centre');
 	Route::get('/meptp-approved-lists', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovedApplicationsController@lists')->name('meptp-approved-lists');
 	Route::post('/meptp-generate-index-number', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovedApplicationsController@generateIndexNumber')->name('meptp-generate-index-number');
+
+    // MEPTP RESULTS ROUTES
+	Route::get('/meptp-results-batches', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@batches')->name('meptp-results-batches');
+	// Route::get('/meptp-results-states/{batch_id}', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@states')->name('meptp-results-states');
+	// Route::get('/meptp-results-centre/{state_id}', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@centre')->name('meptp-results-centre');
+	// Route::get('/meptp-results-lists', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@lists')->name('meptp-results-lists');
+	// Route::post('/meptp-generate-index-number', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@generateIndexNumber')->name('meptp-generate-index-number');
 });
 
 // VENDOR ROUTES 

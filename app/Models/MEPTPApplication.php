@@ -47,4 +47,8 @@ class MEPTPApplication extends Model
         return $this->hasMany(Activity::class,'application_id', 'id');
     }
 
+    public function result() {
+        return $this->hasOne(MEPTPResult::class,'application_id', 'id');
+    }
+
 }
