@@ -72,6 +72,12 @@ Route::group(['middleware' => ['auth','verified', 'can:isSOffice']], function ()
 	Route::get('/meptp-approve-centre/{batch_id}', 'App\Http\Controllers\StateOffice\MEPTPApproveApplicationsController@centre')->name('meptp-approve-centre');
 	Route::get('/meptp-approve-lists', 'App\Http\Controllers\StateOffice\MEPTPApproveApplicationsController@lists')->name('meptp-approve-lists');
 	Route::get('/meptp-approve-show', 'App\Http\Controllers\StateOffice\MEPTPApproveApplicationsController@show')->name('meptp-approve-show');
+
+    // MEPTP TRANING APPROVED ROUTES
+	Route::get('/meptp-traning-approved-batches', 'App\Http\Controllers\StateOffice\MEPTPTraningApprovedApplicationsController@batches')->name('meptp-traning-approved-batches');
+	// Route::get('/meptp-traning-approved-centre/{batch_id}', 'App\Http\Controllers\StateOffice\MEPTPTraningApprovedApplicationsController@centre')->name('meptp-traning-approved-centre');
+	// Route::get('/meptp-traning-approved-lists', 'App\Http\Controllers\StateOffice\MEPTPTraningApprovedApplicationsController@lists')->name('meptp-traning-approved-lists');
+	// Route::get('/meptp-traning-approved-show', 'App\Http\Controllers\StateOffice\MEPTPTraningApprovedApplicationsController@show')->name('meptp-approve-show');
 });
 
 // PHARMACY PRACTICE ROUTE 
