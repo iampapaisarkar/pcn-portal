@@ -49,6 +49,7 @@ class MEPTPPendingApplicationsController extends Controller
 
             $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
             ->with('user_state', 'user_lga', 'school', 'batch', 'user')
+            ->where('payment', true)
             ->where('status', 'send_to_state_offcie');
             
             if($request->page){

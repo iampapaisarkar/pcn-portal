@@ -23,7 +23,7 @@
                                 "/><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg>
                             </div>
                             <div class="col-9 col-md-10 col-lg-10 d-flex flex-column justify-content-center">
-                                <h2>Your payment has been failed. Please try again</h2>
+                                <h2>Your payment has failed. Please try again</h2>
                                 <h5 class="text-muted">If the amount is already deducted from your account, Contact with us</h5>
 
                                 <div class="mt-3">
