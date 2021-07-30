@@ -9,6 +9,11 @@ use App\Models\Service;
 use App\Models\ServiceFeeMeta;
 use App\Models\Payment;
 
+use LaravelDaily\Invoices\Invoice;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\Party;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
+
 class InvoiceController extends Controller
 {
     public function index(Request $request){
@@ -53,5 +58,82 @@ class InvoiceController extends Controller
         }
 
         return view('invoice.show', compact('invoice'));
+    }
+
+    public function downloadInvoice($id){
+        $authUser = Auth::user();
+
+        $data = Payment::with('user.user_state', 'user.user_lga', 'service.netFees', 'application.batch')->where('id', $id);
+        
+        if($authUser->hasRole(['sadmin'])){
+            $data = $data->first();
+        }else if($authUser->hasRole(['vendor'])){
+            $data = $data->where('vendor_id', $authUser->id)->first();
+        }
+
+        if($data){
+
+            $client = new Party([
+                'name'          => 'Pharmacists Council of Nigeria',
+                'custom_fields' => [
+                    'Address'        => 'Plot 7/9 Industrial Layout, Idu, P.M.B. 415 Garki, Abuja, Nigeria',
+                ],
+            ]);
+
+            $customer = new Party([
+                'name'          => $data->user->firstname  .' '. $data->user->lastname,
+                'custom_fields' => [
+                    'State' => $data->user->user_state->name,
+                    'LGA' => $data->user->user_lga->name,
+                ],
+            ]);
+
+            if($data->service_type == 'meptp_training'){
+                $title = 'APPLICATION FOR MEPTP Training Fees (Batch: '.$data->application->batch->batch_no .'/'. $data->application->batch->year.')';
+            }
+
+            $items = [
+                (new InvoiceItem())->title($title)->pricePerUnit($data->amount)->units($data->service->netFees),
+            ];
+
+            $notes = [
+                'your multiline',
+                'additional notes',
+                'in regards of delivery or something else',
+            ];
+            $notes = implode("<br>", $notes);
+
+            $invoice = Invoice::make('Invoice')
+                ->setCustomData([
+                    'status' => $data->status
+                ])
+                ->series($data->order_id)
+                ->serialNumberFormat('{SERIES}')
+                ->seller($client)
+                ->buyer($customer)
+                ->date($data->created_at)
+                ->dateFormat('m/d/Y')
+                ->currencySymbol('NGN')
+                ->currencyCode('NGN')
+                ->currencyFormat('{SYMBOL}{VALUE}')
+                ->currencyThousandsSeparator('.')
+                ->currencyDecimalPoint('.')
+                ->filename($title. '-' .$client->name)
+                ->addItems($items)
+                ->notes($notes)
+                ->logo(public_path('admin/dist-assets/images/logo.png'));
+                // You can additionally save generated invoice to configured disk
+                // ->save('public');
+
+            $link = $invoice->url();
+            // Then send email to party with link
+
+            // And return invoice itself to browser or have a different view
+            return $invoice->stream();
+        }else{
+            return abort(404);
+        }
+
+
     }
 }

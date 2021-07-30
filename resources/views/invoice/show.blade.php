@@ -5,7 +5,8 @@
 <div class="row">
     <div class="col-lg-12 col-md-12">
         <div class="d-sm-flex mb-5" data-view="print"><span class="m-auto"></span>
-            <button type="button" onclick="printDiv('invoiceWrapper')" class="btn btn-primary mb-sm-0 mb-3 print-invoice">Print Invoice</button>
+            <!-- <button type="button" onclick="printDiv('invoiceWrapper')" class="btn btn-primary mb-sm-0 mb-3 print-invoice">Print Invoice</button> -->
+            <a href="{{route('download-invoice', $invoice->id )}}" class="btn btn-primary mb-sm-0 mb-3 print-invoice">Print Invoice</a>
         </div>
         <!-- -===== Print Area =======-->
         <div id="invoiceWrapper">
@@ -132,7 +133,7 @@
 </script>
 @endif
 
-<script>
+<!-- <script>
     function printDiv(divName) {
         var printContents = document.getElementById(divName).innerHTML;
         var originalContents = document.body.innerHTML;
@@ -145,5 +146,5 @@
 
         document.body.innerHTML = originalContents;
     }
-</script>
+</script> -->
 @endsection

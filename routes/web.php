@@ -39,7 +39,10 @@ Route::post('/profile-password-update', 'App\Http\Controllers\ProfileController@
 Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], function () {
     Route::get('/', function () { return view('index'); })->name('dashboard');
     Route::get('/download-meptp-application-document', 'App\Http\Controllers\Vendor\MEPTPApplicationController@downloadMEPTPDocument')->name('download-meptp-application-document');
+    Route::get('/download-invoice/{id}', 'App\Http\Controllers\InvoiceController@downloadInvoice')->name('download-invoice');
 });
+
+
 
 // SUPER ADMIN ROUTE 
 Route::group(['middleware' => ['auth','verified', 'can:isAdmin']], function () {
@@ -89,6 +92,7 @@ Route::group(['middleware' => ['auth','verified', 'can:isPPractice']], function 
 	Route::post('/meptp-generate-index-number', 'App\Http\Controllers\PharmacyPractice\MEPTPApprovedApplicationsController@generateIndexNumber')->name('meptp-generate-index-number');
 });
 
+// VENDOR ROUTES 
 Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
     // MEPTP APPLICATION REGISTER ROUTES
 	Route::get('/meptp-application', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationForm')->name('meptp-application');
