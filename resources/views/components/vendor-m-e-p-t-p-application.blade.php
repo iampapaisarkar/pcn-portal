@@ -10,7 +10,7 @@
                 <h3>Tier: {{$application->tier->name}}<h3>
                 @endif
                 @if($application->indexNumber)
-                {{$application->indexNumber->arbitrary_1 .'/'. $application->indexNumber->arbitrary_2 .'/'. $application->indexNumber->batch_year .'/'. $application->indexNumber->state_code .'/'. $application->indexNumber->school_code .'/'. $application->indexNumber->tier}}
+                {{$application->indexNumber->arbitrary_1 .'/'. $application->indexNumber->arbitrary_2 .'/'. $application->indexNumber->batch_year .'/'. $application->indexNumber->state_code .'/'. $application->indexNumber->school_code .'/'. $application->indexNumber->tier .'/'. $application->indexNumber->id}}
                 @endif
             </div>
             <div class="col-md-4">

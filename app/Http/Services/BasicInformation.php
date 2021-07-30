@@ -237,6 +237,7 @@ class BasicInformation
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
                             'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved and Examination Card Generated',
+                            'download_link' => route('meptp-examination-card-download', $isSubmittedApplication->id)
                         ];
                 }
             }else{

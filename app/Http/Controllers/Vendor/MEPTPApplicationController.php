@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\MEPTPApplication;
 use App\Models\Batch;
 use DB;
+use PDF;
 use File;
 use Storage;
 
@@ -173,6 +174,27 @@ class MEPTPApplicationController extends Controller
     public function applicationStatus(){
 
         return view('vendor-user.meptp-application-status');
+    }
+
+    public function downlaodExaminationCard($applicationID){
+
+        if($application = MEPTPApplication::where('vendor_id',  Auth::user()->id)
+        ->where('id',  $applicationID)
+        ->where('status',  'index_generated')->exists()){
+            $data = MEPTPApplication::where('vendor_id',  Auth::user()->id)
+            ->where('id',  $applicationID)
+            ->where('status',  'index_generated')
+            ->with('user.user_state','user.user_lga', 'user_state', 'user_lga', 'tier', 'indexNumber')
+            ->first();
+
+            $backgroundURL = public_path('admin/dist-assets/images/examination-background.jpg');
+            $profilePhoto = Auth::user()->photo ? public_path('images/'. Auth::user()->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+            $pdf = PDF::loadView('pdf.examination-card', ['data' => $data, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
+            return $pdf->stream();
+        }else{
+            return abort(404);
+        }
+        
     }
 
     public function applicationResult(){

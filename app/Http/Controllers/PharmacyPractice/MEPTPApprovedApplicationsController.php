@@ -12,6 +12,7 @@ use App\Models\Batch;
 use App\Models\State;
 use App\Models\School;
 use DB;
+use PDF;
 
 class MEPTPApprovedApplicationsController extends Controller
 {
@@ -163,7 +164,6 @@ class MEPTPApprovedApplicationsController extends Controller
     }
 
     public function generateIndexNumber(Request $request){
-
         try {
             DB::beginTransaction();
 
