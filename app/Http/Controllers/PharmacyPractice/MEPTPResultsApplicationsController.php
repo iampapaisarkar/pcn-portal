@@ -147,7 +147,7 @@ class MEPTPResultsApplicationsController extends Controller
                 $applications = MEPTPApplication::where(['traing_centre' => $request->school_id])
                 ->where('status', 'index_generated')
                 ->where('batch_id', $request->batch_id)
-                ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'tier');
+                ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'tier', 'indexNumber');
 
                 if($request->status == 'true'){
                     $applications = $applications->whereHas('result', function($q){

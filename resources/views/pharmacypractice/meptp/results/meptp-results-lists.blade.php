@@ -47,7 +47,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Tier</th>
+                                    <th>Index#</th>
                                     <th>Vendor Name</th>
                                     <th>Shop Name</th>
                                     <th>Batch</th>
@@ -59,7 +59,7 @@
                                 @foreach($applications as $key => $application)
                                 <tr>
                                     <td>{{$key+1}}</td>
-                                    <td>{{$application->tier->name}}</td>
+                                    <td>{{$application->indexNumber->arbitrary_1 .'/'. $application->indexNumber->arbitrary_2 .'/'. $application->indexNumber->batch_year .'/'. $application->indexNumber->state_code .'/'. $application->indexNumber->school_code .'/'. $application->indexNumber->tier .'/'. $application->indexNumber->id}}</td>
                                     <td>{{$application->user->firstname}} {{$application->user->lastname}}</td>
                                     <td>{{$application->shop_name}}</td>
                                     <td>{{$application->batch->batch_no}}/{{$application->batch->year}}</td>
@@ -71,7 +71,7 @@
                             <tfoot>
                                 <tr>
                                     <th>#</th>
-                                    <th>Tier</th>
+                                    <th>Index#</th>
                                     <th>Vendor Name</th>
                                     <th>Shop Name</th>
                                     <th>Batch</th>
@@ -83,6 +83,8 @@
                         {{$applications->links('pagination')}}
                     </div>
                     @if(Request::get('status') == 'false')
+                    <form id="generateIndexNumberForm" class="w-100" method="POST" action="{{ route('meptp-generate-index-number') }}" enctype="multipart/form-data">
+                    @csrf
                     <div class="card-body">
                         <h4 class="card-title mb-3">Upload MEPTP Examination Results</h4>
                         <div class="row">
@@ -97,13 +99,13 @@
                                     <div class="row">
                                         <div class="col-md-12 form-group mb-3 input-group">
                                             <div class="custom-file">
-                                                <input class="custom-file-input" id="inputGroupFile02" type="file" />
+                                                <input name="result" class="custom-file-input" id="inputGroupFile02" type="file" />
                                                 <label class="custom-file-label" for="inputGroupFile02"
                                                     aria-describedby="inputGroupFileAddon02">Choose file</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <button class="btn btn-primary">UPLOAD RESULT TEMPLATE</button>
+                                            <button type="submit" class="btn btn-primary">UPLOAD RESULT TEMPLATE</button>
                                         </div>
                                     </div>
                                 </form>
@@ -112,6 +114,7 @@
                             </div>
                         </div>
                     </div>
+                    </form>
                     @endif
                 </div>
             </div>
