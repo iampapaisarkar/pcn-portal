@@ -18,8 +18,8 @@
                     @foreach($batches as $batch)
                     <tr>
                         <td>{{$batch['batch_no']}}/{{$batch['year']}}</td>
-                        <td><span class="badge badge-pill m-1 badge-{{$batch['index_number_generated'] ? 'success' : 'warning' }}">{{$batch['index_number_generated'] ? 'INDEX NUMBERS GENERATED' : 'INDEX NUMBERS PENDING'}}</span></td>
-                        <td><a href="{{ route('meptp-approved-states', $batch['id']) }}?status={{$batch['status']}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
+                        <td><span class="badge badge-pill m-1 badge-{{$batch['result_uploaded'] ? 'success' : 'warning' }}">{{$batch['result_uploaded'] ? 'RESULT UPLOADED' : 'PENDING RESULTS UPLOAD'}}</span></td>
+                        <td><a href="{{ route('meptp-results-states', $batch['id']) }}?status={{$batch['status']}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
                     </tr>
                     @endforeach
                 </tbody>

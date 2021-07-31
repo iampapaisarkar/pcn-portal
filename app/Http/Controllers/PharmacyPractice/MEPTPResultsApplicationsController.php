@@ -17,37 +17,51 @@ class MEPTPResultsApplicationsController extends Controller
 {
     public function batches(){
 
-        $allBatches = Batch::whereHas('meptpApplication', function($q){
+        $withoutResultBatches = Batch::whereHas('meptpApplication', function($q){
             $q->where('status', 'index_generated');
-            $q->where('index_number_id', '!=', null);
             $q->where('payment', true);
+            $q->whereHas('result', function($q){
+                $q->where('status', 'pending');
+                $q->where('result', null);
+            });
         })
         ->with('meptpApplication.result')
         ->get();
 
-        // dd($allBatches);
-
-        $batches = [];
-        foreach($allBatches as $key => $batch){
-            foreach($batch->meptpApplication as $application){
-                if($application->result && $application->result->status != 'pending'){
-                    // $allBatches[$key]['is_result_uploaded'] = true;
-                    // $allBatches[$key]['status'] = 'true';
-
-                    $batch['is_result_uploaded'] = true;
-                    $batch['status'] = 'true';
-                    array_push($batches, $batch);
-                }else{
-                    // $allBatches[$key]['is_result_uploaded'] = false;
-                    // $allBatches[$key]['status'] = 'false';
-                    $batch['is_result_uploaded'] = false;
-                    $batch['status'] = 'false';
-                    array_push($batches, $batch);
-                }
-            }
+        foreach($withoutResultBatches as $key => $batch){
+            $withoutResultBatches[$key]['result_uploaded'] = false;
+            $withoutResultBatches[$key]['status'] = 'false';
         }
 
-        dd($batches);
+        $withResultBatches = Batch::whereHas('meptpApplication', function($q){
+            $q->where('status', 'index_generated');
+            $q->where('payment', true);
+            $q->whereHas('result', function($q){
+                $q->where('status', '!=', 'pending');
+                $q->where('result', '!=', null);
+            });
+        })
+        ->with('meptpApplication.result')
+        ->get();
+
+        foreach($withResultBatches as $key => $batch){
+            $withResultBatches[$key]['result_uploaded'] = true;
+            $withResultBatches[$key]['status'] = 'true';
+        }
+
+        $batches = (object) array_merge(
+            (array) $withoutResultBatches->toArray(), (array) $withResultBatches->toArray());
+
+
+        // $batches = Batch::whereHas('meptpApplication', function($q){
+        //     $q->where('status', 'index_generated');
+        //     $q->where('payment', true);
+        // })
+        // ->with('meptpApplication.result')
+        // ->paginate(20);
+
+
+        // dd($batches);
 
         return view('pharmacypractice.meptp.results.meptp-results-batches', compact('batches'));
     }
@@ -59,14 +73,19 @@ class MEPTPResultsApplicationsController extends Controller
             $states = State::get();
 
             foreach($states as $key => $state){
-                $totalApplication = MEPTPApplication::where('payment', true);
+                $totalApplication = MEPTPApplication::where('payment', true)->where('status', 'index_generated')
+                ->where('batch_id', $batchID);
 
                 if($request->status == 'true'){
-                    $totalApplication = $totalApplication->where('status', 'index_generated')
-                    ->where('index_number_id', '!=', null);
+                    $totalApplication = $totalApplication->whereHas('result', function($q){
+                        $q->where('status', '!=', 'pending');
+                        $q->where('result', '!=', null);
+                    });
                 }else{
-                    $totalApplication = $totalApplication->where('status', 'approved_tier_selected')
-                    ->where('index_number_id', null);
+                    $totalApplication = $totalApplication->whereHas('result', function($q){
+                        $q->where('status', 'pending');
+                        $q->where('result', null);
+                    });
                 }
                 $totalApplication = $totalApplication->whereHas('user.user_state', function($q) use($state){
                     $q->where('states.id', $state->id);
@@ -75,7 +94,7 @@ class MEPTPResultsApplicationsController extends Controller
 
                 $states[$key]['total_application'] =  $totalApplication;
             }
-            return view('pharmacypractice.meptp.results.meptp-results-states', compact('states'));
+            return view('pharmacypractice.meptp.results.meptp-results-states', compact('states', 'batchID'));
         }else{
             return abort(404);
         }
@@ -90,14 +109,19 @@ class MEPTPResultsApplicationsController extends Controller
             ->get();
 
             foreach($schools as $key => $school){
-                $totalApplication = MEPTPApplication::where('payment', true);
+                $totalApplication = MEPTPApplication::where('payment', true)->where('status', 'index_generated')
+                ->where('batch_id', $request->batch_id);
 
                 if($request->status == 'true'){
-                    $totalApplication = $totalApplication->where('status', 'index_generated')
-                    ->where('index_number_id', '!=', null);
+                    $totalApplication = $totalApplication->whereHas('result', function($q){
+                        $q->where('status', '!=', 'pending');
+                        $q->where('result', '!=', null);
+                    });
                 }else{
-                    $totalApplication = $totalApplication->where('status', 'approved_tier_selected')
-                    ->where('index_number_id', null);
+                    $totalApplication = $totalApplication->whereHas('result', function($q){
+                        $q->where('status', 'pending');
+                        $q->where('result', null);
+                    });
                 }
 
                 $totalApplication = $totalApplication->where('traing_centre', $school->id)
@@ -106,7 +130,9 @@ class MEPTPResultsApplicationsController extends Controller
                 $schools[$key]['total_application'] =  $totalApplication;
             }
 
-            return view('pharmacypractice.meptp.results.meptp-results-centre', compact('schools'));
+            $batchID = $request->batch_id;
+
+            return view('pharmacypractice.meptp.results.meptp-results-centre', compact('schools', 'batchID'));
         }else{
             return abort(404);
         }
@@ -119,14 +145,20 @@ class MEPTPResultsApplicationsController extends Controller
             if(School::where('id', $request->school_id)->exists()){
 
                 $applications = MEPTPApplication::where(['traing_centre' => $request->school_id])
+                ->where('status', 'index_generated')
+                ->where('batch_id', $request->batch_id)
                 ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'tier');
 
                 if($request->status == 'true'){
-                    $applications = $applications->where('status', 'index_generated')
-                    ->where('index_number_id', '!=', null);
+                    $applications = $applications->whereHas('result', function($q){
+                        $q->where('status', '!=', 'pending');
+                        $q->where('result', '!=', null);
+                    });
                 }else{
-                    $applications = $applications->where('status', 'approved_tier_selected')
-                    ->where('index_number_id', null);
+                    $applications = $applications->whereHas('result', function($q){
+                        $q->where('status', 'pending');
+                        $q->where('result', null);
+                    });
                 }
                 
                 if($request->page){

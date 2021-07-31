@@ -16,8 +16,9 @@ class CreateMEPTPResultsTable extends Migration
         Schema::create('m_e_p_t_p_results', function (Blueprint $table) {
             $table->id();
             $table->integer('application_id');
-            $table->integer('vendor_id')->nullable();
+            $table->integer('vendor_id');
             $table->string('status');
+            $table->string('result')->nullable();
             $table->timestamps();
         });
     }
