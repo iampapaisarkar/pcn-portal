@@ -12,9 +12,10 @@ class AllActivity extends Component
      *
      * @return void
      */
-    public function __construct()
+    public $application_id, $vendor_id;
+    public function __construct($applicationID)
     {
-        //
+        $this->application_id = $applicationID;
     }
 
     /**
@@ -24,6 +25,8 @@ class AllActivity extends Component
      */
     public function render()
     {
-        return view('components.all-activity');
+        $activities = Activity::where('type', 'meptp')->where('application_id', $this->application_id)->get();
+        // dd(0);
+        return view('components.all-activity', compact('activities'));
     }
 }

@@ -1,7 +1,8 @@
 <div>
     <h3 class="card-title">Activity Log</h3>
     <div class="table-responsive">
-        <table id="zero_configuration_table" class="display table table-striped table-bordered" style="width:100%">
+        <!-- id="zero_configuration_table"  -->
+        <table class="display table table-striped table-bordered" style="width:100%">
             <thead>
                 <tr>
                     <th scope="col">#</th>
@@ -13,35 +14,19 @@
             </thead>
 
             <tbody>
+                @foreach($activities as $key => $activity)
                 <tr>
-                    <th scope="col">1</th>
-                    <th scope="col">Barack Obama</th>
-                    <th scope="col">State Officer Document Verification Query</th>
-                    <th scope="col">Tiered PPMV Registration</th>
-                    <th scope="col">26-MAY-2021 / 08:59 AM</th>
+                    <th scope="col">{{$key+1}}</th>
+                    <th scope="col">{{$activity->admin_name}}</th>
+                    <th scope="col">{{$activity->activity}}</th>
+                    <th scope="col">
+                        @if($activity->type == 'meptp')
+                        Tiered PPMV Registration
+                        @endif
+                    </th>
+                    <th scope="col">{{$activity->created_at->format('d/M/Y')}}</th>
                 </tr>
-                <tr>
-                    <th scope="col">2</th>
-                    <th scope="col">Barack Obama</th>
-                    <th scope="col">State Officer Document Verification Approval</th>
-                    <th scope="col">Tiered PPMV Registration</th>
-                    <th scope="col">26-MAY-2021 / 08:59 AM</th>
-                </tr>
-                <tr>
-                    <th scope="col">3</th>
-                    <th scope="col">Josh Adebayo</th>
-                    <th scope="col">Inspection Report Uploaded</th>
-                    <th scope="col">Tiered PPMV Registration</th>
-                    <th scope="col">26-MAY-2021 / 08:59 AM</th>
-                </tr>
-                <tr>
-                    <th scope="col">4</th>
-                    <th scope="col">Bunmi Ngozi</th>
-                    <th scope="col">Licence Issued</th>
-                    <th scope="col">Tiered PPMV Registration</th>
-                    <th scope="col">26-MAY-2021 / 08:59 AM</th>
-                </tr>
-
+                @endforeach
             </tbody>
         </table>
     </div>

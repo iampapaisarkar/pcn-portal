@@ -11,6 +11,10 @@
         :applicationID="$application->id" 
         :vendorID="$application->vendor_id"
         />
+
+        <x-all-activity
+        :applicationID="$application->id" 
+        />
     </div>
 </div>
 </div>
