@@ -83,7 +83,7 @@ class MEPTPApprovedApplicationsController extends Controller
 
                 $states[$key]['total_application'] =  $totalApplication;
             }
-            return view('pharmacypractice.meptp.approved.meptp-approved-states', compact('states'));
+            return view('pharmacypractice.meptp.approved.meptp-approved-states', compact('states', 'batchID'));
         }else{
             return abort(404);
         }
@@ -98,7 +98,8 @@ class MEPTPApprovedApplicationsController extends Controller
             ->get();
 
             foreach($schools as $key => $school){
-                $totalApplication = MEPTPApplication::where('payment', true);
+                $totalApplication = MEPTPApplication::where('payment', true)
+                ->where('batch_id', $request->batch_id);
 
                 if($request->status == 'true'){
                     $totalApplication = $totalApplication->where('status', 'index_generated')
@@ -113,8 +114,8 @@ class MEPTPApprovedApplicationsController extends Controller
 
                 $schools[$key]['total_application'] =  $totalApplication;
             }
-
-            return view('pharmacypractice.meptp.approved.meptp-approved-centre', compact('schools'));
+            $batchID = $request->batch_id;
+            return view('pharmacypractice.meptp.approved.meptp-approved-centre', compact('schools', 'batchID'));
         }else{
             return abort(404);
         }
@@ -127,6 +128,7 @@ class MEPTPApprovedApplicationsController extends Controller
             if(School::where('id', $request->school_id)->exists()){
 
                 $applications = MEPTPApplication::where(['traing_centre' => $request->school_id])
+                ->where('batch_id', $request->batch_id)
                 ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'tier');
 
                 if($request->status == 'true'){

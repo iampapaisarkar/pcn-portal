@@ -9,7 +9,7 @@
             @foreach($schools as $school)
             <div class="col-lg-4 col-md-4 col-sm-4">
                 <div class="card card-icon mb-4">
-                    <a href="{{ route('meptp-approved-lists') }}?batch_id={{$school->batch_id}}&school_id={{$school->id}}&status={{Request::get('status')}}">
+                    <a href="{{ route('meptp-approved-lists') }}?batch_id={{$batchID}}&school_id={{$school->id}}&status={{Request::get('status')}}">
                     <div class="card-body text-center"><i class="i-Diploma"></i>
                         <p class="text-muted mt-2 mb-2">{{$school->name}}</p>
                         <p class="text-primary text-20 line-height-1 m-0">{{$school->total_application}}</p>
