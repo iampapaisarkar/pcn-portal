@@ -200,7 +200,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group col-md-3">
+                    <!-- <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">State:</label>
                         @php
                         $states = app('App\Http\Services\BasicInformation')->states();
@@ -278,8 +278,29 @@
                         </span>
                         @enderror
                     </div>
-                    @endif
+                    @endif -->
 
+
+                    <div class="col-md-3 form-group d-flex flex-column justify-content-between">
+                        <label for="huser_state">State:</label>
+                        <input name="state" class="form-control @error('user_state') is-invalid @enderror"
+                            value="{{Auth::user()->user_state->name}}" id="user_state" placeholder="user_state"  readonly />
+                        @error('user_state')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    <div class="col-md-3 form-group d-flex flex-column justify-content-between">
+                        <label for="huser_lga">LGA:</label>
+                        <input name="lga" class="form-control @error('user_lga') is-invalid @enderror"
+                            value="{{Auth::user()->user_lga->name}}" id="user_lga" placeholder="user_lga"  readonly />
+                        @error('user_lga')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
 
                     <div class="form-group col-md-4">
                         <label for="inputEmail3" class="ul-form__label">Are you registered? </label>

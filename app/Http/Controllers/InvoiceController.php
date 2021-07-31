@@ -96,12 +96,6 @@ class InvoiceController extends Controller
                 (new InvoiceItem())->title($title)->pricePerUnit($data->amount)->units($data->service->netFees),
             ];
 
-            $notes = [
-                'your multiline',
-                'additional notes',
-                'in regards of delivery or something else',
-            ];
-            $notes = implode("<br>", $notes);
 
             $invoice = Invoice::make('Invoice')
                 ->setCustomData([
@@ -120,7 +114,6 @@ class InvoiceController extends Controller
                 ->currencyDecimalPoint('.')
                 ->filename($title. '-' .$client->name)
                 ->addItems($items)
-                ->notes($notes)
                 ->logo(public_path('admin/dist-assets/images/logo.png'));
                 // You can additionally save generated invoice to configured disk
                 // ->save('public');
