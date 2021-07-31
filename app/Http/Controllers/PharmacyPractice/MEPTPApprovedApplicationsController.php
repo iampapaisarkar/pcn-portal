@@ -13,6 +13,7 @@ use App\Models\State;
 use App\Models\School;
 use DB;
 use PDF;
+use App\Http\Services\AllActivity;
 
 class MEPTPApprovedApplicationsController extends Controller
 {
@@ -193,6 +194,10 @@ class MEPTPApprovedApplicationsController extends Controller
                         'status' => 'index_generated',
                         'index_number_id' => $indexNumber->id
                     ]); 
+
+                    $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+                    $activity = 'Index Number Generated';
+                    AllActivity::storeActivity($app->id, $adminName, $activity, 'meptp');
                 }
 
                 $response = true;

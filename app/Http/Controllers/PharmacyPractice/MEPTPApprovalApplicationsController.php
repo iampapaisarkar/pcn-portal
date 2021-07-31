@@ -10,7 +10,9 @@ use App\Models\MEPTPResult;
 use App\Models\Batch;
 use App\Models\State;
 use App\Models\School;
+use App\Models\Tier;
 use DB;
+use App\Http\Services\AllActivity;
 
 class MEPTPApprovalApplicationsController extends Controller
 {
@@ -132,6 +134,11 @@ class MEPTPApprovalApplicationsController extends Controller
                     'status' => 'pending',
                 ]);
 
+                $tier = Tier::where('id', $request['tier'])->first();
+                $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+                $activity = 'Pharmacy Practice Approval and Tiering ' . $tier->name;
+                AllActivity::storeActivity($application->id, $adminName, $activity, 'meptp');
+
                 $response = true;
             }else{
                 $response = false;
@@ -178,6 +185,11 @@ class MEPTPApprovalApplicationsController extends Controller
                 //     'vendor_id' => $request->vendor_id,
                 //     'status' => 'pending',
                 // ]);
+
+                $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+                $activity = 'Pharmacy Practice Document Verification Query';
+                AllActivity::storeActivity($application->id, $adminName, $activity, 'meptp');
+
                 $response = true;
             }else{
                 $response = false;

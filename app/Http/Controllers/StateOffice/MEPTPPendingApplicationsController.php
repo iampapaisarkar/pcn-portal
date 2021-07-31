@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\MEPTPApplication;
 use App\Models\Batch;
 use App\Models\School;
+use App\Http\Services\AllActivity;
 
 
 class MEPTPPendingApplicationsController extends Controller
@@ -119,6 +120,10 @@ class MEPTPPendingApplicationsController extends Controller
                 'query' => null,
             ]);
 
+            $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+            $activity = 'State Officer Document Verification Approval';
+            AllActivity::storeActivity($application->id, $adminName, $activity, 'meptp');
+
             return redirect()->route('meptp-pending-batches')->with('success', 'Application Approved successfully done');
         }else{
             return abort(404);
@@ -148,6 +153,10 @@ class MEPTPPendingApplicationsController extends Controller
                 'status' => 'reject_by_state_offcie',
                 'query' => $request['query'],
             ]);
+
+            $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+            $activity = 'State Officer Document Verification Query';
+            AllActivity::storeActivity($application->id, $adminName, $activity, 'meptp');
 
             return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');
         }else{

@@ -12,6 +12,7 @@ use App\Models\Batch;
 use App\Models\State;
 use App\Models\School;
 use DB;
+use App\Http\Services\AllActivity;
 
 class MEPTPResultsApplicationsController extends Controller
 {
@@ -186,4 +187,8 @@ class MEPTPResultsApplicationsController extends Controller
         }
 
     }
+
+    // $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+    // $activity = 'MEPTP Examination Result Uploaded';
+    // AllActivity::storeActivity($app->id, $adminName, $activity, 'meptp');
 }
