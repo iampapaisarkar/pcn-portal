@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@include('layouts.navbars.breadcrumb', ['page' => 'MEPTP Applications - Documents Review Approved', 'route' => 'meptp-approve-batches'])
+@include('layouts.navbars.breadcrumb', ['page' => 'MEPTP Applications - Documents Training Approved', 'route' => 'meptp-traning-approved-batches'])
 <div class="row">
 <div class="col-lg-12 col-md-12">
     <div class="card text-left">

@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
-@include('layouts.navbars.breadcrumb', ['page' => 'MEPTP Applications - Documents Review Approved', 'route' => 'meptp-approve-batches'])
+@include('layouts.navbars.breadcrumb', ['page' => 'MEPTP Applications - Documents Training Approved', 'route' => 'meptp-traning-approved-batches'])
 <div class="row">
 <div class="col-lg-12 col-md-12">
     <div class="card text-left">
     <div class="card-body">
-        <h4>MEPTP Applications - Documents Review Approved</h4>
+        <h4>MEPTP Applications - Documents Training Approved</h4>
         <div class="table-responsive">
             <div class="row m-0">
                 <div class="col-sm-12 col-md-6">
@@ -37,39 +37,42 @@
             <table class="display table table-striped table-bordered" style="width:100%">
                 <thead>
                     <tr>
-                        <th>Date</th>
+                        <th>#</th>
+                        <th>Index#</th>
                         <th>Vendor Name</th>
                         <th>Shop Name</th>
                         <th>Batch</th>
-                        <th>State</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Score</th>
+                        <!-- <th>Result</th> -->
+                        <!-- <th>Action</th> -->
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($applications as $application)
+                    @foreach($applications as $key => $application)
                     <tr>
-                        <td>{{$application->created_at->format('d/m/Y')}}</td>
+                        <td>{{$key+1}}</td>
+                        <td>{{$application->indexNumber->arbitrary_1 .'/'. $application->indexNumber->arbitrary_2 .'/'. $application->indexNumber->batch_year .'/'. $application->indexNumber->state_code .'/'. $application->indexNumber->school_code .'/'. $application->indexNumber->tier .'/'. $application->indexNumber->id}}</td>
                         <td>{{$application->user->firstname}} {{$application->user->lastname}}</td>
                         <td>{{$application->shop_name}}</td>
                         <td>{{$application->batch->batch_no}}/{{$application->batch->year}}</td>
-                        <td>{{$application->user_state->name}}</td>
-                        <td><span class="badge badge-pill m-1 badge-success">Approved</span></td>
-                        <td><a href="{{ route('meptp-approve-show') }}?application_id={{$application->id}}&batch_id={{$application->batch_id}}&school_id={{$application->traing_centre}}&vendor_id={{$application->user->id}}">
+                        <td>-</td>
+                        <!-- <td><span class="badge badge-pill m-1 badge-success">Passed</span></td> -->
+                        <!-- <td><a href="{{ route('meptp-approve-show') }}?application_id={{$application->id}}&batch_id={{$application->batch_id}}&school_id={{$application->traing_centre}}&vendor_id={{$application->user->id}}">
                             <button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a>
-                        </td>
+                        </td> -->
                     </tr>
                     @endforeach
                 </tbody>
                 <tfoot>
                     <tr>
-                        <th>Date</th>
+                        <th>#</th>
+                        <th>Index#</th>
                         <th>Vendor Name</th>
                         <th>Shop Name</th>
                         <th>Batch</th>
-                        <th>State</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Score</th>
+                        <!-- <th>Result</th>
+                        <th>Action</th> -->
                     </tr>
                 </tfoot>
             </table>
