@@ -122,7 +122,7 @@ class MEPTPPendingApplicationsController extends Controller
 
             $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
             $activity = 'State Officer Document Verification Approval';
-            AllActivity::storeActivity($application->id, $adminName, $activity, 'meptp');
+            AllActivity::storeActivity($request->application_id, $adminName, $activity, 'meptp');
 
             return redirect()->route('meptp-pending-batches')->with('success', 'Application Approved successfully done');
         }else{
@@ -156,7 +156,7 @@ class MEPTPPendingApplicationsController extends Controller
 
             $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
             $activity = 'State Officer Document Verification Query';
-            AllActivity::storeActivity($application->id, $adminName, $activity, 'meptp');
+            AllActivity::storeActivity($request->application_id, $adminName, $activity, 'meptp');
 
             return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');
         }else{

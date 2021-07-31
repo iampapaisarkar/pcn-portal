@@ -137,7 +137,7 @@ class MEPTPApprovalApplicationsController extends Controller
                 $tier = Tier::where('id', $request['tier'])->first();
                 $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
                 $activity = 'Pharmacy Practice Approval and Tiering ' . $tier->name;
-                AllActivity::storeActivity($application->id, $adminName, $activity, 'meptp');
+                AllActivity::storeActivity($request->application_id, $adminName, $activity, 'meptp');
 
                 $response = true;
             }else{
@@ -188,7 +188,7 @@ class MEPTPApprovalApplicationsController extends Controller
 
                 $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
                 $activity = 'Pharmacy Practice Document Verification Query';
-                AllActivity::storeActivity($application->id, $adminName, $activity, 'meptp');
+                AllActivity::storeActivity($request->application_id, $adminName, $activity, 'meptp');
 
                 $response = true;
             }else{

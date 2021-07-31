@@ -3,8 +3,9 @@
 namespace App\View\Components;
 
 use Illuminate\View\Component;
+use App\Models\Activity;
 
-class Activity extends Component
+class AllActivity extends Component
 {
     /**
      * Create a new component instance.
@@ -23,6 +24,6 @@ class Activity extends Component
      */
     public function render()
     {
-        return view('components.activity');
+        return view('components.all-activity');
     }
 }
