@@ -140,8 +140,8 @@ class MEPTPApprovedApplicationsController extends Controller
                     ->where('index_number_id', null);
                 }
                 
-                if($request->page){
-                    $perPage = (integer) $request->page;
+                if($request->per_page){
+                    $perPage = (integer) $request->per_page;
                 }else{
                     $perPage = 10;
                 }

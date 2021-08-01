@@ -22,8 +22,8 @@ class SchoolController extends Controller
     {
         $schools = School::with('school_state');
 
-        if($request->page){
-            $perPage = (integer) $request->page;
+        if($request->per_page){
+            $perPage = (integer) $request->per_page;
         }else{
             $perPage = 10;
         }

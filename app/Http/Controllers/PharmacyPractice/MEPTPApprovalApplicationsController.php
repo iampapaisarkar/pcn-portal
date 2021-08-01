@@ -62,8 +62,8 @@ class MEPTPApprovalApplicationsController extends Controller
             ->with('user_state', 'user_lga', 'school', 'batch', 'user')
             ->where('status', 'send_to_pharmacy_practice');
             
-            if($request->page){
-                $perPage = (integer) $request->page;
+            if($request->per_page){
+                $perPage = (integer) $request->per_page;
             }else{
                 $perPage = 10;
             }

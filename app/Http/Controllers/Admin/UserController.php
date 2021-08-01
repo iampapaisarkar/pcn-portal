@@ -34,8 +34,8 @@ class UserController extends Controller
         ->where('roles.code', '!=', 'vendor')
         ->where('users.id', '!=', Auth::user()->id);
 
-        if($request->page){
-            $perPage = (integer) $request->page;
+        if($request->per_page){
+            $perPage = (integer) $request->per_page;
         }else{
             $perPage = 10;
         }

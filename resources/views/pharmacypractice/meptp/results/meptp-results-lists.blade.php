@@ -19,8 +19,9 @@
                                         <select onchange="setPerPage(this);" name="multicolumn_ordering_table_length"
                                             aria-controls="multicolumn_ordering_table"
                                             class="form-control form-control-sm">
-                                            <option {{Request::get('page') ? 'selected' : ''}} hidden
-                                                value="{{Request::get('page')}}">{{Request::get('page')}}</option>
+                                            <option {{Request::get('per_page') ? 'selected' : ''}} hidden
+                                                value="{{Request::get('per_page')}}">{{Request::get('per_page')}}</option>
+                                            <option selected hidden value="10">10</option>
                                             <option value="10">10</option>
                                             <option value="25">25</option>
                                             <option value="50">50</option>
@@ -126,7 +127,7 @@ function setPerPage(sel) {
     var url_string = window.location.href
     var new_url = new URL(url_string);
     let queryParams = (new_url).searchParams;
-    var url_page = new_url.searchParams.get("page");
+    var url_page = new_url.searchParams.get("per_page");
 
     var page = sel.value;
     var mParams = "?";
@@ -136,10 +137,10 @@ function setPerPage(sel) {
     if (url_page !== null) {
         nParams = location.protocol + '//' + location.host + location.pathname + "?" + queryParams;
         var href = new URL(nParams);
-        href.searchParams.set('page', page);
+        href.searchParams.set('per_page', page);
         window.location.href = href;
     } else {
-        mParams += 'page=' + page;
+        mParams += 'per_page=' + page;
         var new_url = location.protocol + '//' + location.host + location.pathname + mParams;
         window.location.href = new_url;
     }
