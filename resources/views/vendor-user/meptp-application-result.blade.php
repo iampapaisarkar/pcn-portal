@@ -23,7 +23,14 @@
             :vendorID="app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['vendor_id']"
             />
         @else
-        <span>No result found!</span>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-12">
+                <div class="alert alert-card alert-{{app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['color']}}" role="alert">{{app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['message']}}
+                </div>
+                </div>
+            </div>
+        </div>
         @endif
         </div>
 

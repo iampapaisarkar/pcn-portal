@@ -10,7 +10,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="alert alert-card alert-{{app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['color']}}" role="alert">
-                        <p>{{app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['message']}}</p>
+                        {{app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['message']}}
                         @if(isset(app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['caption']))
                         <p><strong>REASONS: </strong></p>
                         <p>{{app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['caption']}}</p>
@@ -29,7 +29,13 @@
             :vendorID="app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['vendor_id']"
             />
         @else
-        <span>No application found!</span>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="alert alert-card alert-{{app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['color']}}" role="alert">
+                   {{app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['message']}}
+                </div>
+            </div>
+        </div>
         @endif
         </div>
 
