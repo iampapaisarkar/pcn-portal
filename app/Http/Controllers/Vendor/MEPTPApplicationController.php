@@ -73,6 +73,7 @@ class MEPTPApplicationController extends Controller
         ->where('batches.status', true)
         ->where('m_e_p_t_p_applications.status', 'reject_by_state_offcie')
         ->with('user_state', 'user_lga', 'school', 'batch', 'user.user_state', 'user.user_lga')
+        ->select('m_e_p_t_p_applications.*')
         ->first();
 
         if($application){
