@@ -343,11 +343,11 @@ class BasicInformation
                 if($isResult){
 
                     if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
-                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-                ->where('batches.status', true)
-                ->where('m_e_p_t_p_results.status', 'pending')
-                ->exists()){
+                    ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->where('batches.status', true)
+                    ->where('m_e_p_t_p_results.status', 'pending')
+                    ->exists()){
                         return $response = [
                                 'color' => 'warning',
                                 'is_result' => true,
@@ -373,11 +373,11 @@ class BasicInformation
                     }
 
                     if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
-                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-                ->where('batches.status', true)
-                ->where('m_e_p_t_p_results.status', 'pass')
-                ->exists()){
+                    ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->where('batches.status', true)
+                    ->where('m_e_p_t_p_results.status', 'pass')
+                    ->exists()){
                         return $response = [
                                 'color' => 'success',
                                 'is_result' => true,
