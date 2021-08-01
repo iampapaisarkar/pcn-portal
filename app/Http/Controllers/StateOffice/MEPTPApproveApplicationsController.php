@@ -16,6 +16,7 @@ class MEPTPApproveApplicationsController extends Controller
         $batches = Batch::whereHas('meptpApplication', function($q){
             $q->where('status', 'send_to_pharmacy_practice');
             $q->where('payment', true);
+            $q->where('state', Auth::user()->state);
         })
         ->get();
 

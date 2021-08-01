@@ -18,6 +18,7 @@ class MEPTPPendingApplicationsController extends Controller
         $batches = Batch::whereHas('meptpApplication', function($q){
             $q->where('status', 'send_to_state_offcie');
             $q->where('payment', true);
+            $q->where('state', Auth::user()->state);
         })
         ->get();
 
