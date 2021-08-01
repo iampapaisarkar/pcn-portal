@@ -155,6 +155,10 @@ class BasicInformation
                             'message' => 'YOU ARE ALAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$batch->batch_no.'/'.$batch->year.')',
                         ];
                 }else if($isResultPENDING){
+                    $batch = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->where('m_e_p_t_p_results.status', '!=', 'pass')
+                    ->first();
                     return $response = [
                         'success' => false,
                         'message' => 'YOUR PREVIOUS APPLICATION CURRENTLY INPROGRESS (Batch: '.$batch->batch_no.'/'.$batch->year.')',
