@@ -24,8 +24,8 @@ class VendorController extends Controller
         ->join('roles', 'user_roles.role_id', 'roles.id')
         ->where('roles.code', 'vendor');
 
-        if($request->page){
-            $perPage = (integer) $request->page;
+        if($request->per_page){
+            $perPage = (integer) $request->per_page;
         }else{
             $perPage = 10;
         }
