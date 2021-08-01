@@ -218,7 +218,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}">
+                    <a href="{{route('ppmv-renewal')}}">
                         <i class="nav-icon i-Receipt-4"></i>
                         <span class="item-name">Renewal</span>
                     </a>
