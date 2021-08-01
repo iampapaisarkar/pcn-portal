@@ -180,7 +180,29 @@ class UserSeeder extends Seeder
             'state' => null,
             'created_at' => now(),
             'updated_at' => now()
-            ]
+            ],
+            [
+            'firstname' => 'State',
+            'lastname' => 'Offcie 2',
+            'phone' => '+919002090020',
+            'email' => 'state2@test.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('123456'),
+            'state' => 3,
+            'created_at' => now(),
+            'updated_at' => now(),
+            ],
+            [
+            'firstname' => 'Pharmacy',
+            'lastname' => 'Practice 2',
+            'phone' => '+919002090020',
+            'email' => 'pharmacy2@test.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('123456'),
+            'state' => null,
+            'created_at' => now(),
+            'updated_at' => now()
+            ],
         ];
 
         User::insert($users);
