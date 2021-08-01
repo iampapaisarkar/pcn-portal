@@ -126,4 +126,8 @@ Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileS
     Route::get('/payment-success/{token}', 'App\Http\Controllers\Vendor\CheckoutController@paymentSuccess')->name('payment-success');
 	Route::get('/invoices', 'App\Http\Controllers\InvoiceController@index')->name('invoices.index');
 	Route::get('/invoices/{id}', 'App\Http\Controllers\InvoiceController@show')->name('invoices.show');
+
+    // PPMV APPLICATION ROUTES 
+	Route::get('/ppmv-application', 'App\Http\Controllers\Vendor\PPMVApplicationController@applicationForm')->name('ppmv-application');
+
 });

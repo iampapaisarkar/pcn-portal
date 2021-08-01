@@ -82,4 +82,12 @@ class User extends Authenticatable implements MustVerifyEmail
         ->orWhere('m_e_p_t_p_applications.status', '!=', 'rejected')
         ->with('user_state', 'user_lga', 'school', 'batch');
     }
+
+    public function passed_meptp_application() {
+        return $this->hasOne(MEPTPApplication::class,'vendor_id', 'id')
+        ->where('m_e_p_t_p_applications.status', 'index_generated')
+        ->leftjoin('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+        ->where('m_e_p_t_p_results.status', 'pass')
+        ->with('user_state', 'user_lga', 'school', 'batch');
+    }
 }
