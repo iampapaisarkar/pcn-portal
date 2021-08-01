@@ -286,10 +286,13 @@ class BasicInformation
                     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                     ->where('m_e_p_t_p_results.status', '=', 'pass')
                     ->with('batch')
+                    ->select('m_e_p_t_p_applications.*')
                     ->first();
                     return $response = [
                             'color' => 'warning',
                             'is_status' => true,
+                            'application_id' => $batch->id,
+                            'vendor_id' => Auth::user()->id,
                             'message' => 'YOU ARE ALAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$batch->batch->batch_no.'/'.$batch->batch->year.')',
                         ];
                 }else if($isResultPENDING){
@@ -297,10 +300,13 @@ class BasicInformation
                     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                     ->where('m_e_p_t_p_results.status', '!=', 'pass')
                     ->with('batch')
+                    ->select('m_e_p_t_p_applications.*')
                     ->first();
                     return $response = [
                         'color' => 'warning',
                         'is_status' => true,
+                        'application_id' => $batch->id,
+                        'vendor_id' => Auth::user()->id,
                         'message' => 'YOUR PREVIOUS APPLICATION CURRENTLY INPROGRESS (Batch: '.$batch->batch->batch_no.'/'.$batch->batch->year.')',
                     ];
                 }else{
