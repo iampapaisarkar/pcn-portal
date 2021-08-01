@@ -12,6 +12,34 @@ use App\Models\Tier;
 
 class BasicInformation
 {
+
+    public static function states()
+    {
+        $states = State::get();
+        return $states;
+    }
+
+    public static function lgas()
+    {
+        $lgas = Lga::get();
+        return $lgas;
+    }
+
+    public static function schools()
+    {
+        $authUserState = Auth::user()->user_state;
+
+        $schools = School::where('state', $authUserState->id)->get();
+        return $schools;
+    }
+
+    public static function tiers()
+    {
+        $tiers = Tier::get();
+        return $tiers;
+    }
+
+    
     public static function activeBatch(){
         
         $batches = Batch::where(['status' => true]);
@@ -227,10 +255,10 @@ class BasicInformation
                 }
 
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-            ->where('batches.status', true)
-            ->where('m_e_p_t_p_applications.status', 'index_generated')
-            ->exists()){
+                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+                ->where('batches.status', true)
+                ->where('m_e_p_t_p_applications.status', 'index_generated')
+                ->exists()){
                     return $response = [
                             'color' => 'success',
                             'is_status' => true,
@@ -337,31 +365,4 @@ class BasicInformation
         }
 
     }
-
-    public static function states()
-    {
-        $states = State::get();
-        return $states;
-    }
-
-    public static function lgas()
-    {
-        $lgas = Lga::get();
-        return $lgas;
-    }
-
-    public static function schools()
-    {
-        $authUserState = Auth::user()->user_state;
-
-        $schools = School::where('state', $authUserState->id)->get();
-        return $schools;
-    }
-
-    public static function tiers()
-    {
-        $tiers = Tier::get();
-        return $tiers;
-    }
-
 }
