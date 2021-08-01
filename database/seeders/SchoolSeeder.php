@@ -17,37 +17,37 @@ class SchoolSeeder extends Seeder
         $School = [
             [
             'name' => 'School 1',
-            'code' => 'school-1',
+            'code' => 'SCH1',
             'state' => 2,
             'status' => true
             ],
             [
             'name' => 'School 2',
-            'code' => 'school-2',
+            'code' => 'SCH2',
             'state' => 2,
             'status' => true
             ],
             [
             'name' => 'School 3',
-            'code' => 'school-3',
+            'code' => 'SCH3',
             'state' => 2,
             'status' => true
             ],
             [
             'name' => 'School 1',
-            'code' => 'school-1',
+            'code' => 'SCH4',
             'state' => 3,
             'status' => true
             ],
             [
             'name' => 'School 2',
-            'code' => 'school-2',
+            'code' => 'SCH5',
             'state' => 3,
             'status' => true
             ],
             [
             'name' => 'School 3',
-            'code' => 'school-3',
+            'code' => 'SCH6',
             'state' => 3,
             'status' => true
             ]
