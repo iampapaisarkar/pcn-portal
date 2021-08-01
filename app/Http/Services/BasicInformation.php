@@ -140,11 +140,6 @@ class BasicInformation
                 ->where('m_e_p_t_p_results.status', '!=', 'pass')
                 ->exists();
 
-                // $isApplicationRejected = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
-                // ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-                // ->where('m_e_p_t_p_applications.status', '=', 'reject_by_pharmacy_practice')
-                // ->exists();
-
                 if($isResultPASS){
                     $batch = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
                     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
@@ -276,15 +271,46 @@ class BasicInformation
                         ];
                 }
             }else{
-                // $isApplicationRejected = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
-                //     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-                //     ->where('m_e_p_t_p_applications.status', '=', 'reject_by_pharmacy_practice')
-                //     ->exists();
-                return $response = [
-                    'color' => 'warning',
-                    'is_status' => false,
-                    'message' => 'No application Found!',
-                ];
+                $isResultPASS = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
+                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                ->where('m_e_p_t_p_results.status', '=', 'pass')
+                ->exists();
+
+                $isResultPENDING = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
+                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                ->where('m_e_p_t_p_results.status', '!=', 'pass')
+                ->exists();
+
+                if($isResultPASS){
+                    $batch = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->where('m_e_p_t_p_results.status', '=', 'pass')
+                    ->with('batch')
+                    ->first();
+                    return $response = [
+                            'color' => 'warning',
+                            'is_status' => true,
+                            'message' => 'YOU ARE ALAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$batch->batch->batch_no.'/'.$batch->batch->year.')',
+                        ];
+                }else if($isResultPENDING){
+                    $batch = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->where('m_e_p_t_p_results.status', '!=', 'pass')
+                    ->with('batch')
+                    ->first();
+                    return $response = [
+                        'color' => 'warning',
+                        'is_status' => true,
+                        'message' => 'YOUR PREVIOUS APPLICATION CURRENTLY INPROGRESS (Batch: '.$batch->batch->batch_no.'/'.$batch->batch->year.')',
+                    ];
+                }else{
+                    return $response = [
+                        'color' => 'warning',
+                        'is_status' => false,
+                        'message' => 'No application Found!',
+                    ];
+                }
+                
             }
         
         }else{
