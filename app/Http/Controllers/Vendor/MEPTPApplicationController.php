@@ -20,7 +20,7 @@ class MEPTPApplicationController extends Controller
 {
     public function applicationForm(){
 
-        return view('vendor-user.meptp-application');
+        return view('vendor-user.meptp.meptp-application');
     }
     
     public function applicationSubmit(MEPTPApplicationRequest $request){
@@ -76,7 +76,7 @@ class MEPTPApplicationController extends Controller
         ->first();
 
         if($application){
-            return view('vendor-user.meptp-appication-edit', compact('application'));
+            return view('vendor-user.meptp.meptp-appication-edit', compact('application'));
         }else{
             return abort(404);
         }
@@ -177,7 +177,7 @@ class MEPTPApplicationController extends Controller
 
     public function applicationStatus(){
 
-        return view('vendor-user.meptp-application-status');
+        return view('vendor-user.meptp.meptp-application-status');
     }
 
     public function downlaodExaminationCard($applicationID){
@@ -203,7 +203,7 @@ class MEPTPApplicationController extends Controller
 
     public function applicationResult(){
 
-        return view('vendor-user.meptp-application-result');
+        return view('vendor-user.meptp.meptp-application-result');
     }
 
     public function downloadMEPTPDocument(Request $request){
