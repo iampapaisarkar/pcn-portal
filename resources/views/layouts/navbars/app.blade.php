@@ -24,7 +24,7 @@
                         <i class="i-Lock-User mr-1"></i> {{Auth::user()->firstname . ' ' . Auth::user()->lastname}}
                     </div>
                     <a class="dropdown-item" href="{{route('profile')}}">Profile Settings</a>
-                    <a class="dropdown-item" href="#">Billing History</a>
+                    <!-- <a class="dropdown-item" href="#">Billing History</a> -->
                     <a onclick="logout(event)" class="dropdown-item" href="#">Sign Out</a>
                 </div>
             </div>
