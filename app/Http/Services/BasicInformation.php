@@ -52,15 +52,6 @@ class BasicInformation
     }
 
     public static function canSubmitMEPTPApplication(){
-        
-        // send_to_state_offcie
-        // reject_by_state_offcie
-        // send_to_pharmacy_practice
-        // reject_by_pharmacy_practice
-        // approved_tier_selected
-        // index_generated
-
-        // dd();
 
         $activeBatch = Batch::where('status', true)->first();
 
@@ -144,6 +135,11 @@ class BasicInformation
                 ->where('m_e_p_t_p_results.status', '=', 'pass')
                 ->exists();
 
+                $isResultPENDING = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
+                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                ->where('m_e_p_t_p_results.status', '!=', 'pass')
+                ->exists();
+
                 // $isApplicationRejected = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
                 // ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 // ->where('m_e_p_t_p_applications.status', '=', 'reject_by_pharmacy_practice')
@@ -156,8 +152,13 @@ class BasicInformation
                     ->first();
                     return $response = [
                             'success' => false,
-                            'message' => 'YOU ARE LAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$batch->batch_no.'/'.$batch->year.')',
+                            'message' => 'YOU ARE ALAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$batch->batch_no.'/'.$batch->year.')',
                         ];
+                }else if($isResultPENDING){
+                    return $response = [
+                        'success' => false,
+                        'message' => 'YOUR PREVIOUS APPLICATION CURRENTLY INPROGRESS (Batch: '.$batch->batch_no.'/'.$batch->year.')',
+                    ];
                 }else{
                     return $response = [
                             'success' => true,
