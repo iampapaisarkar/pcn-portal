@@ -31,7 +31,7 @@
                             </div>
                             <div class="col-sm-12 col-md-6">
                                 <div id="multicolumn_ordering_table_filter" class="dataTables_filter float-right">
-                                    <form method="GET" action="{{ route('users.index') }}">
+                                    <form method="GET" action="{{ route('meptp-results-lists') }}">
                                         @csrf
                                         <label>Search:
                                             <input name="search" value="{{Request::get('search')}}" type="text"
