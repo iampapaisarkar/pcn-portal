@@ -181,7 +181,7 @@ class MEPTPApprovedApplicationsController extends Controller
                     
                     $indexNumber = MEPTPIndexNumber::create([
                         'batch_year' => $app->batch->batch_no . '-' . $app->batch->year, 
-                        'state_code' => $app->user_state->code ? strtoupper($app->user_state->code) : 'STATE', 
+                        'state_code' => $app->user_state->state_code ? strtoupper($app->user_state->state_code) : 'STATE', 
                         'school_code' => $app->school->code ? strtoupper($app->school->code) : 'SCHOOL', 
                         'tier' => strtoupper($app->tier->name[0]) . $app->tier->name[5]
                     ]);
