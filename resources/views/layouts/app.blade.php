@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,600,700,800,900" rel="stylesheet" />
     <link href="{{ asset('admin/dist-assets/css/themes/lite-purple.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('admin/dist-assets/css/plugins/perfect-scrollbar.min.css') }}" rel="stylesheet" />
+    <!-- <link href="{{ asset('admin/dist-assets/css/plugins/datatables.min.css') }}" rel="stylesheet" /> -->
     <link href="{{ asset('admin/plugin/toast.css') }}" rel="stylesheet">
 
 
