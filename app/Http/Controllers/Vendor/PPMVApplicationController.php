@@ -13,6 +13,10 @@ class PPMVApplicationController extends Controller
 
         $shop = Auth::user()->passed_meptp_application()->first();
 
-        return view('vendor-user.ppmv.ppmv-application', compact('shop'));
+        if($shop){
+            return view('vendor-user.ppmv.ppmv-application', compact('shop'));
+        }else{
+            return back();
+        }
     }
 }

@@ -78,7 +78,7 @@
                         <label for="inputEmail3" class="ul-form__label">Shop Name:</label>
                         <input name="shop_name" class="form-control @error('shop_name') is-invalid @enderror"
                         value="{{ $shop->shop_name }}"
-                        id="shop_name" placeholder="Enter shop name" />
+                        id="shop_name" placeholder="Enter shop name" readonly />
                         @error('shop_name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -89,7 +89,7 @@
                         <label for="inputEmail3" class="ul-form__label">Shop Phone:</label>
                         <input name="shop_phone" class="form-control @error('shop_phone') is-invalid @enderror"
                         value="{{ $shop->shop_phone }}"
-                        id="shop_phone" placeholder="Enter shop phone" />
+                        id="shop_phone" placeholder="Enter shop phone" readonly />
                         @error('shop_phone')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -101,7 +101,7 @@
                         <label for="inputEmail3" class="ul-form__label">Shop Email:</label>
                         <input type="email" name="shop_email" class="form-control @error('shop_email') is-invalid @enderror"
                         value="{{ $shop->shop_email }}"
-                        id="shop_email" placeholder="Enter shop email" />
+                        id="shop_email" placeholder="Enter shop email" readonly />
                         @error('shop_email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -112,7 +112,7 @@
                         <label for="inputEmail3" class="ul-form__label">Shop Address:</label>
                         <input name="shop_address" class="form-control @error('shop_address') is-invalid @enderror"
                         value="{{ $shop->shop_address }}"
-                        id="shop_address" placeholder="Enter shop address" />
+                        id="shop_address" placeholder="Enter shop address" readonly />
                         @error('shop_address')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -124,7 +124,7 @@
                         <label for="inputEmail3" class="ul-form__label">Town/City:</label>
                         <input name="city" class="form-control @error('city') is-invalid @enderror"
                         value="{{ $shop->city }}"
-                        id="city" placeholder="Enter Town/City" />
+                        id="city" placeholder="Enter Town/City" readonly />
                         @error('city')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -153,18 +153,19 @@
                         @enderror
                     </div>
 
-
+                    @if($shop->ppmvl_no)
                     <div class="form-group col-md-4">
                         <label for="inputEmail3" class="ul-form__label">PPMVL Number :</label>
                         <input name="ppmvl_no" class="form-control @error('ppmvl_no') is-invalid @enderror"
                         value="{{ $shop->ppmvl_no }}"
-                        id="ppmvl_no" placeholder="Enter Town/ppmvl_no" />
+                        id="ppmvl_no" placeholder="Enter Town/ppmvl_no" readonly />
                         @error('ppmvl_no')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror
                     </div>
+                    @endif
                 </div>
 
 
@@ -172,7 +173,7 @@
 
                 <h4>Reference 1 (A Registered Pharmacist from any part of Nigeria)</h4>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Reference Name:</label>
                         <input name="reference_1_name" class="form-control @error('reference_1_name') is-invalid @enderror"
                         value="{{ old('reference_1_name') }}"
@@ -183,7 +184,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Reference Phone:</label>
                         <input name="reference_1_phone" class="form-control @error('reference_1_phone') is-invalid @enderror"
                         value="{{ old('reference_1_phone') }}"
@@ -195,7 +196,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Reference Email:</label>
                         <input type="email" name="reference_1_email" class="form-control @error('reference_1_email') is-invalid @enderror"
                         value="{{ old('reference_1_email') }}"
@@ -206,7 +207,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Current Annual Licence:</label>
                         <input name="current_annual_licence" class="form-control @error('current_annual_licence') is-invalid @enderror"
                         value="{{ old('current_annual_licence') }}"
@@ -229,9 +230,9 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6 d-flex flex-column justify-content-between">
                         <label for="picker1">Reference Letter:</label>
-                        <div class="custom-file mb-3">
+                        <div class="custom-file">
                             <input name="reference_1_letter" type="file" name="color_passportsize" class="custom-file-input
                             @error('reference_1_letter') is-invalid @enderror" accept="application/pdf"
                                 id="inputGroupFile01" accept="image/*">
@@ -250,7 +251,7 @@
 
                 <h4>Reference 2</h4>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Reference Name:</label>
                         <input name="reference_2_name" class="form-control @error('reference_2_name') is-invalid @enderror"
                         value="{{ old('reference_2_name') }}"
@@ -261,7 +262,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Reference Phone:</label>
                         <input name="reference_2_phone" class="form-control @error('reference_2_phone') is-invalid @enderror"
                         value="{{ old('reference_2_phone') }}"
@@ -273,7 +274,7 @@
                         @enderror
                     </div>
 
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Reference Email:</label>
                         <input type="email" name="reference_2_email" class="form-control @error('reference_2_email') is-invalid @enderror"
                         value="{{ old('reference_2_email') }}"
@@ -284,7 +285,7 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="form-group col-md-4">
+                    <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Reference Occupation:</label>
                         <input name="reference_occupation" class="form-control @error('reference_occupation') is-invalid @enderror"
                         value="{{ old('reference_occupation') }}"
@@ -307,9 +308,9 @@
                         </span>
                         @enderror
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-6 d-flex flex-column justify-content-between">
                         <label for="picker1">Reference Letter:</label>
-                        <div class="custom-file mb-3">
+                        <div class="custom-file">
                             <input name="reference_2_letter" type="file" name="color_passportsize" class="custom-file-input
                             @error('reference_2_letter') is-invalid @enderror" accept="application/pdf"
                                 id="inputGroupFile02" accept="image/*">
