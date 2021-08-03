@@ -25,7 +25,8 @@ class MEPTPResultsApplicationsController extends Controller
             $q->where('payment', true);
             $q->whereHas('result', function($q){
                 $q->where('status', 'pending');
-                $q->where('result', null);
+                $q->where('score', null);
+                $q->where('percentage', null);
             });
         })
         ->with('meptpApplication.result')
@@ -41,7 +42,8 @@ class MEPTPResultsApplicationsController extends Controller
             $q->where('payment', true);
             $q->whereHas('result', function($q){
                 $q->where('status', '!=', 'pending');
-                $q->where('result', '!=', null);
+                $q->where('score', '!=', null);
+                $q->where('percentage', '!=', null);
             });
         })
         ->with('meptpApplication.result')
@@ -82,12 +84,14 @@ class MEPTPResultsApplicationsController extends Controller
                 if($request->status == 'true'){
                     $totalApplication = $totalApplication->whereHas('result', function($q){
                         $q->where('status', '!=', 'pending');
-                        $q->where('result', '!=', null);
+                        $q->where('score', '!=', null);
+                        $q->where('percentage', '!=', null);
                     });
                 }else{
                     $totalApplication = $totalApplication->whereHas('result', function($q){
                         $q->where('status', 'pending');
-                        $q->where('result', null);
+                        $q->where('score', null);
+                        $q->where('percentage', null);
                     });
                 }
                 $totalApplication = $totalApplication->whereHas('user.user_state', function($q) use($state){
@@ -118,12 +122,14 @@ class MEPTPResultsApplicationsController extends Controller
                 if($request->status == 'true'){
                     $totalApplication = $totalApplication->whereHas('result', function($q){
                         $q->where('status', '!=', 'pending');
-                        $q->where('result', '!=', null);
+                        $q->where('score', '!=', null);
+                        $q->where('percentage', '!=', null);
                     });
                 }else{
                     $totalApplication = $totalApplication->whereHas('result', function($q){
                         $q->where('status', 'pending');
-                        $q->where('result', null);
+                        $q->where('score', null);
+                        $q->where('percentage', null);
                     });
                 }
 
@@ -155,12 +161,14 @@ class MEPTPResultsApplicationsController extends Controller
                 if($request->status == 'true'){
                     $applications = $applications->whereHas('result', function($q){
                         $q->where('status', '!=', 'pending');
-                        $q->where('result', '!=', null);
+                        $q->where('score', '!=', null);
+                        $q->where('percentage', '!=', null);
                     });
                 }else{
                     $applications = $applications->whereHas('result', function($q){
                         $q->where('status', 'pending');
-                        $q->where('result', null);
+                        $q->where('score', null);
+                        $q->where('percentage', null);
                     });
                 }
                 
@@ -194,7 +202,6 @@ class MEPTPResultsApplicationsController extends Controller
     }
 
     public function downloadResultTemplate(Request $request){
-        // dd($request->all());
 
         $data = MEPTPApplication::where(['batch_id'=>$request->batch_id, 'traing_centre'=>$request->school_id])
         ->where('status', 'index_generated')

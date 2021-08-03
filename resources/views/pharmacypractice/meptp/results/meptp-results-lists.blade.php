@@ -84,7 +84,7 @@
                         {{$applications->links('pagination')}}
                     </div>
                     @if(Request::get('status') == 'false')
-                    <form id="generateIndexNumberForm" class="w-100" method="POST" action="{{ route('meptp-upload-results') }}">
+                    <form id="generateIndexNumberForm" class="w-100" method="POST" action="{{ route('meptp-upload-results') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="card-body">
                         <h4 class="card-title mb-3">Upload MEPTP Examination Results</h4>
@@ -99,9 +99,9 @@
                                     <div class="row">
                                         <div class="col-md-12 form-group mb-3 input-group">
                                             <div class="custom-file">
-                                                <input name="result" class="custom-file-input" id="inputGroupFile02" type="file" />
+                                                <input name="result" class="custom-file-input" id="inputGroupFile02" type="file" required />
                                                 <label class="custom-file-label" for="inputGroupFile02"
-                                                    aria-describedby="inputGroupFileAddon02">Choose file</label>
+                                                    aria-describedby="inputGroupFileAddon02" id="inputGroupFile02previewLabel">Choose file</label>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
@@ -167,6 +167,14 @@ function generateIndexNumber(event) {
         }
     });
 
+}
+
+// Educational Certificate Photo on upload preview 
+inputGroupFile02.onchange = evt => {
+    const [file] = inputGroupFile02.files
+    if (file) {
+        $('#inputGroupFile02previewLabel').html(file.name);
+    }
 }
 </script>
 @endsection
