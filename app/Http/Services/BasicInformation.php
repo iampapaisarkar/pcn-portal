@@ -401,6 +401,23 @@ class BasicInformation
                         'vendor_id' => Auth::user()->id,
                         'message' => 'YOU ARE ALAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$batch->batch->batch_no.'/'.$batch->batch->year.')',
                     ];
+            }else if($isResultPENDING){
+
+                $application = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'approved_tier_selected'])
+                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                ->where('m_e_p_t_p_results.status', 'pending')
+                ->select('m_e_p_t_p_applications.*')
+                ->latest()->first();
+
+
+                return $response = [
+                    'color' => 'success',
+                    'is_status' => true,
+                    'application_id' => $application->id,
+                    'vendor_id' => Auth::user()->id,
+                    'message' => 'APPLICATION FOR MEPTP (Batch: '.$application->batch->batch_no.'/'.$application->batch->year.') STATUS: Application Approved',
+                    'download_link' => route('meptp-examination-card-download', $application->id)
+                ];
             }else if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
                 ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                 ->where('m_e_p_t_p_applications.status', 'index_generated')
