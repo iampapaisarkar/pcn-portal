@@ -416,7 +416,6 @@ class BasicInformation
                     'application_id' => $application->id,
                     'vendor_id' => Auth::user()->id,
                     'message' => 'APPLICATION FOR MEPTP (Batch: '.$application->batch->batch_no.'/'.$application->batch->year.') STATUS: Application Approved',
-                    'download_link' => route('meptp-examination-card-download', $application->id)
                 ];
             }else if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
                 ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
