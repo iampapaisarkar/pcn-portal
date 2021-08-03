@@ -163,20 +163,20 @@ class MEPTPTraningApprovedApplicationsController extends Controller
 
                 if($request->index == 'false' && $request->result == 'false'){
                     $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
-                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber')
+                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber', 'result')
                     ->where('payment', true)
                     ->where('status', 'approved_tier_selected');
                 }
                 if($request->index == 'true' && $request->result == 'false'){
                     $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
-                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber')
+                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber', 'result')
                     ->where('payment', true)
                     ->where('status', 'index_generated')
                     ->where('index_number_id', '!=', null);
                 }
                 if($request->index == 'true' && $request->result == 'true'){
                     $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
-                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber')
+                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber', 'result')
                     ->where('payment', true)
                     ->where(function($q){
                         $q->where('status', 'pass');
@@ -210,27 +210,29 @@ class MEPTPTraningApprovedApplicationsController extends Controller
         }
     }
 
-    // public function show(Request $request){
+    public function show($applicationID){
 
-    //     if(MEPTPApplication::where('id', $request->application_id)
-    //     ->where('batch_id', $request->batch_id)
-    //     ->where('traing_centre', $request->school_id)
-    //     ->where('vendor_id', $request->vendor_id)
-    //     ->where('status', 'send_to_state_offcie')
-    //     ->where('payment', true)
-    //     ->exists()){
+        if(MEPTPApplication::where('id', $applicationID)
+        ->where(function($q){
+            $q->where('status', 'approved_tier_selected');
+            $q->orWhere('status', 'index_generated');
+            $q->orWhere('status', 'pass');
+            $q->orWhere('status', 'fail');
+        })
+        ->exists()){
 
-    //         $application = MEPTPApplication::where('id', $request->application_id)
-    //         ->where('batch_id', $request->batch_id)
-    //         ->where('traing_centre', $request->school_id)
-    //         ->where('vendor_id', $request->vendor_id)
-    //         ->where('status', 'send_to_state_offcie')
-    //         ->where('payment', true)
-    //         ->first();
+            $application = MEPTPApplication::where('id', $applicationID)
+            ->where(function($q){
+                $q->where('status', 'approved_tier_selected');
+                $q->orWhere('status', 'index_generated');
+                $q->orWhere('status', 'pass');
+                $q->orWhere('status', 'fail');
+            })
+            ->first();
 
-    //         return view('stateoffice.meptp.trainingapproved.meptp-training-approved-show', compact('application'));
-    //     }else{
-    //         return abort(404);
-    //     }
-    // }
+            return view('stateoffice.meptp.trainingapproved.meptp-training-approved-show', compact('application'));
+        }else{
+            return abort(404);
+        }
+    }
 }

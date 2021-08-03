@@ -44,23 +44,42 @@
                         <th>Shop Name</th>
                         <th>Batch</th>
                         <th>Score</th>
-                        <!-- <th>Result</th> -->
-                        <!-- <th>Action</th> -->
+                        <th>Percentage</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($applications as $key => $application)
                     <tr>
                         <td>{{$key+1}}</td>
-                        <td>{{$application->indexNumber->arbitrary_1 .'/'. $application->indexNumber->arbitrary_2 .'/'. $application->indexNumber->batch_year .'/'. $application->indexNumber->state_code .'/'. $application->indexNumber->school_code .'/'. $application->indexNumber->tier .'/'. $application->indexNumber->id}}</td>
+                        @if($application->indexNumber)
+                            <td>{{$application->indexNumber->arbitrary_1 .'/'. $application->indexNumber->arbitrary_2 .'/'. $application->indexNumber->batch_year .'/'. $application->indexNumber->state_code .'/'. $application->indexNumber->school_code .'/'. $application->indexNumber->tier .'/'. $application->indexNumber->id}}</td>
+                        @else
+                            <td>-</td>
+                        @endif
                         <td>{{$application->user->firstname}} {{$application->user->lastname}}</td>
                         <td>{{$application->shop_name}}</td>
                         <td>{{$application->batch->batch_no}}/{{$application->batch->year}}</td>
+                        @if($application->result && $application->result->status != 'pending')
+                            <td>{{$application->result->score}}</td>
+                            <td>{{$application->result->percentage}}</td>
+                        @else
                         <td>-</td>
-                        <!-- <td><span class="badge badge-pill m-1 badge-success">Passed</span></td> -->
-                        <!-- <td><a href="{{ route('meptp-approve-show') }}?application_id={{$application->id}}&batch_id={{$application->batch_id}}&school_id={{$application->traing_centre}}&vendor_id={{$application->user->id}}">
-                            <button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a>
-                        </td> -->
+                        <td>-</td>
+                        @endif
+                        @if($application->result && $application->result->status != 'pending')
+                            @if($application->result->status == 'pass')
+                            <td><span class="badge badge-pill m-1 badge-success">Passed</span></td>
+                            @else
+                            <td><span class="badge badge-pill m-1 badge-danger">Failed</span></td>
+                            @endif
+                        @else
+                            <td><span class="badge badge-pill m-1 badge-warning">Pending</span></td>
+                        @endif
+                        <td><a href="{{ route('/meptp-traning-approved-show', $application->id) }}">
+                            <button class="btn btn-success btn-sm" type="button">VIEW</button></a>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -72,8 +91,9 @@
                         <th>Shop Name</th>
                         <th>Batch</th>
                         <th>Score</th>
-                        <!-- <th>Result</th>
-                        <th>Action</th> -->
+                        <th>Percentage</th>
+                        <th>Status</th>
+                        <th>Action</th>
                     </tr>
                 </tfoot>
             </table>
