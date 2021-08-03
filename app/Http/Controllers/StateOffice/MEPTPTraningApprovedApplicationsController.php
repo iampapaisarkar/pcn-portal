@@ -107,7 +107,7 @@ class MEPTPTraningApprovedApplicationsController extends Controller
 
             foreach($schools as $key => $school){
                 if($request->index == 'false' && $request->result == 'false'){
-                    $totalApplication = MEPTPApplication::where('index_number_id', null)
+                    $totalApplication = MEPTPApplication::where('status', 'approved_tier_selected')
                     ->where('payment', true)
                     ->where('batch_id', $request->batch_id)
                     ->where('traing_centre', $school->id)
@@ -155,30 +155,56 @@ class MEPTPTraningApprovedApplicationsController extends Controller
 
     public function lists(Request $request){
 
-        if(School::where('state', Auth::user()->state)->where('id', $request->school_id)->exists()){
+        if(($request->index == 'true' || $request->index == 'false') &&
+        ($request->result == 'true' || $request->result == 'false') &&
+        isset($request->batch_id)){
 
-            $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
-            ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber')
-            ->where('payment', true)
-            ->where('status', 'index_generated');
-            
-            if($request->per_page){
-                $perPage = (integer) $request->per_page;
+            if(School::where('state', Auth::user()->state)->where('id', $request->school_id)->exists()){
+
+                if($request->index == 'false' && $request->result == 'false'){
+                    $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
+                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber')
+                    ->where('payment', true)
+                    ->where('status', 'approved_tier_selected');
+                }
+                if($request->index == 'true' && $request->result == 'false'){
+                    $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
+                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber')
+                    ->where('payment', true)
+                    ->where('status', 'index_generated')
+                    ->where('index_number_id', '!=', null);
+                }
+                if($request->index == 'true' && $request->result == 'true'){
+                    $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
+                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'indexNumber')
+                    ->where('payment', true)
+                    ->where(function($q){
+                        $q->where('status', 'pass');
+                        $q->orWhere('status', 'fail');
+                    })
+                    ->where('index_number_id', '!=', null);
+                }
+                
+                if($request->per_page){
+                    $perPage = (integer) $request->per_page;
+                }else{
+                    $perPage = 10;
+                }
+        
+                if(!empty($request->search)){
+                    $search = $request->search;
+                    $applications = $applications->where(function($q) use ($search){
+                        $q->where('m_e_p_t_p_applications.shop_name', 'like', '%' .$search. '%');
+                        $q->orWhere('m_e_p_t_p_applications.shop_address', 'like', '%' .$search. '%');
+                    });
+                }
+        
+                $applications = $applications->latest()->paginate($perPage);
+
+                return view('stateoffice.meptp.trainingapproved.meptp-training-approved-lists', compact('applications'));
             }else{
-                $perPage = 10;
+                return abort(404);
             }
-    
-            if(!empty($request->search)){
-                $search = $request->search;
-                $applications = $applications->where(function($q) use ($search){
-                    $q->where('m_e_p_t_p_applications.shop_name', 'like', '%' .$search. '%');
-                    $q->orWhere('m_e_p_t_p_applications.shop_address', 'like', '%' .$search. '%');
-                });
-            }
-    
-            $applications = $applications->latest()->paginate($perPage);
-
-            return view('stateoffice.meptp.trainingapproved.meptp-training-approved-lists', compact('applications'));
         }else{
             return abort(404);
         }
