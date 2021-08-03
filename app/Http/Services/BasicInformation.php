@@ -87,7 +87,7 @@ class BasicInformation
                 ->exists()){
                     return $response = [
                         'success' => false,
-                        'message' => 'YOUR APPLICATION IS QUIRED (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.'). YOU HAVE TO WAIT FOR NEXT BATCH',
+                        'message' => 'YOUR APPLICATION IS REJECTED (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.'). YOU HAVE TO WAIT FOR NEXT BATCH',
                     ];
                 }
 
@@ -268,7 +268,7 @@ class BasicInformation
                             'is_status' => true,
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: APPLICATION REJECTED',
                             'caption' => $isSubmittedApplication->query,
                         ];
                 }

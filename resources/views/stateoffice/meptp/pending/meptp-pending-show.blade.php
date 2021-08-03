@@ -50,7 +50,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button onclick="submitReject(event)" type="button" class="btn btn-primary">Submit & Reject</button>
+                <button onclick="submitReject(event)" type="button" class="btn btn-primary">Submit Query</button>
             </div>
             </div>
             </form>
