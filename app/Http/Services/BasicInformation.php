@@ -539,6 +539,7 @@ class BasicInformation
                 $isResultPENDING = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 ->where('m_e_p_t_p_results.status', '!=', 'pass')
+                ->select('m_e_p_t_p_applications.*')
                 ->latest()->first();
 
                 if($isResultPASS){
