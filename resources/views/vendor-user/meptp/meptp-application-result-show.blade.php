@@ -54,7 +54,7 @@
                                 {{$application->result->score}}
                                 </td>
                                 <td>
-                                {{$application->result->percentage}}
+                                {{$application->result->percentage}}%
                                 </td>
                             </tr>
                         </tbody>

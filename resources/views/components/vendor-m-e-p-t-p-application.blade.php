@@ -12,6 +12,18 @@
                 @if($application->indexNumber)
                 {{$application->indexNumber->arbitrary_1 .'/'. $application->indexNumber->arbitrary_2 .'/'. $application->indexNumber->batch_year .'/'. $application->indexNumber->state_code .'/'. $application->indexNumber->school_code .'/'. $application->indexNumber->tier .'/'. $application->indexNumber->id}}
                 @endif
+
+                @if($application->result && $application->result->status != 'pending')
+                    @if($application->result->status == 'pass')
+                    <span class="badge badge-pill badge-success">PASS</span>
+                    <h5>Score: <strong>{{$application->result->score}}</strong></h5>
+                    <h5>Percentage: <strong>{{$application->result->percentage}}%</strong></h5>
+                    @else
+                    <span class="badge badge-pill badge-danger">FAILED</span>
+                    <h5>Score: <strong>{{$application->result->score}}</strong></h5>
+                    <h5>Percentage: <strong>{{$application->result->percentage}}%</strong></h5>
+                    @endif
+                @endif
             </div>
             <div class="col-md-4">
                 <label for="inputEmail1" class="ul-form__label"><strong>First Name:</strong></label>

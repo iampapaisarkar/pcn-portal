@@ -63,7 +63,7 @@
                         <td>{{$application->batch->batch_no}}/{{$application->batch->year}}</td>
                         @if($application->result && $application->result->status != 'pending')
                             <td>{{$application->result->score}}</td>
-                            <td>{{$application->result->percentage}}</td>
+                            <td>{{$application->result->percentage}}%</td>
                         @else
                         <td>-</td>
                         <td>-</td>
