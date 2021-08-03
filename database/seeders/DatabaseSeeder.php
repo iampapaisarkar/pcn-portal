@@ -24,8 +24,8 @@ class DatabaseSeeder extends Seeder
         $this->call([SchoolSeeder::class]);
         $this->call([TierSeeder::class]);
         
-        $this->call([MEPTPApplicationSeeder::class]);
-        $this->call([MEPTPIndexNumberSeeder::class]);
-        $this->call([MEPTPResultSeeder::class]);
+        // $this->call([MEPTPApplicationSeeder::class]);
+        // $this->call([MEPTPIndexNumberSeeder::class]);
+        // $this->call([MEPTPResultSeeder::class]);
     }
 }

@@ -33,7 +33,7 @@ class CreateMEPTPApplicationsTable extends Migration
             $table->integer('tier_id')->nullable();
             $table->integer('index_number_id')->nullable();
             $table->string('status');
-            $table->string('query')->nullable();
+            $table->longtext('query')->nullable();
             $table->boolean('payment')->default(false);
             $table->timestamps();
         });
