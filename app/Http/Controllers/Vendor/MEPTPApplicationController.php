@@ -28,9 +28,9 @@ class MEPTPApplicationController extends Controller
         try {
             DB::beginTransaction();
 
-            $birth_certificate = FileUpload::upload($request->file('birth_certificate'), $private = true);
-            $educational_certificate = FileUpload::upload($request->file('educational_certificate'), $private = true);
-            $academic_certificate = FileUpload::upload($request->file('academic_certificate'), $private = true);
+            $birth_certificate = FileUpload::upload($request->file('birth_certificate'), $private = true, 'meptp', 'birth_certificate');
+            $educational_certificate = FileUpload::upload($request->file('educational_certificate'), $private = true, 'meptp', 'educational_certificate');
+            $academic_certificate = FileUpload::upload($request->file('academic_certificate'), $private = true, 'meptp', 'academic_certificate');
 
             // Store MEPTP application 
             $application = MEPTPApplication::create([
@@ -221,7 +221,7 @@ class MEPTPApplicationController extends Controller
             }
 
             $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
-            DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $filename);
+            DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . 'MEPTP' . DIRECTORY_SEPARATOR . $filename);
             return response()->download($path);
 
         }else{

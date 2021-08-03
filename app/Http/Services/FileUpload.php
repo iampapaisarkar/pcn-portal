@@ -12,15 +12,32 @@ class FileUpload
 {
     private $image_allowed_mimes = ['image/bmp', 'image/gif', 'image/jpeg', 'image/tiff', 'image/png'];
 
-    public static function upload($file, $private = false){
+    public static function upload($file, $private = false, $type = null, $doc_type = null){
 
         if($private === true){
-            $private_storage_path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . Auth::user()->id);
-            if(!file_exists($private_storage_path)){
-                \mkdir($private_storage_path, intval('755',8), true);
-            }
 
-            $file_name = $file->getClientOriginalName();
+            if($type == 'meptp'){
+                $private_storage_path = storage_path(
+                    'app'. DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . 'MEPTP'
+                );
+
+                if(!file_exists($private_storage_path)){
+                    \mkdir($private_storage_path, intval('755',8), true);
+                }
+            }
+            if($type == 'ppmv'){
+                $private_storage_path = storage_path(
+                    'app'. DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . 'PPMV'
+                );
+
+                if(!file_exists($private_storage_path)){
+                    \mkdir($private_storage_path, intval('755',8), true);
+                }
+            }
+            
+
+            // $file_name = $file->getClientOriginalName();
+            $file_name = 'vendor'.Auth::user()->id.'-'.$doc_type.'.'.$file->getClientOriginalExtension();
             $file->move($private_storage_path, $file_name);
 
             return $file_name;
