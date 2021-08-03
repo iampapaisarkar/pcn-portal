@@ -125,7 +125,7 @@
                 </div>
                 <div class="col-md-4 form-group mb-3">
                     <label for="datepicker">Date of Birth</label>
-                    <input name="dob" class="form-control @error('dob') is-invalid @enderror" id="datepicker"
+                    <input readonly name="dob" class="form-control @error('dob') is-invalid @enderror" id="datepicker"
                         value="{{Auth::user()->dob}}" placeholder="dd-mm-yyyy" name="dp" required />
                     @error('dob')
                     <span class="invalid-feedback" role="alert">

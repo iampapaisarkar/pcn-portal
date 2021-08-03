@@ -56,14 +56,13 @@ class BasicInformation
         $activeBatch = Batch::where('status', true)->first();
 
         if($activeBatch){
-            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->latest()->exists();
+            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->exists();
 
             if($isSubmittedApplication){
 
                 if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 ->where('m_e_p_t_p_results.status', '=', 'pass')
-                ->latest()
                 ->exists()){
                     return $response = [
                         'success' => false,
@@ -74,7 +73,6 @@ class BasicInformation
                 if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 ->where('m_e_p_t_p_results.status', '=', 'fail')
-                ->latest()
                 ->exists()){
                     return $response = [
                         'success' => false,
@@ -86,7 +84,6 @@ class BasicInformation
                 ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                 ->where('batches.status', true)
                 ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
-                ->latest()
                 ->exists()){
                     return $response = [
                         'success' => false,
@@ -99,7 +96,6 @@ class BasicInformation
                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                ->where('batches.status', true)
                ->where('m_e_p_t_p_applications.status', 'send_to_state_offcie')
-               ->latest()
                ->exists()){
                     return $response = [
                             'success' => false,
@@ -111,7 +107,6 @@ class BasicInformation
                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                ->where('batches.status', true)
                ->where('m_e_p_t_p_applications.status', 'reject_by_state_offcie')
-               ->latest()
                ->exists()){
                     return $response = [
                             'success' => false,
@@ -124,7 +119,6 @@ class BasicInformation
                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                ->where('batches.status', true)
                ->where('m_e_p_t_p_applications.status', 'send_to_pharmacy_practice')
-               ->latest()
                ->exists()){
                      return $response = [
                             'success' => false,
@@ -136,7 +130,6 @@ class BasicInformation
                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                ->where('batches.status', true)
                ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
-               ->latest()
                ->exists()){
                     return $response = [
                             'success' => false,
@@ -149,7 +142,6 @@ class BasicInformation
                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                ->where('batches.status', true)
                ->where('m_e_p_t_p_applications.status', 'approved_tier_selected')
-               ->latest()
                ->exists()){
                     return $response = [
                             'success' => false,
@@ -161,7 +153,6 @@ class BasicInformation
                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                ->where('batches.status', true)
                ->where('m_e_p_t_p_applications.status', 'index_generated')
-               ->latest()
                ->exists()){
                     return $response = [
                             'success' => false,
@@ -174,13 +165,11 @@ class BasicInformation
                 $isResultPASS = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 ->where('m_e_p_t_p_results.status', '=', 'pass')
-                ->latest()
                 ->exists();
 
                 $isResultPENDING = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 ->where('m_e_p_t_p_results.status', '!=', 'pass')
-                ->latest()
                 ->exists();
 
                 if($isResultPASS){
@@ -188,7 +177,6 @@ class BasicInformation
                     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                     ->where('m_e_p_t_p_results.status', '=', 'pass')
                     ->with('batch')
-                    ->latest()
                     ->first();
                     return $response = [
                             'success' => false,
@@ -199,7 +187,6 @@ class BasicInformation
                     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                     ->where('m_e_p_t_p_results.status', '!=', 'pass')
                     ->with('batch')
-                    ->latest()
                     ->first();
                     return $response = [
                         'success' => false,
@@ -224,14 +211,13 @@ class BasicInformation
 
         if($activeBatch){
 
-            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->latest()->first();
+            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->first();
 
             if($isSubmittedApplication){
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
             ->where('batches.status', true)
             ->where('m_e_p_t_p_applications.status', 'send_to_state_offcie')
-            ->latest()
             ->exists()){
                     return $response = [
                             'color' => 'warning',
@@ -246,7 +232,6 @@ class BasicInformation
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
             ->where('batches.status', true)
             ->where('m_e_p_t_p_applications.status', 'reject_by_state_offcie')
-            ->latest()
             ->exists()){
                     return $response = [
                             'color' => 'danger',
@@ -263,7 +248,6 @@ class BasicInformation
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
             ->where('batches.status', true)
             ->where('m_e_p_t_p_applications.status', 'send_to_pharmacy_practice')
-            ->latest()
             ->exists()){
                     return $response = [
                             'color' => 'warning',
@@ -278,7 +262,6 @@ class BasicInformation
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
             ->where('batches.status', true)
             ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
-            ->latest()
             ->exists()){
                     return $response = [
                             'color' => 'danger',
@@ -295,7 +278,6 @@ class BasicInformation
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
             ->where('batches.status', true)
             ->where('m_e_p_t_p_applications.status', 'approved_tier_selected')
-            ->latest()
             ->exists()){
                     return $response = [
                             'color' => 'success',
@@ -310,7 +292,6 @@ class BasicInformation
                 ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                 ->where('batches.status', true)
                 ->where('m_e_p_t_p_applications.status', 'index_generated')
-                ->latest()
                 ->exists()){
                     return $response = [
                             'color' => 'success',
@@ -325,13 +306,11 @@ class BasicInformation
                 $isResultPASS = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 ->where('m_e_p_t_p_results.status', '=', 'pass')
-                ->latest()
                 ->exists();
 
                 $isResultPENDING = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 ->where('m_e_p_t_p_results.status', '!=', 'pass')
-                ->latest()
                 ->exists();
 
                 if($isResultPASS){
@@ -340,7 +319,6 @@ class BasicInformation
                     ->where('m_e_p_t_p_results.status', '=', 'pass')
                     ->with('batch')
                     ->select('m_e_p_t_p_applications.*')
-                    ->latest()
                     ->first();
                     return $response = [
                             'color' => 'warning',
@@ -355,7 +333,6 @@ class BasicInformation
                     ->where('m_e_p_t_p_results.status', '!=', 'pass')
                     ->with('batch')
                     ->select('m_e_p_t_p_applications.*')
-                    ->latest()
                     ->first();
                     return $response = [
                         'color' => 'warning',
@@ -389,11 +366,11 @@ class BasicInformation
 
         if($activeBatch){
 
-            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->latest()->first();
+            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->first();
 
             if($isSubmittedApplication){
 
-                $isResult = MEPTPResult::where(['vendor_id' => Auth::user()->id, 'application_id' => $isSubmittedApplication->id])->latest()->exists();
+                $isResult = MEPTPResult::where(['vendor_id' => Auth::user()->id, 'application_id' => $isSubmittedApplication->id])->exists();
 
                 if($isResult){
 
@@ -402,7 +379,6 @@ class BasicInformation
                     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                     ->where('batches.status', true)
                     ->where('m_e_p_t_p_results.status', 'pending')
-                    ->latest()
                     ->exists()){
                         return $response = [
                                 'color' => 'warning',
@@ -418,7 +394,6 @@ class BasicInformation
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 ->where('batches.status', true)
                 ->where('m_e_p_t_p_results.status', 'fail')
-                ->latest()
                 ->exists()){
                         return $response = [
                                 'color' => 'danger',
@@ -434,7 +409,6 @@ class BasicInformation
                     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                     ->where('batches.status', true)
                     ->where('m_e_p_t_p_results.status', 'pass')
-                    ->latest()
                     ->exists()){
                         return $response = [
                                 'color' => 'success',
@@ -468,13 +442,11 @@ class BasicInformation
             $isResultPASS = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
             ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
             ->where('m_e_p_t_p_results.status', '=', 'pass')
-            ->latest()
             ->exists();
 
             $isResultPENDING = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
             ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
             ->where('m_e_p_t_p_results.status', '!=', 'pass')
-            ->latest()
             ->exists();
 
             if($isResultPASS){
@@ -483,7 +455,6 @@ class BasicInformation
                 ->where('m_e_p_t_p_results.status', '=', 'pass')
                 ->with('batch')
                 ->select('m_e_p_t_p_applications.*')
-                ->latest()
                 ->first();
                 return $response = [
                         'color' => 'warning',
@@ -498,7 +469,6 @@ class BasicInformation
                 ->where('m_e_p_t_p_results.status', '!=', 'pass')
                 ->with('batch')
                 ->select('m_e_p_t_p_applications.*')
-                ->latest()
                 ->first();
                 return $response = [
                     'color' => 'warning',
