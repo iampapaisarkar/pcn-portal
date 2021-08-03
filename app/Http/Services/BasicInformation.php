@@ -484,11 +484,52 @@ class BasicInformation
 
                 }
             }else{
-                return $response = [
-                    'color' => 'warning',
-                    'is_result' => false,
-                    'message' => 'No results Found!',
-                ];
+
+                $isResultPASS = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'pass'])
+                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                ->where('m_e_p_t_p_results.status', '=', 'pass')
+                ->exists();
+
+                $isResultPENDING = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
+                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                ->where('m_e_p_t_p_results.status', '!=', 'pass')
+                ->exists();
+
+                if($isResultPASS){
+                    $batch = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'pass'])
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->where('m_e_p_t_p_results.status', '=', 'pass')
+                    ->with('batch')
+                    ->select('m_e_p_t_p_applications.*')
+                    ->first();
+                    return $response = [
+                            'color' => 'success',
+                            'is_result' => true,
+                            'application_id' => $batch->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'YOU ARE ALAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$batch->batch->batch_no.'/'.$batch->batch->year.')',
+                        ];
+                }else if($isResultPENDING){
+                    $batch = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->where('m_e_p_t_p_results.status', '!=', 'pass')
+                    ->with('batch')
+                    ->select('m_e_p_t_p_applications.*')
+                    ->first();
+                    return $response = [
+                        'color' => 'warning',
+                        'is_result' => true,
+                        'application_id' => $batch->id,
+                        'vendor_id' => Auth::user()->id,
+                        'message' => 'YOUR PREVIOUS APPLICATION CURRENTLY INPROGRESS (Batch: '.$batch->batch->batch_no.'/'.$batch->batch->year.')',
+                    ];
+                }else{
+                    return $response = [
+                        'color' => 'warning',
+                        'is_result' => false,
+                        'message' => 'No application Found!',
+                    ];
+                }
             }
 
         }else{
@@ -511,7 +552,7 @@ class BasicInformation
                 ->select('m_e_p_t_p_applications.*')
                 ->first();
                 return $response = [
-                        'color' => 'warning',
+                        'color' => 'success',
                         'is_result' => true,
                         'application_id' => $app->id,
                         'vendor_id' => Auth::user()->id,
