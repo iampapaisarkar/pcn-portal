@@ -173,11 +173,16 @@ class MEPTPApprovedApplicationsController extends Controller
             $checkboxes = isset($request->check_box_bulk_action) ? true : false;
             if($checkboxes == true){
                 foreach($request->check_box_bulk_action as $application_id => $application){
+
                     $app = MEPTPApplication::where('id', $application_id)
                     ->where('index_number_id', null)
                     ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'tier')
                     ->where('status', 'approved_tier_selected')
-                    ->first();      
+                    ->first();     
+                    
+                    if(Batch::where(['status' => true, 'id' => $app->batch_id])->exists()){
+                        return back()->with('error', 'You can\'t generate index number & examination card during batch is active');
+                    }
                     
                     $indexNumber = MEPTPIndexNumber::create([
                         'batch_year' => $app->batch->batch_no . '-' . $app->batch->year, 

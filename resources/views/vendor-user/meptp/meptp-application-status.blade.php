@@ -16,7 +16,7 @@
                         <p>{{app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['caption']}}</p>
                         @endif
                         @if(isset(app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['download_link']))
-                        <a class="btn btn-primary" href="{{app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['download_link']}}">Download Examination Card</a>
+                        <a target="_blank" class="btn btn-primary" href="{{app('App\Http\Services\BasicInformation')->MEPTPApplicationStatus()['download_link']}}">Download Examination Card</a>
                         @endif
                     </div>
                 </div>
