@@ -31,6 +31,7 @@ class MEPTPResultsApplicationsController extends Controller
             });
         })
         ->with('meptpApplication.result')
+        ->latest()
         ->get();
 
         foreach($withoutResultBatches as $key => $batch){
@@ -49,6 +50,7 @@ class MEPTPResultsApplicationsController extends Controller
             });
         })
         ->with('meptpApplication.result')
+        ->latest()
         ->get();
 
         foreach($withResultBatches as $key => $batch){
