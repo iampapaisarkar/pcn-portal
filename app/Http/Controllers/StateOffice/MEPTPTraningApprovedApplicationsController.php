@@ -23,7 +23,8 @@ class MEPTPTraningApprovedApplicationsController extends Controller
             $q->where('payment', true);
             $q->whereHas('result', function($q){
                 $q->where('status', 'pending');
-                $q->where('result', null);
+                $q->where('score', null);
+                $q->where('percentage', null);
             });
         })
         ->with('meptpApplication.result')
@@ -41,12 +42,13 @@ class MEPTPTraningApprovedApplicationsController extends Controller
         }
 
         $withIndexBatches = Batch::whereHas('meptpApplication', function($q){
-            $q->where('status', 'index_generated');
+            $q->where('status', '!=', 'index_generated');
             $q->where('index_number_id', '!=', null);
             $q->where('payment', true);
             $q->whereHas('result', function($q){
                 $q->where('status', '!=', 'pending');
-                $q->where('result', '!=', null);
+                $q->where('score', '!=', null);
+                $q->where('percentage', '!=', null);
             });
         })
         ->with('meptpApplication.result')
@@ -65,8 +67,6 @@ class MEPTPTraningApprovedApplicationsController extends Controller
 
         $batches = (object) array_merge(
             (array) $withoutIndexBatches->toArray(), (array) $withIndexBatches->toArray());
-
-        // dd($batches);
 
         return view('stateoffice.meptp.trainingapproved.meptp-training-approved-batches', compact('batches'));
     }
