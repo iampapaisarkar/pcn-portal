@@ -1,0 +1,14 @@
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>2</td>
+            <td>2</td>
+        </tr>
+    </tbody>
+</table>

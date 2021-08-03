@@ -84,19 +84,18 @@
                         {{$applications->links('pagination')}}
                     </div>
                     @if(Request::get('status') == 'false')
-                    <form id="generateIndexNumberForm" class="w-100" method="POST" action="{{ route('meptp-generate-index-number') }}" enctype="multipart/form-data">
+                    <form id="generateIndexNumberForm" class="w-100" method="POST" action="{{ route('meptp-upload-results') }}">
                     @csrf
                     <div class="card-body">
                         <h4 class="card-title mb-3">Upload MEPTP Examination Results</h4>
                         <div class="row">
                             <div class="col-lg-6 col-md-12">
                                 <p>Download the template and complete accordingly</p>
-                                <button class="btn btn-primary btn-icon m-1" type="button">
+                                <a class="btn btn-primary btn-icon m-1" href="{{ route('meptp-donwload-result-template') }}?school_id={{$schoolID}}&batch_id={{$batchID}}">
                                     <span class="ul-btn__icon"><i class="i-File-Excel"></i></span>
                                     <span class="ul-btn__text">DOWNLOAD TEMPLATE</span>
-                                </button>
+                                </a>
                                 <p>Download the template and complete accordingly</p>
-                                <form>
                                     <div class="row">
                                         <div class="col-md-12 form-group mb-3 input-group">
                                             <div class="custom-file">

@@ -18,7 +18,8 @@ class CreateMEPTPResultsTable extends Migration
             $table->integer('application_id');
             $table->integer('vendor_id');
             $table->string('status');
-            $table->string('result')->nullable();
+            $table->integer('score')->nullable();
+            $table->float('percentage')->nullable();
             $table->timestamps();
         });
     }

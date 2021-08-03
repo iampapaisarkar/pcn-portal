@@ -13,6 +13,8 @@ use App\Models\State;
 use App\Models\School;
 use DB;
 use App\Http\Services\AllActivity;
+use App\Exports\ResultTemplateExport;
+use Excel;
 
 class MEPTPResultsApplicationsController extends Controller
 {
@@ -178,7 +180,10 @@ class MEPTPResultsApplicationsController extends Controller
         
                 $applications = $applications->latest()->paginate($perPage);
 
-                return view('pharmacypractice.meptp.results.meptp-results-lists', compact('applications'));
+                $schoolID = $request->school_id;
+                $batchID = $request->batch_id;
+
+                return view('pharmacypractice.meptp.results.meptp-results-lists', compact('applications', 'schoolID', 'batchID'));
             }else{
                 return abort(404);
             }
@@ -186,6 +191,39 @@ class MEPTPResultsApplicationsController extends Controller
             return abort(404);
         }
 
+    }
+
+    public function downloadResultTemplate(Request $request){
+        // dd($request->all());
+
+        $data = MEPTPApplication::where(['batch_id'=>$request->batch_id, 'traing_centre'=>$request->school_id])
+        ->where('status', 'index_generated')
+        ->with('indexNumber', 'user', 'tier', 'batch', 'school')->get();
+        // dd($data);
+        $array = array();
+        foreach ($data as $key => $value) {
+            $fields = [
+                'S/N' => $key+1, 
+                'vendor_id' => $value['vendor_id'], 
+                'application_id' => $value['id'], 
+                'name_of_candidate' => $value['user']['firstname'] .' '.$value['user']['lastname'],
+                'index_numbers' => $value['indexNumber']['arbitrary_1'] .'/'. $value['indexNumber']['arbitrary_2'] .'/'. $value['indexNumber']['batch_year'] .'/'. $value['indexNumber']['state_code'] .'/'. $value['indexNumber']['school_code'] .'/'. $value['indexNumber']['tier'] .'/'. $value['indexNumber']['id'],
+                'tier' => $value['tier']['name'], 
+                'batch' => $value['batch']['batch_no'].'/'.$value['batch']['year'], 
+                'traning_centre' => $value['school']['name'], 
+                'exam_score' => '', 
+                'percentage_score' => '', 
+            ];
+            array_push($array, $fields);
+        }
+
+        $results = new ResultTemplateExport($array);
+
+        return Excel::download($results, 'result-template.xlsx');
+    }
+
+    public function uploadResult(Request $request){
+        dd($request->all());
     }
 
     // $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;

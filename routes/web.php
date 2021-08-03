@@ -102,7 +102,8 @@ Route::group(['middleware' => ['auth','verified', 'can:isPPractice']], function 
 	Route::get('/meptp-results-states/{batch_id}', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@states')->name('meptp-results-states');
 	Route::get('/meptp-results-centre/{state_id}', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@centre')->name('meptp-results-centre');
 	Route::get('/meptp-results-lists', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@lists')->name('meptp-results-lists');
-	// Route::post('/meptp-generate-index-number', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@generateIndexNumber')->name('meptp-generate-index-number');
+	Route::get('/meptp-donwload-result-template', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@downloadResultTemplate')->name('meptp-donwload-result-template');
+	Route::post('/meptp-upload-results', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@uploadResult')->name('meptp-upload-results');
 });
 
 // VENDOR ROUTES 

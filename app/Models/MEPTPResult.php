@@ -10,6 +10,6 @@ class MEPTPResult extends Model
     use HasFactory;
 
     protected $fillable = [
-        'application_id', 'vendor_id', 'status', 'result'
+        'application_id', 'vendor_id', 'status', 'score', 'percentage'
     ];
 }
