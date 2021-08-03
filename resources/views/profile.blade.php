@@ -202,7 +202,8 @@ $("#datepicker").datepicker({
   dateFormat: 'dd-mm-yy',
   changeMonth: true,
   changeYear: true,
-  yearRange: '-99:-18'
+  yearRange: '-99:-18',
+  defaultDate: '-18yr', 
 });
 
 $('#stateField').on('change', function() {
