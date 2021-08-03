@@ -14,6 +14,7 @@ use App\Models\School;
 use DB;
 use App\Http\Services\AllActivity;
 use App\Exports\ResultTemplateExport;
+use App\Imports\ResultImport;
 use Excel;
 
 class MEPTPResultsApplicationsController extends Controller
@@ -38,7 +39,8 @@ class MEPTPResultsApplicationsController extends Controller
         }
 
         $withResultBatches = Batch::whereHas('meptpApplication', function($q){
-            $q->where('status', 'index_generated');
+            $q->where('status', 'fail');
+            $q->orWhere('status', 'pass');
             $q->where('payment', true);
             $q->whereHas('result', function($q){
                 $q->where('status', '!=', 'pending');
@@ -78,17 +80,17 @@ class MEPTPResultsApplicationsController extends Controller
             $states = State::get();
 
             foreach($states as $key => $state){
-                $totalApplication = MEPTPApplication::where('payment', true)->where('status', 'index_generated')
+                $totalApplication = MEPTPApplication::where('payment', true)
                 ->where('batch_id', $batchID);
 
                 if($request->status == 'true'){
-                    $totalApplication = $totalApplication->whereHas('result', function($q){
+                    $totalApplication = $totalApplication->where('status', '!=', 'index_generated')->whereHas('result', function($q){
                         $q->where('status', '!=', 'pending');
                         $q->where('score', '!=', null);
                         $q->where('percentage', '!=', null);
                     });
                 }else{
-                    $totalApplication = $totalApplication->whereHas('result', function($q){
+                    $totalApplication = $totalApplication->where('status', 'index_generated')->whereHas('result', function($q){
                         $q->where('status', 'pending');
                         $q->where('score', null);
                         $q->where('percentage', null);
@@ -116,17 +118,17 @@ class MEPTPResultsApplicationsController extends Controller
             ->get();
 
             foreach($schools as $key => $school){
-                $totalApplication = MEPTPApplication::where('payment', true)->where('status', 'index_generated')
+                $totalApplication = MEPTPApplication::where('payment', true)
                 ->where('batch_id', $request->batch_id);
 
                 if($request->status == 'true'){
-                    $totalApplication = $totalApplication->whereHas('result', function($q){
+                    $totalApplication = $totalApplication->where('status', '!=', 'index_generated')->whereHas('result', function($q){
                         $q->where('status', '!=', 'pending');
                         $q->where('score', '!=', null);
                         $q->where('percentage', '!=', null);
                     });
                 }else{
-                    $totalApplication = $totalApplication->whereHas('result', function($q){
+                    $totalApplication = $totalApplication->where('status', 'index_generated')->whereHas('result', function($q){
                         $q->where('status', 'pending');
                         $q->where('score', null);
                         $q->where('percentage', null);
@@ -154,18 +156,19 @@ class MEPTPResultsApplicationsController extends Controller
             if(School::where('id', $request->school_id)->exists()){
 
                 $applications = MEPTPApplication::where(['traing_centre' => $request->school_id])
-                ->where('status', 'index_generated')
                 ->where('batch_id', $request->batch_id)
                 ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'tier', 'indexNumber');
 
                 if($request->status == 'true'){
-                    $applications = $applications->whereHas('result', function($q){
+                    $applications = $applications
+                    ->where('status', '!=', 'index_generated')->whereHas('result', function($q){
                         $q->where('status', '!=', 'pending');
                         $q->where('score', '!=', null);
                         $q->where('percentage', '!=', null);
                     });
                 }else{
-                    $applications = $applications->whereHas('result', function($q){
+                    $applications = $applications
+                    ->where('status', 'index_generated')->whereHas('result', function($q){
                         $q->where('status', 'pending');
                         $q->where('score', null);
                         $q->where('percentage', null);
@@ -230,10 +233,60 @@ class MEPTPResultsApplicationsController extends Controller
     }
 
     public function uploadResult(Request $request){
-        dd($request->all());
+
+        $this->validate($request, [
+            'result' => [
+                'required'
+            ]
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $import = new ResultImport;
+
+            Excel::import($import, request()->file('result'));
+
+            $results = $import->getImportedData();
+
+            foreach($results as $result){
+
+                if($result['exam_score_50'] >= 50 && $result['exam_score_50'] <= 100){
+                    $status = 'pass';
+                }
+                if($result['exam_score_50'] <= 49 && $result['exam_score_50'] >= 0){
+                    $status = 'fail';
+                }
+
+                
+                MEPTPApplication::where(['id' => $result['application_id'], 'vendor_id' => $result['vendor_id']])
+                ->update([
+                    'status' => $status
+                ]);
+
+                MEPTPResult::where(['id' => $result['application_id'], 'vendor_id' => $result['vendor_id']])
+                ->update([
+                    'status' => $status,
+                    'score' => $result['exam_score_50'],
+                    'percentage' => $result['percentage_score']
+                ]);
+
+                $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+                $activity = 'MEPTP Examination Result Uploaded';
+                AllActivity::storeActivity($result['application_id'], $adminName, $activity, 'meptp');
+            }
+
+            
+
+            DB::commit();
+
+            return back()->with('success', 'Results uploaded successfully done');
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
     }
 
-    // $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
-    // $activity = 'MEPTP Examination Result Uploaded';
-    // AllActivity::storeActivity($app->id, $adminName, $activity, 'meptp');
+    
 }

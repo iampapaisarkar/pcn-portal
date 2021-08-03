@@ -84,7 +84,7 @@
                         <div class="custom-file mb-3">
                             <input name="birth_certificate" type="file" name="color_passportsize" class="custom-file-input
                             @error('birth_certificate') is-invalid @enderror" accept="application/pdf"
-                                id="inputGroupFile01" accept="image/*">
+                                id="inputGroupFile01">
                             <label class="custom-file-label " for="inputGroupFile01"
                                 aria-describedby="inputGroupFileAddon02" id="inputGroupFile01previewLabel">Choose file</label>
                             @error('birth_certificate')
@@ -104,7 +104,7 @@
                         <div class="custom-file mb-3">
                             <input name="educational_certificate" type="file" name="color_passportsize" class="custom-file-input
                             @error('educational_certificate') is-invalid @enderror" accept="application/pdf"
-                                id="inputGroupFile02" accept="image/*">
+                                id="inputGroupFile02">
                             <label class="custom-file-label " for="inputGroupFile02"
                                 aria-describedby="inputGroupFileAddon02" id="inputGroupFile02previewLabel">Choose file</label>
                             @error('educational_certificate')
@@ -126,7 +126,7 @@
                         <div class="custom-file mb-3">
                             <input name="academic_certificate" type="file" name="color_passportsize" class="custom-file-input
                             @error('academic_certificate') is-invalid @enderror" accept="application/pdf"
-                                id="inputGroupFile03" accept="image/*">
+                                id="inputGroupFile03">
                             <label class="custom-file-label " for="inputGroupFile03"
                                 aria-describedby="inputGroupFileAddon02" id="inputGroupFile03previewLabel">Choose file</label>
                             @error('academic_certificate')

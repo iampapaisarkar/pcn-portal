@@ -10,7 +10,7 @@
             @csrf
             <div class="card text-left">
                 <div class="card-body">
-                    <h4>Qualified Candidates List for Results Upload</h4>
+                    <h4>Qualified Candidates List for Results {{Request::get('status') == 'false' ? 'Upload' : 'Uploaded'}}</h4>
                     <div class="table-responsive">
                         <div class="row m-0">
                             <div class="col-sm-12 col-md-6">
@@ -99,7 +99,7 @@
                                     <div class="row">
                                         <div class="col-md-12 form-group mb-3 input-group">
                                             <div class="custom-file">
-                                                <input name="result" class="custom-file-input" id="inputGroupFile02" type="file" required />
+                                                <input  accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" name="result" class="custom-file-input" id="inputGroupFile02" type="file" required />
                                                 <label class="custom-file-label" for="inputGroupFile02"
                                                     aria-describedby="inputGroupFileAddon02" id="inputGroupFile02previewLabel">Choose file</label>
                                             </div>
