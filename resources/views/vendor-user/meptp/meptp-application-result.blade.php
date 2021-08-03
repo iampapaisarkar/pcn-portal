@@ -11,8 +11,8 @@
                 <div class="col-md-12">
                     <div class="col-md-12">
                     <div class="alert alert-card alert-{{app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['color']}}" role="alert">{{app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['message']}}
-                        @if(isset(app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['download_result']))
-                        <button class="btn btn-rounded btn-success ml-3">Download Result</button>
+                        @if(isset(app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['download_link']))
+                        <a target="_blank" href="{{app('App\Http\Services\BasicInformation')->MEPTPApplicationResult()['download_link']}}" class="btn btn-rounded btn-success ml-3">View Result</a>
                         @endif
                     </div>
                     </div>

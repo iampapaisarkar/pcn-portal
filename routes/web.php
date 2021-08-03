@@ -120,6 +120,7 @@ Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileS
     Route::get('/meptp-application-status', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationStatus')->name('meptp-application-status');
     Route::get('/meptp-examination-card-download/{application_id}', 'App\Http\Controllers\Vendor\MEPTPApplicationController@downlaodExaminationCard')->name('meptp-examination-card-download');
     Route::get('/meptp-application-result', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationResult')->name('meptp-application-result');
+    Route::get('/meptp-application-result-show', 'App\Http\Controllers\Vendor\MEPTPApplicationController@applicationResulDownload')->name('meptp-application-result-show');
 
     // MEPTP APPLICATION CHECKOUT ROUTE
     Route::get('/checkout-meptp/{token}', 'App\Http\Controllers\Vendor\CheckoutController@checkoutMEPTP')->name('checkout-meptp');

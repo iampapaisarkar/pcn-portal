@@ -444,16 +444,17 @@ class BasicInformation
                     }
 
                     if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id])
-                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
-                ->where('batches.status', true)
-                ->where('m_e_p_t_p_results.status', 'fail')
-                ->exists()){
+                    ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->where('batches.status', true)
+                    ->where('m_e_p_t_p_results.status', 'fail')
+                    ->exists()){
                         return $response = [
                                 'color' => 'danger',
                                 'is_result' => true,
                                 'application_id' => $isSubmittedApplication->id,
                                 'vendor_id' => Auth::user()->id,
+                                'download_link' => route('meptp-application-result-show') . '?application_id=' .$isSubmittedApplication->id,
                                 'message' => 'Sorry! You were unsuccessful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result FAIL',
                             ];
                     }
@@ -469,6 +470,7 @@ class BasicInformation
                                 'is_result' => true,
                                 'application_id' => $isSubmittedApplication->id,
                                 'vendor_id' => Auth::user()->id,
+                                'download_link' => route('meptp-application-result-show') . '?application_id=' .$isSubmittedApplication->id,
                                 'message' => 'Congratulation! You were successful in the MEPTP Training Examination (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Result PASS',
                                 'download_result' => ''
                             ];
@@ -484,7 +486,6 @@ class BasicInformation
 
                 }
             }else{
-
                 $isResultPASS = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'pass'])
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                 ->where('m_e_p_t_p_results.status', '=', 'pass')
@@ -496,7 +497,7 @@ class BasicInformation
                 ->exists();
 
                 if($isResultPASS){
-                    $batch = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'pass'])
+                    $app = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'pass'])
                     ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
                     ->where('m_e_p_t_p_results.status', '=', 'pass')
                     ->with('batch')
@@ -505,9 +506,10 @@ class BasicInformation
                     return $response = [
                             'color' => 'success',
                             'is_result' => true,
-                            'application_id' => $batch->id,
+                            'application_id' => $app->id,
                             'vendor_id' => Auth::user()->id,
-                            'message' => 'YOU ARE ALAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$batch->batch->batch_no.'/'.$batch->batch->year.')',
+                            'download_link' => route('meptp-application-result-show') . '?application_id=' .$app->id,
+                            'message' => 'YOU ARE ALAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$app->batch->batch_no.'/'.$app->batch->year.')',
                         ];
                 }else if($isResultPENDING){
                     $batch = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'index_generated'])
@@ -522,6 +524,26 @@ class BasicInformation
                         'application_id' => $batch->id,
                         'vendor_id' => Auth::user()->id,
                         'message' => 'YOUR PREVIOUS APPLICATION CURRENTLY INPROGRESS (Batch: '.$batch->batch->batch_no.'/'.$batch->batch->year.')',
+                    ];
+                }else if(MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'fail'])
+                ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                ->where('m_e_p_t_p_results.status', '=', 'fail')
+                ->exists()){
+    
+                    $app = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'fail'])
+                    ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
+                    ->with('batch')
+                    ->where('m_e_p_t_p_results.status', '=', 'fail')
+                    ->select('m_e_p_t_p_applications.*')
+                    ->first();
+    
+                    return $response = [
+                        'color' => 'danger',
+                        'is_result' => true,
+                        'application_id' => $app->id,
+                        'vendor_id' => Auth::user()->id,
+                        'download_link' => route('meptp-application-result-show') . '?application_id=' .$app->id,
+                        'message' => 'YOU ARE UNSUCCESSFUL IN THE MEPTP TRANING EXAMINATION (Batch: '.$app->batch->batch_no.'/'.$app->batch->year.'). YOU HAVE TO WAIT FOR NEXT BATCH',
                     ];
                 }else{
                     return $response = [
@@ -556,6 +578,7 @@ class BasicInformation
                         'is_result' => true,
                         'application_id' => $app->id,
                         'vendor_id' => Auth::user()->id,
+                        'download_link' => route('meptp-application-result-show') . '?application_id=' .$app->id,
                         'message' => 'YOU ARE ALAREADY PASSED OUT FOR MEPTP APPLICATION (Batch: '.$app->batch->batch_no.'/'.$app->batch->year.')',
                     ];
             }else if($isResultPENDING){
@@ -589,6 +612,7 @@ class BasicInformation
                     'is_result' => true,
                     'application_id' => $app->id,
                     'vendor_id' => Auth::user()->id,
+                    'download_link' => route('meptp-application-result-show') . '?application_id=' .$app->id,
                     'message' => 'YOU ARE UNSUCCESSFUL IN THE MEPTP TRANING EXAMINATION (Batch: '.$app->batch->batch_no.'/'.$app->batch->year.'). YOU HAVE TO WAIT FOR NEXT BATCH',
                 ];
             }else{

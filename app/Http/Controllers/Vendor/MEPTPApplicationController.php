@@ -241,4 +241,25 @@ class MEPTPApplicationController extends Controller
         }
 
     }
+
+
+    public function applicationResulDownload(Request $request){
+        if(isset($request->application_id)){
+            if(MEPTPApplication::where(['id' => $request->application_id, 'vendor_id' => Auth::user()->id])
+            ->where('status', 'fail')
+            ->orWhere('status', 'pass')
+            ->exists()){
+                $application = MEPTPApplication::where(['id' => $request->application_id, 'vendor_id' => Auth::user()->id])
+                ->where('status', 'fail')
+                ->orWhere('status', 'pass')
+                ->with('batch', 'tier', 'school', 'indexNumber', 'result')
+                ->first();
+
+                return view('vendor-user.meptp.meptp-application-result-show', compact('application'));
+            }
+        }else{
+            return abort(404);
+        }
+        
+    }
 }
