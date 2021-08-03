@@ -21,9 +21,9 @@
                     <tr>
                         <td>{{$batch['batch_no']}}/{{$batch['year']}}</td>
                         <td>{{Auth::user()->user_state->name}}</td>
-                        <td><span class="badge badge-pill m-1 badge-{{$batch['index_number_generated'] ? 'success' : 'warning' }}">{{$batch['index_number_generated'] ? 'INDEX NUMBERS GENERATED' : 'INDEX NUMBERS PENDING'}}</span></td>
-                        <td><span class="badge badge-pill m-1 badge-{{$batch['result_uploaded'] ? 'success' : 'warning' }}">{{$batch['result_uploaded'] ? 'RESULTS UPLOADED' : 'RESULTS UPLOAD PENDING'}}</span></td>
-                        <td><a href="{{route('meptp-traning-approved-centre', $batch['id'])}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
+                        <td><span class="badge badge-pill m-1 badge-{{$batch['index_status'] == 'true' ? 'success' : 'warning' }}">{{$batch['index_status'] == 'true' ? 'INDEX NUMBERS GENERATED' : 'INDEX NUMBERS PENDING'}}</span></td>
+                        <td><span class="badge badge-pill m-1 badge-{{$batch['result_status'] == 'true' ? 'success' : 'warning' }}">{{$batch['result_status'] == 'true' ? 'RESULTS UPLOADED' : 'RESULTS UPLOAD PENDING'}}</span></td>
+                        <td><a href="{{route('meptp-traning-approved-centre')}}?index={{$batch['index_status']}}&result={{$batch['result_status']}}&batch_id={{$batch['id']}}"><button class="btn btn-info" type="button">VIEW</button></a></td>
                     </tr>
                     @endforeach
                 </tbody>

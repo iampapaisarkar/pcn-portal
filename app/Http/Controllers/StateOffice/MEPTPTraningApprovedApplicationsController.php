@@ -22,6 +22,7 @@ class MEPTPTraningApprovedApplicationsController extends Controller
             $q->where('status', 'approved_tier_selected');
             $q->where('index_number_id', null);
             $q->where('payment', true);
+            $q->where('state', Auth::user()->state);
         })
         ->with('meptpApplication.result')
         ->latest()
@@ -30,11 +31,9 @@ class MEPTPTraningApprovedApplicationsController extends Controller
         foreach($withoutIndexBatches as $key => $batch){
             foreach($batch->meptpApplication as $application){
                 if($application->index_number_id == null){
-                    $withoutIndexBatches[$key]['index_number_generated'] = false;
                     $withoutIndexBatches[$key]['index_status'] = 'false';
                 }
             }
-            $withoutResultBatches[$key]['result_uploaded'] = false;
             $withoutResultBatches[$key]['result_status'] = 'false';
         }
 
@@ -42,6 +41,7 @@ class MEPTPTraningApprovedApplicationsController extends Controller
         $withIndexNDWithoutResultBatches = Batch::whereHas('meptpApplication', function($q){
             $q->where('status', 'index_generated');
             $q->where('payment', true);
+            $q->where('state', Auth::user()->state);
             $q->whereHas('result', function($q){
                 $q->where('status', 'pending');
                 $q->where('score', null);
@@ -55,11 +55,9 @@ class MEPTPTraningApprovedApplicationsController extends Controller
         foreach($withIndexNDWithoutResultBatches as $key => $batch){
             foreach($batch->meptpApplication as $application){
                 if($application->index_number_id != null){
-                    $withIndexNDWithoutResultBatches[$key]['index_number_generated'] = true;
                     $withIndexNDWithoutResultBatches[$key]['index_status'] = 'true';
                 }
             }
-            $withIndexNDWithoutResultBatches[$key]['result_uploaded'] = false;
             $withIndexNDWithoutResultBatches[$key]['result_status'] = 'false';
         }
 
@@ -68,6 +66,7 @@ class MEPTPTraningApprovedApplicationsController extends Controller
             $q->where('status', 'pass');
             $q->orWhere('status', 'fail');
             $q->where('payment', true);
+            $q->where('state', Auth::user()->state);
             $q->whereHas('result', function($q){
                 $q->where('status', '!=', 'pending');
                 $q->where('score', '!=', null);
@@ -81,11 +80,9 @@ class MEPTPTraningApprovedApplicationsController extends Controller
         foreach($withIndexNDWithResultBatches as $key => $batch){
             foreach($batch->meptpApplication as $application){
                 if($application->index_number_id != null){
-                    $withIndexNDWithResultBatches[$key]['index_number_generated'] = true;
                     $withIndexNDWithResultBatches[$key]['index_status'] = 'true';
                 }
             }
-            $withIndexNDWithResultBatches[$key]['result_uploaded'] = true;
             $withIndexNDWithResultBatches[$key]['result_status'] = 'true';
         }
 
@@ -98,24 +95,62 @@ class MEPTPTraningApprovedApplicationsController extends Controller
         return view('stateoffice.meptp.trainingapproved.meptp-training-approved-batches', compact('batches'));
     }
 
-    public function centre($batchID){
+    public function centre(Request $request){
 
-        $schools = School::where('state', Auth::user()->state)
-        ->where('status', true)
-        ->get();
+        if(($request->index == 'true' || $request->index == 'false') &&
+        ($request->result == 'true' || $request->result == 'false') &&
+        isset($request->batch_id)){
 
-        foreach($schools as $key => $school){
-            $totalApplication = MEPTPApplication::where('status', 'index_generated')
-            ->where('payment', true)
-            ->where('batch_id', $batchID)
-            ->where('traing_centre', $school->id)
-            ->count();
+            $schools = School::where('state', Auth::user()->state)
+            ->where('status', true)
+            ->get();
 
-            $schools[$key]['total_application'] =  $totalApplication;
-            $schools[$key]['batch_id'] =  $batchID;
+            foreach($schools as $key => $school){
+                if($request->index == 'false' && $request->result == 'false'){
+                    $totalApplication = MEPTPApplication::where('index_number_id', null)
+                    ->where('payment', true)
+                    ->where('batch_id', $request->batch_id)
+                    ->where('traing_centre', $school->id)
+                    ->count();
+    
+                    $schools[$key]['total_application'] =  $totalApplication;
+                    $schools[$key]['batch_id'] =  $request->batch_id;
+                }
+                if($request->index == 'true' && $request->result == 'false'){
+                    $totalApplication = MEPTPApplication::where('index_number_id', '!=', null)
+                    ->where(function($q){
+                        $q->where('status', '!=', 'pass');
+                        $q->orWhere('status', '!=', 'fail');
+                    })
+                    ->where('payment', true)
+                    ->where('batch_id', $request->batch_id)
+                    ->where('traing_centre', $school->id)
+                    ->count();
+    
+                    $schools[$key]['total_application'] =  $totalApplication;
+                    $schools[$key]['batch_id'] =  $request->batch_id;
+                }
+                if($request->index == 'true' && $request->result == 'true'){
+                    $totalApplication = MEPTPApplication::where('index_number_id', '!=', null)
+                    ->where(function($q){
+                        $q->where('status', 'pass');
+                        $q->orWhere('status', 'fail');
+                    })
+                    ->where('payment', true)
+                    ->where('batch_id', $request->batch_id)
+                    ->where('traing_centre', $school->id)
+                    ->count();
+    
+                    $schools[$key]['total_application'] =  $totalApplication;
+                    $schools[$key]['batch_id'] =  $request->batch_id;
+                }
+                
+            }
+
+            return view('stateoffice.meptp.trainingapproved.meptp-training-approved-centre', compact('schools'));
+        }else{
+            return abort(404);
         }
-
-        return view('stateoffice.meptp.trainingapproved.meptp-training-approved-centre', compact('schools'));
     }
 
     public function lists(Request $request){
