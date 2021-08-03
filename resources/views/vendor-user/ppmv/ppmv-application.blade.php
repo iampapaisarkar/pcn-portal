@@ -5,7 +5,7 @@
 <div class="row">
     <div class="col-lg-12 col-md-12">
         <div class="card-body">
-            <form method="POST" action="{{ route('meptp-application-submit') }}" enctype="multipart/form-data" novalidate>
+            <form method="POST" action="{{ route('ppmv-application-submit') }}" enctype="multipart/form-data" novalidate>
             @csrf
                 <h4>Vendor Details</h4>
                 <div class="row">
