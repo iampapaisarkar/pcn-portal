@@ -65,7 +65,7 @@ class SchoolController extends Controller
             // Store school 
             School::create([
                 'name' => $request->name,
-                'code' => $this->sanitize($request->code),
+                'code' => strtoupper($this->sanitize($request->code)),
                 'state' => $request->state,
                 'status' => $request->status == 'on' ? true : false
             ]);
@@ -125,7 +125,7 @@ class SchoolController extends Controller
             // Update school 
             School::where('id', $id)->update([
                 'name' => $request->name,
-                'code' => $this->sanitize($request->code),
+                'code' => strtoupper($this->sanitize($request->code)),
                 'state' => $request->state,
                 'status' => $request->status == 'on' ? true : false
             ]);

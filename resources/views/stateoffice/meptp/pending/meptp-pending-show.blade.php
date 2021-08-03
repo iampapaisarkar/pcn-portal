@@ -30,7 +30,7 @@
             @csrf
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Quired Reason</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Reason for Query</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
@@ -40,9 +40,8 @@
                 <input type="hidden" name="batch_id" value="{{$application->batch_id}}">
                 <input type="hidden" name="school_id" value="{{$application->traing_centre}}">
                 <input type="hidden" name="vendor_id" value="{{$application->vendor_id}}">
-                <label for="query1">Describe Reason</label>
-                <textarea rows="3" name="query" class="form-control @error('query') is-invalid @enderror" id="query1" type="text" placeholder="Enter your first name" required>
-                </textarea>
+                <label for="query1">State Reason</label>
+                <textarea name="query" class="form-control  @error('query') is-invalid @enderror" id="exampleFormControlTextarea1" placeholder="Enter your reason here" rows="3" required></textarea>
                 @error('query')
                     <span class="invalid-feedback" role="alert">
                         <strong>{{ $message }}</strong>
