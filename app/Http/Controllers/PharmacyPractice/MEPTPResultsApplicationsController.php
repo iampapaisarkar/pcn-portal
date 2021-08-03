@@ -266,7 +266,7 @@ class MEPTPResultsApplicationsController extends Controller
                     'status' => $status
                 ]);
 
-                MEPTPResult::where(['id' => $result['application_id'], 'vendor_id' => $result['vendor_id']])
+                MEPTPResult::where(['application_id' => $result['application_id'], 'vendor_id' => $result['vendor_id']])
                 ->update([
                     'status' => $status,
                     'score' => $result['exam_score_50'],
