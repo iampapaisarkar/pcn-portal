@@ -19,6 +19,6 @@ class School extends Model
 
     // public function meptpApplication() {
     //     return $this->hasMany(MEPTPApplication::class,'traing_centre', 'id');
-    //     // ->where('status', 'send_to_state_offcie');
+    //     // ->where('status', 'send_to_state_office');
     // }
 }

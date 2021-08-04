@@ -77,7 +77,7 @@ class BasicInformation
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                ->where('batches.status', true)
-               ->where('m_e_p_t_p_applications.status', 'send_to_state_offcie')
+               ->where('m_e_p_t_p_applications.status', 'send_to_state_office')
                ->select('m_e_p_t_p_applications.*')
                ->latest()->first()){
                     return $response = [
@@ -232,7 +232,7 @@ class BasicInformation
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
                 ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                 ->where('batches.status', true)
-                ->where('m_e_p_t_p_applications.status', 'send_to_state_offcie')
+                ->where('m_e_p_t_p_applications.status', 'send_to_state_office')
                 ->select('m_e_p_t_p_applications.*')
                 ->latest()->first()){
                     return $response = [

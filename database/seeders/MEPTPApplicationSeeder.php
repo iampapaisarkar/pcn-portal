@@ -32,7 +32,7 @@ class MEPTPApplicationSeeder extends Seeder
             'batch_id' => 1,
             'tier_id' => 2,
             'index_number_id' => 1000,
-            'status' => 'send_to_state_offcie',
+            'status' => 'send_to_state_office',
             'payment' => true,
             'created_at' => now(),
             ]

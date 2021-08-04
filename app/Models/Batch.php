@@ -19,6 +19,6 @@ class Batch extends Model
 
     public function meptpApplication() {
         return $this->hasMany(MEPTPApplication::class,'batch_id', 'id');
-        // ->where('status', 'send_to_state_offcie');
+        // ->where('status', 'send_to_state_office');
     }
 }

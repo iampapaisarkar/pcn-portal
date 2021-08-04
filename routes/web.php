@@ -82,6 +82,10 @@ Route::group(['middleware' => ['auth','verified', 'can:isSOffice']], function ()
     // PPMV PENDING REGISTRATION ROUTES 
 	Route::get('/ppmv-pending-applications', 'App\Http\Controllers\StateOffice\PPMVPendingApplicationController@applications')->name('ppmv-pending-applications');
 	Route::get('/ppmv-pending-application-show/{id}', 'App\Http\Controllers\StateOffice\PPMVPendingApplicationController@show')->name('ppmv-pending-application-show');
+	Route::get('/download-ppmv-application-document', 'App\Http\Controllers\StateOffice\PPMVPendingApplicationController@downloadDocument')->name('download-ppmv-application-document');
+	
+    Route::get('/ppmv-application-approve', 'App\Http\Controllers\StateOffice\PPMVPendingApplicationController@approve')->name('ppmv-application-approve');
+    Route::post('/ppmv-application-query', 'App\Http\Controllers\StateOffice\PPMVPendingApplicationController@query')->name('ppmv-application-query');
 });
 
 // PHARMACY PRACTICE ROUTE 

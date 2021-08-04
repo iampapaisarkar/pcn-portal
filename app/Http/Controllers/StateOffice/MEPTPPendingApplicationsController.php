@@ -16,7 +16,7 @@ class MEPTPPendingApplicationsController extends Controller
     public function batches(){
 
         $batches = Batch::whereHas('meptpApplication', function($q){
-            $q->where('status', 'send_to_state_offcie');
+            $q->where('status', 'send_to_state_office');
             $q->where('payment', true);
             $q->where('state', Auth::user()->state);
         })
@@ -32,7 +32,7 @@ class MEPTPPendingApplicationsController extends Controller
         ->get();
 
         foreach($schools as $key => $school){
-            $totalApplication = MEPTPApplication::where('status', 'send_to_state_offcie')
+            $totalApplication = MEPTPApplication::where('status', 'send_to_state_office')
             ->where('payment', true)
             ->where('batch_id', $batchID)
             ->where('traing_centre', $school->id)
@@ -52,7 +52,7 @@ class MEPTPPendingApplicationsController extends Controller
             $applications = MEPTPApplication::where(['traing_centre' => $request->school_id, 'batch_id' => $request->batch_id])
             ->with('user_state', 'user_lga', 'school', 'batch', 'user')
             ->where('payment', true)
-            ->where('status', 'send_to_state_offcie');
+            ->where('status', 'send_to_state_office');
             
             if($request->per_page){
                 $perPage = (integer) $request->per_page;
@@ -82,7 +82,7 @@ class MEPTPPendingApplicationsController extends Controller
         ->where('batch_id', $request->batch_id)
         ->where('traing_centre', $request->school_id)
         ->where('vendor_id', $request->vendor_id)
-        ->where('status', 'send_to_state_offcie')
+        ->where('status', 'send_to_state_office')
         ->where('payment', true)
         ->exists()){
 
@@ -90,7 +90,7 @@ class MEPTPPendingApplicationsController extends Controller
             ->where('batch_id', $request->batch_id)
             ->where('traing_centre', $request->school_id)
             ->where('vendor_id', $request->vendor_id)
-            ->where('status', 'send_to_state_offcie')
+            ->where('status', 'send_to_state_office')
             ->where('payment', true)
             ->first();
 
@@ -106,7 +106,7 @@ class MEPTPPendingApplicationsController extends Controller
         ->where('batch_id', $request->batch_id)
         ->where('traing_centre', $request->school_id)
         ->where('vendor_id', $request->vendor_id)
-        ->where('status', 'send_to_state_offcie')
+        ->where('status', 'send_to_state_office')
         ->where('payment', true)
         ->exists()){
 
@@ -114,7 +114,7 @@ class MEPTPPendingApplicationsController extends Controller
             ->where('batch_id', $request->batch_id)
             ->where('traing_centre', $request->school_id)
             ->where('vendor_id', $request->vendor_id)
-            ->where('status', 'send_to_state_offcie')
+            ->where('status', 'send_to_state_office')
             ->where('payment', true)
             ->update([
                 'status' => 'send_to_pharmacy_practice',
@@ -141,14 +141,14 @@ class MEPTPPendingApplicationsController extends Controller
         ->where('batch_id', $request->batch_id)
         ->where('traing_centre', $request->school_id)
         ->where('vendor_id', $request->vendor_id)
-        ->where('status', 'send_to_state_offcie')
+        ->where('status', 'send_to_state_office')
         ->where('payment', true)
         ->exists()){
             $application = MEPTPApplication::where('id', $request->application_id)
             ->where('batch_id', $request->batch_id)
             ->where('traing_centre', $request->school_id)
             ->where('vendor_id', $request->vendor_id)
-            ->where('status', 'send_to_state_offcie')
+            ->where('status', 'send_to_state_office')
             ->where('payment', true)
             ->update([
                 'status' => 'reject_by_state_offcie',

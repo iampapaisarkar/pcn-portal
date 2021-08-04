@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PPMVApplication;
+use App\Http\Services\AllActivity;
 
 class PPMVPendingApplicationController extends Controller
 {
@@ -56,6 +57,77 @@ class PPMVPendingApplicationController extends Controller
             return view('stateoffice.ppmv.pending.ppmv-pending-show', compact('application'));
         }else{
             return abort(404);
+        }
+    }
+
+
+    public function downloadDocument(Request $request){
+        if($request->type == 'reference_1_letter'){
+            $filename = PPMVApplication::where(['vendor_id' => $request->user_id, 'id' => $request->id])->first()->reference_1_letter;
+        }
+        if($request->type == 'reference_2_letter'){
+            $filename = PPMVApplication::where(['vendor_id' => $request->user_id, 'id' => $request->id])->first()->reference_2_letter;
+        }
+
+        $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
+        DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . 'PPMV' . DIRECTORY_SEPARATOR . $filename);
+        return response()->download($path);
+    }
+
+    public function approve(Request $request){
+
+        if(PPMVApplication::where('id', $request->application_id)
+        ->where('vendor_id', $request->vendor_id)
+        ->where('status', 'send_to_state_office')
+        ->where('payment', true)
+        ->exists()){
+
+            $application = PPMVApplication::where('id', $request->application_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('status', 'send_to_state_office')
+            ->where('payment', true)
+            ->update([
+                'status' => 'approved',
+                'query' => null,
+            ]);
+
+            $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+            $activity = 'State Officer Document Verification Approved';
+            AllActivity::storeActivity($request->application_id, $adminName, $activity, 'ppmv');
+
+            return redirect()->route('meptp-pending-batches')->with('success', 'Application Approved successfully done');
+        }else{
+            return abort(404);
+        }
+    }
+
+    public function query(Request $request){
+       
+        $this->validate($request, [
+            'query' => ['required'],
+        ]);
+
+        if(PPMVApplication::where('id', $request->application_id)
+        ->where('vendor_id', $request->vendor_id)
+        ->where('status', 'send_to_state_office')
+        ->where('payment', true)
+        ->exists()){
+            $application = PPMVApplication::where('id', $request->application_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('status', 'send_to_state_office')
+            ->where('payment', true)
+            ->update([
+                'status' => 'rejected',
+                'query' => $request['query'],
+            ]);
+
+            $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+            $activity = 'State Officer Document Verification Query';
+            AllActivity::storeActivity($request->application_id, $adminName, $activity, 'ppmv');
+
+            return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');
+        }else{
+            return back()->with('error', 'There is something error, please try after some time');
         }
     }
 }

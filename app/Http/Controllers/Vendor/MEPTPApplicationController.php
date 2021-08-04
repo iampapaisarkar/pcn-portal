@@ -51,7 +51,7 @@ class MEPTPApplicationController extends Controller
                 'ppmvl_no' => $request->is_registered == 'yes' ? $request->ppmvl_no : NULL,
                 'traing_centre' => $request->school,
                 'batch_id' => Batch::where('status', true)->first()->id,
-                'status' => 'send_to_state_offcie',
+                'status' => 'send_to_state_office',
             ]);
 
             $response = Checkout::checkoutMEPTP($application = ['id' => $application->id], 'meptp');
@@ -152,7 +152,7 @@ class MEPTPApplicationController extends Controller
                     'ppmvl_no' => $request->is_registered == 'yes' ? $request->ppmvl_no : NULL,
                     'traing_centre' => $request->school,
                     'batch_id' => Batch::where('status', true)->first()->id,
-                    'status' => 'send_to_state_offcie',
+                    'status' => 'send_to_state_office',
                 ]);
 
                 $response = true;
@@ -236,7 +236,7 @@ class MEPTPApplicationController extends Controller
             }
 
             $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
-            DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . $filename);
+            DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . 'MEPTP' . DIRECTORY_SEPARATOR . $filename);
             return response()->download($path);
         }
 
