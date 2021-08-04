@@ -15,4 +15,12 @@ class PPMVApplication extends Model
         'reference_2_name', 'reference_2_phone', 'reference_2_email', 'reference_2_address','reference_2_letter', 'reference_occupation',
         'status', 'payment', 'query'
     ];
+
+    public function user() {
+        return $this->hasOne(User::class,'id', 'vendor_id');
+    }
+
+    public function meptp() {
+        return $this->hasOne(MEPTPApplication::class,'id', 'meptp_application_id');
+    }
 }

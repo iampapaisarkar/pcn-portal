@@ -78,6 +78,10 @@ Route::group(['middleware' => ['auth','verified', 'can:isSOffice']], function ()
 	Route::get('/meptp-traning-approved-centre', 'App\Http\Controllers\StateOffice\MEPTPTraningApprovedApplicationsController@centre')->name('meptp-traning-approved-centre');
 	Route::get('/meptp-traning-approved-lists', 'App\Http\Controllers\StateOffice\MEPTPTraningApprovedApplicationsController@lists')->name('meptp-traning-approved-lists');
 	Route::get('/meptp-traning-approved-show/{application_id}', 'App\Http\Controllers\StateOffice\MEPTPTraningApprovedApplicationsController@show')->name('/meptp-traning-approved-show');
+
+    // PPMV PENDING REGISTRATION ROUTES 
+	Route::get('/ppmv-pending-applications', 'App\Http\Controllers\StateOffice\PPMVPendingApplicationController@applications')->name('ppmv-pending-applications');
+	Route::get('/ppmv-pending-application-show/{id}', 'App\Http\Controllers\StateOffice\PPMVPendingApplicationController@show')->name('ppmv-pending-application-show');
 });
 
 // PHARMACY PRACTICE ROUTE 

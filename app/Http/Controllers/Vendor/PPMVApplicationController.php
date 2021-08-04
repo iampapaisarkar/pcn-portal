@@ -49,7 +49,7 @@ class PPMVApplicationController extends Controller
                 'reference_2_address' => $request->reference_2_address,
                 'reference_2_letter' => $reference_2_letter,
                 'reference_occupation' => $request->reference_occupation,
-                'status' => 'send_to_state_offcie',
+                'status' => 'send_to_state_office',
             ]);
 
             $response = Checkout::checkoutMEPTP($application = ['id' => $application->id], 'ppmv_registration');
