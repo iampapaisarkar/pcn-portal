@@ -151,7 +151,7 @@ class MEPTPPendingApplicationsController extends Controller
             ->where('status', 'send_to_state_office')
             ->where('payment', true)
             ->update([
-                'status' => 'reject_by_state_offcie',
+                'status' => 'reject_by_state_office',
                 'query' => $request['query'],
             ]);
 

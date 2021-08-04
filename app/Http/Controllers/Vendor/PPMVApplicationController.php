@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\PPMV\PPMVApplicationStoreRequest;
-// use App\Http\Requests\PPMV\PPMVApplicationupdateRequest;
+use App\Http\Requests\PPMV\PPMVApplicationUpdateRequest;
 use App\Http\Services\FileUpload;
 use App\Http\Services\Checkout;
 use App\Models\PPMVApplication;
@@ -65,8 +65,102 @@ class PPMVApplicationController extends Controller
         }  
     }
 
+    public function applicationFormEdit($id){
 
+        $application = PPMVApplication::where('id', $id)
+        ->where('vendor_id', Auth::user()->id)
+        ->where(function($q){
+            $q->where('status', 'rejected');
+            $q->orWhere('status', 'unrecommended');
+        })
+        ->latest()
+        ->with('user', 'meptp')
+        ->first();
 
+        if($application){
+            return view('vendor-user.ppmv.ppmv-application-edit', compact('application'));
+        }else{
+            return abort(404);
+        }
+    }
+
+    public function applicationFormUpdate(PPMVApplicationUpdateRequest $request, $id){
+
+        try {
+            DB::beginTransaction();
+
+            if(PPMVApplication::where(['vendor_id' => Auth::user()->id, 'id' => $id])->exists()){
+
+                $application = PPMVApplication::where(['vendor_id' => Auth::user()->id, 'id' => $id])->first();
+
+                if($request->file('reference_1_letter') != null){
+                    if($application->reference_1_letter == $request->file('reference_1_letter')->getClientOriginalName()){
+                        $reference_1_letter = $application->reference_1_letter;
+                    }else{
+                        $reference_1_letter = FileUpload::upload($request->file('reference_1_letter'), $private = true, 'ppmv', 'reference_1_letter');
+        
+                        $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
+                        DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . 'PPMV'. DIRECTORY_SEPARATOR . $application->reference_1_letter);
+                        File::Delete($path);
+                    }
+                }else{
+                    $reference_1_letter = $application->reference_1_letter;
+                }
+
+                if($request->file('reference_2_letter') != null){
+                    if($application->reference_2_letter == $request->file('reference_2_letter')->getClientOriginalName()){
+                        $reference_2_letter = $application->reference_2_letter;
+                    }else{
+                        $reference_2_letter = FileUpload::upload($request->file('reference_2_letter'), $private = true, 'ppmv', 'reference_2_letter');
+        
+                        $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
+                        DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . 'PPMV'. DIRECTORY_SEPARATOR . $application->reference_2_letter);
+                        File::Delete($path);
+                    }
+                }else{
+                    $reference_2_letter = $application->reference_2_letter;
+                }
+                
+
+                PPMVApplication::where(['vendor_id' => Auth::user()->id, 'id' => $id])
+                ->update([
+                    'vendor_id' => Auth::user()->id,
+                    'reference_1_name' => $request->reference_1_name,
+                    'reference_1_phone' => $request->reference_1_phone,
+                    'reference_1_email' => $request->reference_1_email,
+                    'reference_1_address' => $request->reference_1_address,
+                    'reference_1_letter' => $reference_1_letter,
+                    'current_annual_licence' => $request->current_annual_licence,
+                    'reference_2_name' => $request->reference_2_name,
+                    'reference_2_phone' => $request->reference_2_phone,
+                    'reference_2_email' => $request->reference_2_email,
+                    'reference_2_address' => $request->reference_2_address,
+                    'reference_2_letter' => $reference_2_letter,
+                    'reference_occupation' => $request->reference_occupation,
+                    'status' => 'send_to_state_office',
+                ]);
+
+                $response = true;
+               
+            }else{
+                $response = false;
+            }
+
+            DB::commit();
+
+                if($response == true){
+                    return redirect()->route('ppmv-application')
+                    ->with('success', 'Application successfully updated');
+                }else{
+                    return back()->with('error','There is something error, please try after some time');
+                }
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }
+        
+    }
 
     public function renewal(){
         return view('vendor-user.ppmv.ppmv-application', compact('shop'));

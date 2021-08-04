@@ -144,4 +144,6 @@ Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileS
     Route::get('/renew-licence', 'App\Http\Controllers\Vendor\PPMVApplicationController@renewLicence')->name('renew-licence');
     Route::post('/renew-licence-submit', 'App\Http\Controllers\Vendor\PPMVApplicationController@renewLicence')->name('renew-licence-submit');
 
+	Route::get('/ppmv-application-edit/{id}', 'App\Http\Controllers\Vendor\PPMVApplicationController@applicationFormEdit')->name('ppmv-application-edit');
+	Route::post('/ppmv-application-update/{id}', 'App\Http\Controllers\Vendor\PPMVApplicationController@applicationFormUpdate')->name('ppmv-application-update');
 });

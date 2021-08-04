@@ -41,8 +41,6 @@ class VendorPPMVApplication extends Component
         ->with('user', 'meptp')
         ->first();
 
-        // dd($application);
-
         return view('components.vendor-p-p-m-v-application', compact('application'));
     }
 }

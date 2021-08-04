@@ -89,7 +89,7 @@ class BasicInformation
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
                ->where('batches.status', true)
-               ->where('m_e_p_t_p_applications.status', 'reject_by_state_offcie')
+               ->where('m_e_p_t_p_applications.status', 'reject_by_state_office')
                ->select('m_e_p_t_p_applications.*')
                ->latest()->first()){
                     return $response = [
@@ -247,7 +247,7 @@ class BasicInformation
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
             ->where('batches.status', true)
-            ->where('m_e_p_t_p_applications.status', 'reject_by_state_offcie')
+            ->where('m_e_p_t_p_applications.status', 'reject_by_state_office')
             ->select('m_e_p_t_p_applications.*')
             ->latest()->first()){
                     return $response = [
@@ -682,36 +682,68 @@ class BasicInformation
     public function canSubmitPPMVApplication(){
         $meptp = Auth::user()->passed_meptp_application()->first();
 
+        // send_to_state_office
+        // rejected
+        // approved
+        // recommended
+        // unrecommended
+
         if($meptp){
 
             if(PPMVApplication::where('vendor_id', Auth::user()->id)
+            ->where('status', 'send_to_state_office')
+            ->latest()
+            ->first()){
+                return $response = [
+                    'can_submit' => false,
+                    'color' => 'warning',
+                    'message' => 'You\'re already submit in PPMV registration. STATUS: INPROGRESS',
+                ]; 
+            }else if(PPMVApplication::where('vendor_id', Auth::user()->id)
+            ->where('status', 'approved')
+            ->latest()
+            ->first()){
+                return $response = [
+                    'can_submit' => false,
+                    'color' => 'warning',
+                    'message' => 'Your PPMV registration application approved. STATUS: INPROGRESS',
+                ]; 
+            }else if(PPMVApplication::where('vendor_id', Auth::user()->id)
+            ->where('status', 'rejected')
+            ->latest()
+            ->first()){
+
+                $applciation = PPMVApplication::where('vendor_id', Auth::user()->id)
+                ->where('status', 'rejected')
+                ->latest()
+                ->first();
+
+                return $response = [
+                    'can_submit' => false,
+                    'can_edit' => true,
+                    'color' => 'danger',
+                    'application_id' => $applciation->id,
+                    'message' => 'Your PPMV registration application queried. STATUS: Queried',
+                    'caption' => $applciation->query,
+                ]; 
+            }else if(PPMVApplication::where('vendor_id', Auth::user()->id)
             ->where('status', 'recommended')
             ->latest()
             ->first()){
                 return $response = [
                     'can_submit' => false,
                     'color' => 'success',
-                    'message' => 'You\'re already registered in PPMV',
+                    'message' => 'Your PPMV Application RECOMMENDED',
                 ]; 
             }else if(PPMVApplication::where('vendor_id', Auth::user()->id)
             ->where('status', 'unrecommended')
             ->latest()
             ->first()){
                 return $response = [
-                    'can_submit' => true,
-                ];
-            }else if(PPMVApplication::where('vendor_id', Auth::user()->id)
-            ->where(function($q){
-                $q->where('status', '!=', 'recommended');
-                $q->orWhere('status', '!=', 'unrecommended');
-            })
-            ->latest()
-            ->first()){
-                return $response = [
                     'can_submit' => false,
-                    'color' => 'warning',
-                    'message' => 'Your application is inprogress',
-                ];
+                    'color' => 'danger',
+                    'message' => 'Your PPMV Application UNRECOMMENDED',
+                ]; 
             }else{
                 return $response = [
                     'can_submit' => true,

@@ -71,7 +71,7 @@ class MEPTPApplicationController extends Controller
         $application = MEPTPApplication::where(['vendor_id' => Auth::user()->id])
         ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
         ->where('batches.status', true)
-        ->where('m_e_p_t_p_applications.status', 'reject_by_state_offcie')
+        ->where('m_e_p_t_p_applications.status', 'reject_by_state_office')
         ->with('user_state', 'user_lga', 'school', 'batch', 'user.user_state', 'user.user_lga')
         ->select('m_e_p_t_p_applications.*')
         ->first();
@@ -95,10 +95,10 @@ class MEPTPApplicationController extends Controller
                     if($application->birth_certificate == $request->file('birth_certificate')->getClientOriginalName()){
                         $birth_certificate = $application->birth_certificate;
                     }else{
-                        $birth_certificate = FileUpload::upload($request->file('birth_certificate'), $private = true);
+                        $birth_certificate = FileUpload::upload($request->file('birth_certificate'), $private = true, 'meptp', 'birth_certificate');
         
                         $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
-                        DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . $application->birth_certificate);
+                        DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . 'MEPTP'. DIRECTORY_SEPARATOR . $application->birth_certificate);
                         File::Delete($path);
                     }
                 }else{
@@ -109,10 +109,10 @@ class MEPTPApplicationController extends Controller
                     if($application->educational_certificate == $request->file('educational_certificate')->getClientOriginalName()){
                         $educational_certificate = $application->educational_certificate;
                     }else{
-                        $educational_certificate = FileUpload::upload($request->file('educational_certificate'), $private = true);
+                        $educational_certificate = FileUpload::upload($request->file('educational_certificate'), $private = true, 'meptp', 'educational_certificate');
         
                         $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
-                        DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . $application->educational_certificate);
+                        DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . 'MEPTP'. DIRECTORY_SEPARATOR . $application->educational_certificate);
                         File::Delete($path);
                     }
                 }else{
@@ -123,9 +123,9 @@ class MEPTPApplicationController extends Controller
                     if($application->academic_certificate == $request->file('academic_certificate')->getClientOriginalName()){
                         $academic_certificate = $application->academic_certificate;
                     }else{
-                        $academic_certificate = FileUpload::upload($request->file('academic_certificate'), $private = true);
+                        $academic_certificate = FileUpload::upload($request->file('academic_certificate'), $private = true, 'meptp', 'academic_certificate');
                         $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
-                        DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . $application->academic_certificate);
+                        DIRECTORY_SEPARATOR . $request->user_id . DIRECTORY_SEPARATOR . 'MEPTP'. DIRECTORY_SEPARATOR . $application->academic_certificate);
                         File::Delete($path);
                     }
                 }else{
