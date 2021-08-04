@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PPMVApplication;
 use App\Http\Services\AllActivity;
+use App\Http\Services\FileUpload;
+use DB;
 
 class PPMVInspectionApplicationController extends Controller
 {
@@ -58,5 +60,53 @@ class PPMVInspectionApplicationController extends Controller
         }else{
             return abort(404);
         }
+    }
+
+    public function submitInspectionReport(Request $request, $id){
+        $this->validate($request, [
+            'recommendation' => ['required'],
+            'inspection_report' => ['required']
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $application = PPMVApplication::where('id', $id)->where('status', 'approved')->first();
+
+            if($application){
+
+                $file = $request->file('inspection_report');
+
+                $private_storage_path = storage_path(
+                    'app'. DIRECTORY_SEPARATOR . 'private' . DIRECTORY_SEPARATOR . $application->vendor_id . DIRECTORY_SEPARATOR . 'PPMV'
+                );
+
+                if(!file_exists($private_storage_path)){
+                    \mkdir($private_storage_path, intval('755',8), true);
+                }
+                $file_name = 'vendor'.$application->vendor_id.'-inspection_report.'.$file->getClientOriginalExtension();
+                $file->move($private_storage_path, $file_name);
+
+                PPMVApplication::where('id', $id)
+                ->where('status', 'approved')
+                ->where('payment', true)
+                ->update([
+                    'status' => $request->recommendation,
+                ]);
+
+                $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+                $activity = 'State Officer Document Verification Query';
+                AllActivity::storeActivity($request->application_id, $adminName, $activity, 'ppmv');
+            }
+            
+            DB::commit();
+
+            return redirect()->route('ppmv-inspection-applications')
+            ->with('success', 'Inspection Report updated successfully');
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        }  
     }
 }

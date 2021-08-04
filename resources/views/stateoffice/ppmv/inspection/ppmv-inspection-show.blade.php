@@ -11,75 +11,51 @@
         :applicationID="$application->id" 
         :vendorID="$application->vendor_id"
         />
-        @if(Auth::user()->hasRole(['state_office']))
-        <div class="card-footer">
+        <div class="custom-separator"></div>
+        <div class="card-footer mb-4">
             <div class="mc-footer">
-                <div class="row">
-                    <div class="col-lg-12">
-                        <a href="{{ route('ppmv-application-approve') }}?application_id={{$application->id}}&vendor_id={{$application->user->id}}" class="btn  btn-primary m-1" id="save" name="save">Approve</a>
-                        <button data-toggle="modal" data-target="#queryModal" type="button" class="btn  btn-danger m-1" id="query" name="query">Query</button>
+                <h4>Upload Inspection Report</h4>
+                <form id="RecommendationForm" class="w-100" method="POST" action="{{ route('ppmv-inspection-report-submit', $application->id) }}" enctype="multipart/form-data">
+                @csrf
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="inputEmail3" class="ul-form__label">Recommendation:</label>
+                            <div class="input-right-icon">
+                                <select name="recommendation" class="form-control @error('recommendation') is-invalid @enderror" name="Recommendation">
+                                    <option value="">Select Recommendation</option>
+                                    @if(old('recommendation'))    
+                                    <option hidden selected value="{{old('recommendation') == 'recommended' ? 'recommended' : 'unrecommended'}}">{{old('recommendation') == 'Recommended' ? 'recommended' : 'Not Recommended'}}</option>
+                                    @endif
+                                    <option value="recommended">Recommended</option>
+                                    <option value="unrecommended">Not Recommended</option>
+                                </select>
+                            </div>
+                            @error('recommendation')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-md-6 d-flex flex-column justify-content-between">
+                            <label for="picker1">Inspection Report (PDF):</label>
+                            <div class="custom-file">
+                                <input name="inspection_report" type="file" name="color_passportsize" class="custom-file-input
+                                @error('inspection_report') is-invalid @enderror" accept="application/pdf"
+                                    id="inputGroupFile01" accept="image/*">
+                                <label class="custom-file-label " for="inputGroupFile01"
+                                    aria-describedby="inputGroupFileAddon02" id="inputGroupFile01previewLabel">Choose file</label>
+                                @error('inspection_report')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
-                </div>
+                    <button onclick="submitRecommendation(event)" type="button" class="btn btn-primary">Submit Recommendation</button>
+                </form>
             </div>
         </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="queryModal" tabindex="-1" role="dialog" aria-labelledby="queryModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <form id="quriedForm" class="w-100" method="POST" action="{{ route('ppmv-application-query') }}" enctype="multipart/form-data">
-            @csrf
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Reason for Query</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" name="application_id" value="{{$application->id}}">
-                <input type="hidden" name="vendor_id" value="{{$application->vendor_id}}">
-                <label for="query1">State Reason</label>
-                <textarea name="query" class="form-control  @error('query') is-invalid @enderror" id="exampleFormControlTextarea1" placeholder="Enter your reason here" rows="3" required></textarea>
-                @error('query')
-                    <span class="invalid-feedback" role="alert">
-                        <strong>{{ $message }}</strong>
-                    </span>
-                @enderror
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button onclick="submitReject(event)" type="button" class="btn btn-primary">Submit Query</button>
-            </div>
-            </div>
-            </form>
-        </div>
-        </div>
-
-        <script>
-            function submitReject(event){
-                event.preventDefault();
-
-                $.confirm({
-                    title: 'Quired & Reject',
-                    content: 'Are you sure want to reject this application?',
-                    buttons: {   
-                        ok: {
-                            text: "YES",
-                            btnClass: 'btn-primary',
-                            keys: ['enter'],
-                            action: function(){
-                                document.getElementById('quriedForm').submit();
-                            }
-                        },
-                        cancel: function(){
-                                console.log('the user clicked cancel');
-                        }
-                    }
-                });
-
-            }
-        </script>
-        @endif
 
         <x-all-activity
         :applicationID="$application->id" 
@@ -89,4 +65,39 @@
 </div>
 </div>
 </div>
+
+
+<script>
+    function submitRecommendation(event){
+        event.preventDefault();
+
+        $.confirm({
+            title: 'Submit Recommendation',
+            content: 'Are you sure want to submit?',
+            buttons: {   
+                ok: {
+                    text: "YES",
+                    btnClass: 'btn-primary',
+                    keys: ['enter'],
+                    action: function(){
+                        document.getElementById('RecommendationForm').submit();
+                    }
+                },
+                cancel: function(){
+                        console.log('the user clicked cancel');
+                }
+            }
+        });
+
+    }
+
+    // Educational Certificate Photo on upload preview 
+    inputGroupFile01.onchange = evt => {
+        const [file] = inputGroupFile01.files
+        if (file) {
+            $('#inputGroupFile01preview').attr('src', URL.createObjectURL(file));
+            $('#inputGroupFile01previewLabel').html(file.name);
+        }
+    }
+</script>
 @endsection
