@@ -64,4 +64,11 @@ class PPMVApplicationController extends Controller
             return back()->with('error','There is something error, please try after some time');
         }  
     }
+
+
+
+
+    public function renewal(){
+        return view('vendor-user.ppmv.ppmv-application', compact('shop'));
+    }
 }
