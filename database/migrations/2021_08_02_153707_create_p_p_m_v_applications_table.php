@@ -34,6 +34,7 @@ class CreatePPMVApplicationsTable extends Migration
             $table->string('status');
             $table->boolean('payment')->default(false);
             $table->longtext('query')->nullable();
+            $table->string('token')->nullable();
             $table->timestamps();
         });
     }

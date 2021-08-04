@@ -138,6 +138,7 @@ class PPMVApplicationController extends Controller
                     'reference_2_letter' => $reference_2_letter,
                     'reference_occupation' => $request->reference_occupation,
                     'status' => 'send_to_state_office',
+                    'created_at' => now(),
                 ]);
 
                 $response = true;
