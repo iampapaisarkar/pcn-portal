@@ -91,6 +91,12 @@ class InvoiceController extends Controller
             if($data->service_type == 'meptp_training'){
                 $title = 'APPLICATION FOR MEPTP Training Fees (Batch: '.$data->application->batch->batch_no .'/'. $data->application->batch->year.')';
             }
+            if($data->service_type == 'ppmv_registration'){
+                $title = 'APPLICATION FOR PPMV Registration Fees';
+            }
+            if($data->service_type == 'ppmv_renewal'){
+                $title = 'APPLICATION FOR PPMV Renewal Fees';
+            }
 
             $items = [
                 (new InvoiceItem())->title($title)->pricePerUnit($data->amount)->units($data->service->netFees),

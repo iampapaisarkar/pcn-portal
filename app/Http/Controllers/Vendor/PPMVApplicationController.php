@@ -31,7 +31,7 @@ class PPMVApplicationController extends Controller
             $meptp = Auth::user()->passed_meptp_application()->first();
 
             $reference_1_letter = FileUpload::upload($request->file('reference_1_letter'), $private = true, 'ppmv', 'reference_1_letter');
-            $reference_2_letter = FileUpload::upload($request->file('reference_2_letter'), $private = true, 'ppmv', 'reference_1_letter');
+            $reference_2_letter = FileUpload::upload($request->file('reference_2_letter'), $private = true, 'ppmv', 'reference_2_letter');
 
             // Store MEPTP application 
             $application = PPMVApplication::create([
@@ -52,7 +52,7 @@ class PPMVApplicationController extends Controller
                 'status' => 'send_to_state_offcie',
             ]);
 
-            $response = Checkout::checkoutMEPTP($application = ['id' => $application->id], 'ppmv');
+            $response = Checkout::checkoutMEPTP($application = ['id' => $application->id], 'ppmv_registration');
 
             DB::commit();
 

@@ -37,7 +37,7 @@ class PPMVApplicationStoreRequest extends FormRequest
                 'required', 'min:3', 'max:255'
             ],
             'reference_1_letter' => [
-                'required', 'min:3', 'max:255'
+                'required'
             ],
             'reference_2_name' => [
                 'required'
@@ -52,7 +52,7 @@ class PPMVApplicationStoreRequest extends FormRequest
                 'required', 'min:3', 'max:255'
             ],
             'reference_2_letter' => [
-                'required', 'min:3', 'max:255'
+                'required'
             ],
             'current_annual_licence' => [
                 'required', 'min:3', 'max:255'

@@ -63,6 +63,9 @@
                                     APPLICATION FOR {{$invoice->service->description}} 
                                     (Batch: {{$invoice->application->batch->batch_no .'/'. $invoice->application->batch->year}})
                                 @endif
+                                @if($invoice->service_type == 'ppmv_registration')
+                                    APPLICATION FOR {{$invoice->service->description}}
+                                @endif
                                 </td>
 
                                 <td>
