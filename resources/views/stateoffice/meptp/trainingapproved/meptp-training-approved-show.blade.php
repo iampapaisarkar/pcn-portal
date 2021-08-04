@@ -14,6 +14,7 @@
 
         <x-all-activity
         :applicationID="$application->id" 
+        type="meptp"
         />
     </div>
 </div>

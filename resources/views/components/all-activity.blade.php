@@ -23,6 +23,9 @@
                         @if($activity->type == 'meptp')
                         Tiered PPMV Registration
                         @endif
+                        @if($activity->type == 'ppmv')
+                        Tiered PPMV Registration
+                        @endif
                     </th>
                     <th scope="col">{{$activity->created_at->format('d/M/Y')}}</th>
                 </tr>

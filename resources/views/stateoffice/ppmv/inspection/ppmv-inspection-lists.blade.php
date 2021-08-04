@@ -52,9 +52,9 @@
                         <td>{{$application->user->firstname . ' ' . $application->user->lastname}}</td>
                         <td>{{$application->meptp->shop_name}}</td>
                         <td>{{$application->created_at->format('Y')}}</td>
-                        <td>{{$application->user->user_state->name}}</td>
+                        <td>{{$application->token}}</td>
                         <td><span class="badge badge-warning">PENDING</span></td>
-                        <td><a href="{{route('ppmv-pending-application-show', $application->id)}}"><button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a></td>
+                        <td><a href="{{route('ppmv-inspection-show', $application->id)}}"><button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a></td>
                     </tr>
                     @endforeach
                 </tbody>

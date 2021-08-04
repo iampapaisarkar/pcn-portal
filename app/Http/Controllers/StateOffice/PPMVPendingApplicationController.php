@@ -89,6 +89,7 @@ class PPMVPendingApplicationController extends Controller
             ->update([
                 'status' => 'approved',
                 'query' => null,
+                'token' => random_bytes(6),
             ]);
 
             $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;

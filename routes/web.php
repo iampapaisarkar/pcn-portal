@@ -89,6 +89,7 @@ Route::group(['middleware' => ['auth','verified', 'can:isSOffice']], function ()
 
      // PPMV INSSPECTION REGISTRATION ROUTES 
 	Route::get('/ppmv-inspection-applications', 'App\Http\Controllers\StateOffice\PPMVInspectionApplicationController@applications')->name('ppmv-inspection-applications');
+	Route::get('/ppmv-inspection-show/{id}', 'App\Http\Controllers\StateOffice\PPMVInspectionApplicationController@show')->name('ppmv-inspection-show');
 });
 
 // PHARMACY PRACTICE ROUTE 

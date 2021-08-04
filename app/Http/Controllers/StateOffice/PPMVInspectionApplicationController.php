@@ -41,4 +41,22 @@ class PPMVInspectionApplicationController extends Controller
 
         return view('stateoffice.ppmv.inspection.ppmv-inspection-lists', compact('applications'));
     }
+
+    public function show($id){
+
+        $application = PPMVApplication::where('id', $id)
+        ->where('payment', true)
+        ->where('status', 'approved')
+        ->whereHas('user', function($q){
+            $q->where('state', Auth::user()->state);
+        })
+        ->with('user', 'meptp')
+        ->first();
+
+        if($application){
+            return view('stateoffice.ppmv.inspection.ppmv-inspection-show', compact('application'));
+        }else{
+            return abort(404);
+        }
+    }
 }

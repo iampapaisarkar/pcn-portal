@@ -12,10 +12,11 @@ class AllActivity extends Component
      *
      * @return void
      */
-    public $application_id, $vendor_id;
-    public function __construct($applicationID)
+    public $application_id, $app_type;
+    public function __construct($applicationID, $type)
     {
         $this->application_id = $applicationID;
+        $this->app_type = $type;
     }
 
     /**
@@ -25,7 +26,9 @@ class AllActivity extends Component
      */
     public function render()
     {
-        $activities = Activity::where('type', 'meptp')->where('application_id', $this->application_id)->get();
+        $activities = Activity::where('type', $this->app_type)->where('application_id', $this->application_id)
+        ->latest()
+        ->get();
         // dd(0);
         return view('components.all-activity', compact('activities'));
     }
