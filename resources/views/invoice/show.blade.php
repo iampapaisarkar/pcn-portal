@@ -66,6 +66,9 @@
                                 @if($invoice->service_type == 'ppmv_registration')
                                     APPLICATION FOR {{$invoice->service->description}}
                                 @endif
+                                @if($invoice->service_type == 'ppmv_renewal')
+                                    APPLICATION FOR {{$invoice->service->description}}
+                                @endif
                                 </td>
 
                                 <td>

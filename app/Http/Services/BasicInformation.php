@@ -3,6 +3,7 @@
 namespace App\Http\Services;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MEPTPApplication;
+use App\Models\PPMVApplication;
 use App\Models\Batch;
 use App\Models\State;
 use App\Models\Lga;
@@ -682,9 +683,41 @@ class BasicInformation
         $meptp = Auth::user()->passed_meptp_application()->first();
 
         if($meptp){
-            return $response = [
-                'can_submit' => true,
-            ];
+
+            if(PPMVApplication::where('vendor_id', Auth::user()->id)
+            ->where('status', 'recommended')
+            ->latest()
+            ->first()){
+                return $response = [
+                    'can_submit' => false,
+                    'color' => 'success',
+                    'message' => 'You\'re already registered in PPMV',
+                ]; 
+            }else if(PPMVApplication::where('vendor_id', Auth::user()->id)
+            ->where('status', 'unrecommended')
+            ->latest()
+            ->first()){
+                return $response = [
+                    'can_submit' => true,
+                ];
+            }else if(PPMVApplication::where('vendor_id', Auth::user()->id)
+            ->where(function($q){
+                $q->where('status', '!=', 'recommended');
+                $q->orWhere('status', '!=', 'unrecommended');
+            })
+            ->latest()
+            ->first()){
+                return $response = [
+                    'can_submit' => false,
+                    'color' => 'warning',
+                    'message' => 'Your application is inprogress',
+                ];
+            }else{
+                return $response = [
+                    'can_submit' => true,
+                ];
+            }
+
         }else{
             return $response = [
                 'can_submit' => false,
