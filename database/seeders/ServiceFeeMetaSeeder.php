@@ -36,6 +36,48 @@ class ServiceFeeMetaSeeder extends Seeder
             'status' => false,
             'updated_at' => now()
             ],
+            [
+            'service_id' => 2,
+            'description' => 'PPMV Registration Fees 1',
+            'amount' => 50,
+            'status' => true,
+            'updated_at' => now()
+            ],
+            [
+            'service_id' => 2,
+            'description' => 'PPMV Registration Fees 2',
+            'amount' => 150,
+            'status' => true,
+            'updated_at' => now()
+            ],
+            [
+            'service_id' => 2,
+            'description' => 'PPMV Registration Fees 3',
+            'amount' => 50,
+            'status' => false,
+            'updated_at' => now()
+            ],
+            [
+            'service_id' => 3,
+            'description' => 'PPMV Renewal Fees 1',
+            'amount' => 50,
+            'status' => true,
+            'updated_at' => now()
+            ],
+            [
+            'service_id' => 3,
+            'description' => 'PPMV Renewal Fees 2',
+            'amount' => 150,
+            'status' => true,
+            'updated_at' => now()
+            ],
+            [
+            'service_id' => 3,
+            'description' => 'PPMV Renewal Fees 3',
+            'amount' => 50,
+            'status' => false,
+            'updated_at' => now()
+            ],
         ];
 
         ServiceFeeMeta::insert($services);

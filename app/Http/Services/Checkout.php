@@ -6,49 +6,92 @@ use App\Models\Service;
 use App\Models\ServiceFeeMeta;
 use App\Models\Payment;
 use App\Models\MEPTPApplication;
+use App\Models\PPMVApplication;
 use DB;
 
 class Checkout
 {
-    public static function checkoutMEPTP($application){
+    public static function checkoutMEPTP($application, $type){
 
         try {
             DB::beginTransaction();
 
-            $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => false])->first();
+            if($type == 'meptp'){
 
-            if($meptp){
-                $service = Service::where('id', 1)
-                ->with('netFees')
-                ->first();
+                $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => false])->first();
 
-                $totalAmount = 0;
-                foreach($service->netFees as $fee){
-                    $totalAmount += $fee->amount;
+                if($meptp){
+                    $service = Service::where('id', 1)
+                    ->with('netFees')
+                    ->first();
+
+                    $totalAmount = 0;
+                    foreach($service->netFees as $fee){
+                        $totalAmount += $fee->amount;
+                    }
+
+                    $token = md5(uniqid(rand(), true));
+                    $order_id = date('m-Y') . '-' .rand(10,1000);
+
+                    $payment = Payment::create([
+                        'vendor_id' => Auth::user()->id,
+                        'order_id' => $order_id,
+                        'application_id' => $application['id'],
+                        'service_id' => $service->id,
+                        'service_type' => 'meptp_training',
+                        'amount' => $totalAmount,
+                        'token' => $token,
+                    ]);
+
+                    $response = [
+                        'success' => true,
+                        'order_id' => $order_id,
+                        'token' => $token,
+                        'id' => $payment->id,
+                    ];
+
+                }else{
+                    $response = ['success' => false];
                 }
+            }
 
-                $token = md5(uniqid(rand(), true));
-                $order_id = date('m-Y') . '-' .rand(10,1000);
+            if($type == 'ppmv'){
 
-                $payment = Payment::create([
-                    'vendor_id' => Auth::user()->id,
-                    'order_id' => $order_id,
-                    'application_id' => $application['id'],
-                    'service_id' => $service->id,
-                    'service_type' => 'meptp_training',
-                    'amount' => $totalAmount,
-                    'token' => $token,
-                ]);
+                $ppmv = PPMVApplication::where(['id' => $application['id'], 'payment' => false])->first();
 
-                $response = [
-                    'success' => true,
-                    'order_id' => $order_id,
-                    'token' => $token,
-                    'id' => $payment->id,
-                ];
+                if($ppmv){
+                    $service = Service::where('id', 2)
+                    ->with('netFees')
+                    ->first();
 
-            }else{
-                $response = ['success' => false];
+                    $totalAmount = 0;
+                    foreach($service->netFees as $fee){
+                        $totalAmount += $fee->amount;
+                    }
+
+                    $token = md5(uniqid(rand(), true));
+                    $order_id = date('m-Y') . '-' .rand(10,1000);
+
+                    $payment = Payment::create([
+                        'vendor_id' => Auth::user()->id,
+                        'order_id' => $order_id,
+                        'application_id' => $application['id'],
+                        'service_id' => $service->id,
+                        'service_type' => 'ppmv',
+                        'amount' => $totalAmount,
+                        'token' => $token,
+                    ]);
+
+                    $response = [
+                        'success' => true,
+                        'order_id' => $order_id,
+                        'token' => $token,
+                        'id' => $payment->id,
+                    ];
+
+                }else{
+                    $response = ['success' => false];
+                }
             }
 
             DB::commit();

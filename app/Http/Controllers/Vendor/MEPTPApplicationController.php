@@ -54,7 +54,7 @@ class MEPTPApplicationController extends Controller
                 'status' => 'send_to_state_offcie',
             ]);
 
-            $response = Checkout::checkoutMEPTP($application = ['id' => $application->id]);
+            $response = Checkout::checkoutMEPTP($application = ['id' => $application->id], 'meptp');
 
             DB::commit();
 
@@ -62,8 +62,8 @@ class MEPTPApplicationController extends Controller
                 ->with('success', 'Application successfully submitted. Please pay amount for further action');
 
         }catch(Exception $e) {
-        DB::rollback();
-        return back()->with('error','There is something error, please try after some time');
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
         }  
     }
 

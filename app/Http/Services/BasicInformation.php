@@ -676,4 +676,21 @@ class BasicInformation
         }
 
     }
+
+
+    public function canSubmitPPMVApplication(){
+        $meptp = Auth::user()->passed_meptp_application()->first();
+
+        if($meptp){
+            return $response = [
+                'can_submit' => true,
+            ];
+        }else{
+            return $response = [
+                'can_submit' => false,
+                'color' => 'warning',
+                'message' => 'currently, you can\'t submit PPMV  registration, You must pass the MEPTP exam',
+            ];
+        }
+    }
 }
