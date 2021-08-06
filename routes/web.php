@@ -124,6 +124,12 @@ Route::group(['middleware' => ['auth','verified', 'can:isPPractice']], function 
 	Route::post('/meptp-upload-results', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@uploadResult')->name('meptp-upload-results');
 });
 
+// LICENCING & REGISTERING ROUTE 
+Route::group(['middleware' => ['auth','verified', 'can:isRLicencing']], function () {
+	Route::get('/ppmv-licence-pending-lists', 'App\Http\Controllers\Licencing\PPMVLicenceController@lists')->name('ppmv-licence-pending-lists');
+	Route::get('/ppmv-licence-issued-lists', 'App\Http\Controllers\Licencing\PPMVLicenceController@lists')->name('ppmv-licence-issued-lists');
+});
+
 // VENDOR ROUTES 
 Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileStatus']], function () {
     // MEPTP APPLICATION REGISTER ROUTES

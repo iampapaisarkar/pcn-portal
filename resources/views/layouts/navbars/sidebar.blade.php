@@ -177,13 +177,13 @@
                 <!-- Registration licencing routes start  -->
                 @can('isRLicencing')
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}">
+                    <a href="{{route('ppmv-licence-pending-lists')}}">
                         <i class="nav-icon i-Receipt-4"></i>
                         <span class="item-name">PPMV Registration - Licence Pending</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('dashboard')}}">
+                    <a href="{{route('ppmv-licence-issued-lists')}}">
                         <i class="nav-icon i-Receipt-4"></i>
                         <span class="item-name">PPMV Registration - Licence Issued</span>
                     </a>
