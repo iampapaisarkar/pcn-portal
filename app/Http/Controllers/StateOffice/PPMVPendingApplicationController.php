@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\PPMVApplication;
 use App\Models\PPMVRenewal;
 use App\Http\Services\AllActivity;
+use App\Http\Services\BasicInformation;
 
 class PPMVPendingApplicationController extends Controller
 {
@@ -76,43 +77,31 @@ class PPMVPendingApplicationController extends Controller
 
     public function approve(Request $request){
 
-        // if(PPMVApplication::where('id', $request->application_id)
-        // ->where('vendor_id', $request->vendor_id)
-        // ->where('status', 'send_to_state_office')
-        // ->where('payment', true)
-        // ->exists()){
-
-        //     $application = PPMVApplication::where('id', $request->application_id)
-        //     ->where('vendor_id', $request->vendor_id)
-        //     ->where('status', 'send_to_state_office')
-        //     ->where('payment', true)
-        //     ->update([
-        //         'status' => 'approved',
-        //         'query' => null,
-        //         'token' => random_bytes(6),
-        //     ]);
-
-        //     $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
-        //     $activity = 'State Officer Document Verification Approved';
-        //     AllActivity::storeActivity($request->application_id, $adminName, $activity, 'ppmv');
-
-        //     return redirect()->route('meptp-pending-batches')->with('success', 'Application Approved successfully done');
-        // }else{
-        //     return abort(404);
-        // }
-
         if(PPMVRenewal::where('id', $request->application_id)
         ->where('vendor_id', $request->vendor_id)
         ->where('payment', true)
         ->where('status', 'pending')
         ->exists()){
 
+            $ppmv_application = PPMVRenewal::where('id', $request->application_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('payment', true)
+            ->where('status', 'pending')
+            ->with('ppmv_application')
+            ->first();
+
+            if($ppmv_application->inspection == true){
+                $status = 'approved';
+            }else{
+                $status = 'recommended';
+            }
+
             $application = PPMVRenewal::where('id', $request->application_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('payment', true)
             ->where('status', 'pending')
             ->update([
-                'status' => 'approved',
+                'status' => $status,
                 'query' => null,
                 'token' => md5(uniqid(rand(), true)),
             ]);

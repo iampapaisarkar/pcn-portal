@@ -215,6 +215,8 @@ class PPMVApplicationController extends Controller
         ->with('meptp')
         ->first();
 
+        $PPMVRenwal = PPMVRenewal::where('vendor_id', Auth::user()->id)->orderBy('renewal_year', 'desc')->first();
+
         try {
             DB::beginTransaction();
 
@@ -225,7 +227,7 @@ class PPMVApplicationController extends Controller
                 'renewal_year' => date('Y'),
                 'expires_at' => \Carbon\Carbon::now()->addYear()->subDays(1),
                 'status' => 'pending',
-                'inspection' => true,
+                'inspection' => $PPMVRenwal->inspection == true ? false : true,
             ]);
 
             $response = Checkout::checkoutMEPTP($application = ['id' => $renewal->id], 'ppmv_renewal');
