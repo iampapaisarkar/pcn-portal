@@ -173,6 +173,12 @@ class PPMVApplicationController extends Controller
     }
 
     public function renewal(){
-        return view('vendor-user.ppmv.ppmv-application', compact('shop'));
+
+        $renewals = PPMVRenewal::where('vendor_id', Auth::user()->id)
+        ->with('user', 'ppmv_application', 'meptp_application')
+        ->orderBy('renewal_year')
+        ->get();
+
+        return view('vendor-user.ppmv.ppmv-renewal', compact('renewals'));
     }
 }

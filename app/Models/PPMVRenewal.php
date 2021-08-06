@@ -10,6 +10,18 @@ class PPMVRenewal extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vendor_id', 'meptp_application_id', 'ppmv_application_id', 'renewal_year', 'licence'
+        'vendor_id', 'meptp_application_id', 'ppmv_application_id', 'renewal_year', 'licence', 'status'
     ];
+
+    public function user() {
+        return $this->hasOne(User::class,'id', 'vendor_id');
+    }
+
+    public function ppmv_application() {
+        return $this->hasOne(PPMVApplication::class,'id', 'ppmv_application_id');
+    }
+
+    public function meptp_application() {
+        return $this->hasOne(MEPTPApplication::class,'id', 'meptp_application_id');
+    }
 }
