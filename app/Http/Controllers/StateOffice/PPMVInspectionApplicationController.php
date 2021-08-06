@@ -15,15 +15,12 @@ class PPMVInspectionApplicationController extends Controller
 {
     public function applications(Request $request){
         
-        $applications = PPMVApplication::select('p_p_m_v_applications.*', 'p_p_m_v_renewals.token')
-        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
-        ->where('p_p_m_v_renewals.renewal_year', date('Y'))
-        ->where('p_p_m_v_renewals.payment', true)
-        ->where('p_p_m_v_renewals.status', 'approved')
+        $applications = PPMVRenewal::where('payment', true)
+        ->where('status', 'approved')
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
-        ->with('user', 'meptp');
+        ->with('user', 'ppmv_application', 'meptp_application');
 
         if($request->per_page){
             $perPage = (integer) $request->per_page;
@@ -37,7 +34,7 @@ class PPMVInspectionApplicationController extends Controller
                 $q->where('firstname', 'like', '%' .$search. '%');
                 $q->orWhere('lastname', 'like', '%' .$search. '%');
             })
-            ->orWhereHas('meptp', function($q) use ($search){
+            ->orWhereHas('meptp_application', function($q) use ($search){
                 $q->where('shop_name', 'like', '%' .$search. '%');
             });
         }
@@ -49,17 +46,13 @@ class PPMVInspectionApplicationController extends Controller
 
     public function show($id){
 
-        $application = PPMVApplication::select('p_p_m_v_applications.*', 'p_p_m_v_renewals.token')
-        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
-        ->where('p_p_m_v_renewals.renewal_year', date('Y'))
-        ->where('p_p_m_v_renewals.payment', true)
-        ->where('p_p_m_v_renewals.status', 'approved')
-        
-        ->where('p_p_m_v_applications.id', $id)
+        $application = PPMVRenewal::where('id', $id)
+        ->where('payment', true)
+        ->where('status', 'approved')
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
-        ->with('user', 'meptp')
+        ->with('user', 'ppmv_application', 'meptp_application')
         ->first();
 
         if($application){
@@ -78,7 +71,7 @@ class PPMVInspectionApplicationController extends Controller
         try {
             DB::beginTransaction();
 
-            $application = PPMVApplication::where('id', $id)->first();
+            $application = PPMVRenewal::where('id', $id)->with('ppmv_application', 'meptp_application', 'user')->first();
 
             if($application){
 
@@ -94,8 +87,7 @@ class PPMVInspectionApplicationController extends Controller
                 $file_name = 'vendor'.$application->vendor_id.'-inspection_report.'.$file->getClientOriginalExtension();
                 $file->move($private_storage_path, $file_name);
 
-                PPMVRenewal::where('ppmv_application_id', $id)
-                ->where('renewal_year', date('Y'))
+                PPMVRenewal::where('id', $id)
                 ->where('status', 'approved')
                 ->where('payment', true)
                 ->update([
