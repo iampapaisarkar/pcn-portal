@@ -8,7 +8,7 @@
     <div class="card-body">
         <h4>Tiered PPMV Registration Document Verification - Vendor Details</h4>
         <x-vendor-p-p-m-v-application
-        :applicationID="$application->id" 
+        :applicationID="$application->ppmv_application->id" 
         :vendorID="$application->vendor_id"
         />
 
@@ -18,11 +18,11 @@
 
         @if($application->status == 'recommended')
         <div class="alert alert-card alert-success" role="alert">
-        <h3>Inspection Report: Recommended</h3></div>
+        <h3>Inspection Report: Recommended</h3> <a href="{{route('download-ppmv-inspection-report', $application->id)}}" class="btn btn-rounded btn-success ml-3">Download Inspection Report</a></div>
         </div>
         @else
         <div class="alert alert-card alert-danger" role="alert">
-        <h3>Inspection Report: Not Recommended</h3> <a href="{{route('download-ppmv-inspection-report')}}" class="btn btn-rounded btn-danger ml-3">Download Inspection Report</a>
+        <h3>Inspection Report: Not Recommended</h3> <a href="{{route('download-ppmv-inspection-report', $application->id)}}" class="btn btn-rounded btn-danger ml-3">Download Inspection Report</a>
         </div>
         @endif
 

@@ -50,7 +50,7 @@
                     <tr>
                         <td>{{$application->created_at->format('d M, Y')}}</td>
                         <td>{{$application->user->firstname . ' ' . $application->user->lastname}}</td>
-                        <td>{{$application->meptp->shop_name}}</td>
+                        <td>{{$application->meptp_application->shop_name}}</td>
                         <td>{{$application->created_at->format('Y')}}</td>
                         <td>{{$application->token}}</td>
                         <td>

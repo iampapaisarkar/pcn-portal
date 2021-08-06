@@ -16,16 +16,26 @@ class PPMVInspectionReportController extends Controller
 {
     public function reports(Request $request){
         
-        $applications = PPMVApplication::select('p_p_m_v_applications.*', 'p_p_m_v_renewals.status', 'p_p_m_v_renewals.token')
-        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
-        ->where(function($q){
-            $q->where('p_p_m_v_renewals.status', 'recommended');
-            $q->orWhere('p_p_m_v_renewals.status', 'unrecommended');
-        })
+        // $applications = PPMVApplication::select('p_p_m_v_applications.*', 'p_p_m_v_renewals.status', 'p_p_m_v_renewals.token')
+        // ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
+        // ->where(function($q){
+        //     $q->where('p_p_m_v_renewals.status', 'recommended');
+        //     $q->orWhere('p_p_m_v_renewals.status', 'unrecommended');
+        // })
+        // ->whereHas('user', function($q){
+        //     $q->where('state', Auth::user()->state);
+        // })
+        // ->with('user', 'meptp');
+
+        $applications = PPMVRenewal::where('payment', true)
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
-        ->with('user', 'meptp');
+        ->where(function($q){
+            $q->where('status', 'recommended');
+            $q->orWhere('status', 'unrecommended');
+        })
+        ->with('user', 'ppmv_application', 'meptp_application');
 
         if($request->per_page){
             $perPage = (integer) $request->per_page;
@@ -39,7 +49,7 @@ class PPMVInspectionReportController extends Controller
                 $q->where('firstname', 'like', '%' .$search. '%');
                 $q->orWhere('lastname', 'like', '%' .$search. '%');
             })
-            ->orWhereHas('meptp', function($q) use ($search){
+            ->orWhereHas('meptp_application', function($q) use ($search){
                 $q->where('shop_name', 'like', '%' .$search. '%');
             });
         }
@@ -52,17 +62,16 @@ class PPMVInspectionReportController extends Controller
 
     public function show($id){
 
-        $application = PPMVApplication::select('p_p_m_v_applications.*', 'p_p_m_v_renewals.status', 'p_p_m_v_renewals.token')
-        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
-        ->where(function($q){
-            $q->where('p_p_m_v_renewals.status', 'recommended');
-            $q->orWhere('p_p_m_v_renewals.status', 'unrecommended');
-        })
-        ->where('p_p_m_v_applications.id', $id)
+        $application = PPMVRenewal::where('id', $id)
+        ->where('payment', true)
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
-        ->with('user', 'meptp')
+        ->where(function($q){
+            $q->where('status', 'recommended');
+            $q->orWhere('status', 'unrecommended');
+        })
+        ->with('user', 'ppmv_application', 'meptp_application')
         ->first();
 
         if($application){
@@ -70,5 +79,16 @@ class PPMVInspectionReportController extends Controller
         }else{
             return abort(404);
         }
+    }
+
+
+    public function downloadReport($id){
+
+        $application = PPMVRenewal::where('id', $id)->first();
+
+        $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
+        DIRECTORY_SEPARATOR . $application->vendor_id . DIRECTORY_SEPARATOR . 'PPMV' . DIRECTORY_SEPARATOR . $application->inspection_report);
+        return response()->download($path);
+        
     }
 }
