@@ -4,6 +4,7 @@ namespace App\Http\Services;
 use Illuminate\Support\Facades\Auth;
 use App\Models\MEPTPApplication;
 use App\Models\PPMVApplication;
+use App\Models\PPMVRenewal;
 use App\Models\Batch;
 use App\Models\State;
 use App\Models\Lga;
@@ -783,5 +784,22 @@ class BasicInformation
         //         'message' => 'currently, you can\'t submit PPMV  registration, You must pass the MEPTP exam',
         //     ];
         // }
+    }
+
+    public function licenceRenewalYearCheck(){
+        $meptp = Auth::user()->passed_meptp_application()->first();
+
+        $renwal = PPMVRenewal::where('vendor_id', Auth::user()->id)->orderBy('renewal_year', 'desc')->first();
+
+        if(PPMVRenewal::where('vendor_id', Auth::user()->id)->exists() && $renwal->expires_at < date('Y-m-d')){
+            return [
+                'response' => true
+            ];
+        }else{
+            return [
+                'response' => false,
+                'renewal_date' => \Carbon\Carbon::createFromFormat('Y-m-d', $renwal->expires_at)->addDays(1)->format('d M, Y')
+            ];
+        }
     }
 }

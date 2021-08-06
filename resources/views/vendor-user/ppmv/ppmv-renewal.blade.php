@@ -7,8 +7,11 @@
         <div class="card text-left">
             <div class="card-body">
                 <h2 class=" mb-6">Renewals</h2>
+                @if(app('App\Http\Services\BasicInformation')->licenceRenewalYearCheck()['response'])
                 <a href="{{route('renew-licence')}}"><button class="btn btn-primary" type="button">RENEW LICENCE</button></a>
-
+                @else
+                    <h5>You can renwal on {{app('App\Http\Services\BasicInformation')->licenceRenewalYearCheck()['renewal_date']}}</h5>
+                @endif
                 <div class="custom-separator"></div>
 
                 <div class="table-responsive">

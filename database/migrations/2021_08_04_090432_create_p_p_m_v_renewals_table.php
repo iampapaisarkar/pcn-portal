@@ -19,6 +19,7 @@ class CreatePPMVRenewalsTable extends Migration
             $table->integer('meptp_application_id');
             $table->integer('ppmv_application_id');
             $table->integer('renewal_year');
+            $table->date('expires_at');
             $table->string('licence')->nullable();
             $table->string('status');
             $table->boolean('payment')->default(false);
