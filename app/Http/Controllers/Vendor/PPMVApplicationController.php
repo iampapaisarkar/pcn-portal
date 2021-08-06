@@ -76,11 +76,13 @@ class PPMVApplicationController extends Controller
 
     public function applicationFormEdit($id){
 
-        $application = PPMVApplication::where('id', $id)
-        ->where('vendor_id', Auth::user()->id)
+        $application = PPMVApplication::select('p_p_m_v_applications.*')
+        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
+        ->where('p_p_m_v_applications.id', $id)
+        ->where('p_p_m_v_applications.vendor_id', Auth::user()->id)
         ->where(function($q){
-            $q->where('status', 'rejected');
-            $q->orWhere('status', 'unrecommended');
+            $q->where('p_p_m_v_renewals.status', 'rejected');
+            $q->orWhere('p_p_m_v_renewals.status', 'unrecommended');
         })
         ->latest()
         ->with('user', 'meptp')
@@ -146,8 +148,12 @@ class PPMVApplicationController extends Controller
                     'reference_2_address' => $request->reference_2_address,
                     'reference_2_letter' => $reference_2_letter,
                     'reference_occupation' => $request->reference_occupation,
-                    'status' => 'send_to_state_office',
                     'created_at' => now(),
+                ]);
+
+                PPMVRenewal::where(['vendor_id' => Auth::user()->id, 'ppmv_application_id' => $id, 'renewal_year' => date('Y')])
+                ->update([
+                    'status' => 'pending',
                 ]);
 
                 $response = true;
@@ -159,7 +165,7 @@ class PPMVApplicationController extends Controller
             DB::commit();
 
                 if($response == true){
-                    return redirect()->route('ppmv-application')
+                    return redirect()->route('ppmv-renewal')
                     ->with('success', 'Application successfully updated');
                 }else{
                     return back()->with('error','There is something error, please try after some time');

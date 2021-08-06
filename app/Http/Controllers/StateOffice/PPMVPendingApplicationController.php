@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PPMVApplication;
+use App\Models\PPMVRenewal;
 use App\Http\Services\AllActivity;
 
 class PPMVPendingApplicationController extends Controller
@@ -121,7 +122,7 @@ class PPMVPendingApplicationController extends Controller
             ->update([
                 'status' => 'approved',
                 'query' => null,
-                'token' => random_bytes(6),
+                'token' => md5(uniqid(rand(), true)),
             ]);
 
             $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;

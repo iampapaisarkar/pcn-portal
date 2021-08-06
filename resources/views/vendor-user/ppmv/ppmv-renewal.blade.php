@@ -30,17 +30,40 @@
                                 <td>{{$renewal->user->firstname}} {{$renewal->user->lastname}}</td>
                                 <td>{{$renewal->meptp_application->shop_name}}</td>
                                 <td>{{$renewal->meptp_application->user_state->name}}</td>
+                                
+                                <td>
                                 @if($renewal->status == 'pending')
-                                <td> <p><span class="rounded badge w-badge badge-warning">PENDING</span></p></td>
+                                    <p><span class="rounded badge w-badge badge-warning">PENDING</span></p>
                                 @endif
                                 @if($renewal->status == 'approved')
-                                <td> <p><span class="rounded badge w-badge badge-success">APPROVED</span></p></td>
+                                    <p><span class="rounded badge w-badge badge-warning">PENDING</span></p>
                                 @endif
-                                @if($renewal->status == 'approved')
-                                <td><a href="#"><button class="btn btn-info btn-icon btn-sm m-0" type="button"> <span class="ul-btn__icon"><i class="i-Gear-2"></i></span> <span class="ul-btn__text">LICENCE</span></button></a></td>
-                                @else
-                                <td></td>
+                                @if($renewal->status == 'rejected')
+                                    <p><span class="rounded badge w-badge badge-warning">QUIRED</span></p>
                                 @endif
+                                @if($renewal->status == 'recommended')
+                                    <p><span class="rounded badge w-badge badge-warning">PENDING</span></p>
+                                @endif
+                                @if($renewal->status == 'unrecommended')
+                                    <p><span class="rounded badge w-badge badge-warning">REJECTED</span></p>
+                                @endif
+                                @if($renewal->status == 'licence_generated')
+                                    <p><span class="rounded badge w-badge badge-success">APPROVED</span></p>
+                                @endif
+                                </td>
+
+
+                                <td>
+                                @if($renewal->status == 'rejected')
+                                <a href="{{route('ppmv-application-edit', $renewal->ppmv_application_id)}}"><button class="btn btn-info btn-icon btn-sm m-0" type="button"> UPDATE APPLICATION</button></a>
+                                @endif
+                                @if($renewal->status == 'unrecommended')
+                                <a href="{{route('ppmv-application-edit', $renewal->ppmv_application_id)}}"><button class="btn btn-info btn-icon btn-sm m-0" type="button"> UPDATE APPLICATION</button></a>
+                                @endif
+                                @if($renewal->status == 'licence_generated')
+                                <a href="#"><button class="btn btn-info btn-icon btn-sm m-0" type="button"> <span class="ul-btn__icon"><i class="i-Gear-2"></i></span> <span class="ul-btn__text">LICENCE</span></button></a>
+                                @endif
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>
