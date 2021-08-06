@@ -30,11 +30,7 @@ class CreatePPMVApplicationsTable extends Migration
             $table->string('reference_2_address');
             $table->string('reference_2_letter');
             $table->string('reference_occupation');
-
-            $table->string('status');
-            $table->boolean('payment')->default(false);
-            $table->longtext('query')->nullable();
-            $table->string('token')->nullable();
+            
             $table->timestamps();
         });
     }

@@ -21,6 +21,9 @@ class CreatePPMVRenewalsTable extends Migration
             $table->integer('renewal_year');
             $table->string('licence')->nullable();
             $table->string('status');
+            $table->boolean('payment')->default(false);
+            $table->longtext('query')->nullable();
+            $table->string('token')->nullable();
             $table->timestamps();
         });
     }
