@@ -803,19 +803,4 @@ class BasicInformation
         }
     }
 
-    public function isInspectionNeeded($ppmv_applicationID){
-
-        $renwal = PPMVRenewal::where('vendor_ppmv_application_id', $ppmv_applicationID)->orderBy('renewal_year', 'desc')->first();
-
-        if(PPMVRenewal::where('vendor_id', Auth::user()->id)->exists() && $renwal->expires_at < date('Y-m-d')){
-            return [
-                'response' => true
-            ];
-        }else{
-            return [
-                'response' => false,
-                'renewal_date' => \Carbon\Carbon::createFromFormat('Y-m-d', $renwal->expires_at)->addDays(1)->format('d M, Y')
-            ];
-        }
-    }
 }

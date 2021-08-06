@@ -16,21 +16,12 @@ class PPMVInspectionReportController extends Controller
 {
     public function reports(Request $request){
         
-        // $applications = PPMVApplication::select('p_p_m_v_applications.*', 'p_p_m_v_renewals.status', 'p_p_m_v_renewals.token')
-        // ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
-        // ->where(function($q){
-        //     $q->where('p_p_m_v_renewals.status', 'recommended');
-        //     $q->orWhere('p_p_m_v_renewals.status', 'unrecommended');
-        // })
-        // ->whereHas('user', function($q){
-        //     $q->where('state', Auth::user()->state);
-        // })
-        // ->with('user', 'meptp');
 
         $applications = PPMVRenewal::where('payment', true)
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
+        ->where('inspection', true)
         ->where(function($q){
             $q->where('status', 'recommended');
             $q->orWhere('status', 'unrecommended');
