@@ -122,6 +122,11 @@ Route::group(['middleware' => ['auth','verified', 'can:isPPractice']], function 
 	Route::get('/meptp-results-lists', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@lists')->name('meptp-results-lists');
 	Route::get('/meptp-donwload-result-template', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@downloadResultTemplate')->name('meptp-donwload-result-template');
 	Route::post('/meptp-upload-results', 'App\Http\Controllers\PharmacyPractice\MEPTPResultsApplicationsController@uploadResult')->name('meptp-upload-results');
+
+	// PPMV REPORT ROUTES 
+	Route::get('/ppmv-reports', 'App\Http\Controllers\PharmacyPractice\PPMVApplicationController@reports')->name('ppmv-reports');
+	Route::get('/ppmv-report-show/{id}', 'App\Http\Controllers\PharmacyPractice\PPMVApplicationController@show')->name('ppmv-report-show');
+	Route::get('/download-ppmv-report/{id}', 'App\Http\Controllers\PharmacyPractice\PPMVApplicationController@downloadReport')->name('download-ppmv-report');
 });
 
 // LICENCING & REGISTERING ROUTE 
