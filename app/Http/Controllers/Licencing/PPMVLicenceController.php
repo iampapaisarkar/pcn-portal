@@ -145,4 +145,20 @@ class PPMVLicenceController extends Controller
 
         return view('licencing.ppmv-licence-issued-lists', compact('licences'));
     }
+
+    public function issuedShow($id){
+        
+        $licence = PPMVRenewal::where('payment', true)
+        ->where('status', 'licence_issued')
+        ->where('id', $id)
+        ->with('user', 'ppmv_application', 'meptp_application')
+        ->first();
+
+        if($licence){
+            return view('licencing.ppmv-licence-issued-show', compact('licence'));
+        }else{
+            return abort(404);
+        }
+
+    }
 }

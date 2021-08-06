@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@include('layouts.navbars.breadcrumb', ['page' => 'Tiered PPMV Registration - Licence', 'route' => 'ppmv-inspection-applications'])
+@include('layouts.navbars.breadcrumb', ['page' => 'Tiered PPMV Registration - Licence', 'route' => 'ppmv-licence-pending-list'])
 <div class="row">
 <div class="col-lg-12 col-md-12">
     <div class="card text-left">

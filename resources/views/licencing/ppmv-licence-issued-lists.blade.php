@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-@include('layouts.navbars.breadcrumb', ['page' => 'Tiered PPMV Registration - Licence Issued', 'route' => 'ppmv-licence-pending-lists'])
+@include('layouts.navbars.breadcrumb', ['page' => 'Tiered PPMV Registration - Licence Issued', 'route' => 'ppmv-licence-issued-lists'])
 <div class="row">
 <div class="col-lg-12 col-md-12">
     <div class="card text-left">
@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-sm-12 col-md-6">
                     <div id="multicolumn_ordering_table_filter" class="dataTables_filter float-right">
-                    <form method="GET" action="{{ route('ppmv-licence-pending-lists') }}">
+                    <form method="GET" action="{{ route('ppmv-licence-issued-lists') }}">
                     @csrf
                         <label>Search:
                             <input name="search" value="{{Request::get('search')}}" type="text" class="form-control form-control-sm" placeholder="" aria-controls="multicolumn_ordering_table">
@@ -63,7 +63,7 @@
                             @endif
                         </td>
                         <td>
-                        <a href="{{ route('ppmv-licence-pending-show', $licence->id) }}">
+                        <a href="{{ route('ppmv-licence-issued-show', $licence->id) }}">
                         <button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a>
                         </td>
                     </tr>

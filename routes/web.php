@@ -131,6 +131,7 @@ Route::group(['middleware' => ['auth','verified', 'can:isRLicencing']], function
 	Route::post('/issue-single-licence/{id}', 'App\Http\Controllers\Licencing\PPMVLicenceController@issueSingleLicence')->name('issue-single-licence');
 	Route::post('/issue-licences', 'App\Http\Controllers\Licencing\PPMVLicenceController@issueLicences')->name('issue-licences');
 	Route::get('/ppmv-licence-issued-lists', 'App\Http\Controllers\Licencing\PPMVLicenceController@issuedLists')->name('ppmv-licence-issued-lists');
+	Route::get('/ppmv-licence-issued-show/{id}', 'App\Http\Controllers\Licencing\PPMVLicenceController@issuedShow')->name('ppmv-licence-issued-show');
 });
 
 // VENDOR ROUTES 
