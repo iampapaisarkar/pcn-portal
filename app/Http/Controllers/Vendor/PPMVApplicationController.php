@@ -58,6 +58,7 @@ class PPMVApplicationController extends Controller
                 'ppmv_application_id' => $application->id,
                 'renewal_year' => date('Y'),
                 'status' => 'pending',
+                'inspection' => true,
             ]);
 
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\PPMVApplication;
+use App\Models\PPMVRenewal;
 use App\Http\Services\AllActivity;
 use App\Http\Services\FileUpload;
 use DB;
@@ -14,9 +15,11 @@ class PPMVInspectionApplicationController extends Controller
 {
     public function applications(Request $request){
         
-        $applications = PPMVApplication::select('p_p_m_v_applications.*')
-        ->where('payment', true)
-        ->where('status', 'approved')
+        $applications = PPMVApplication::select('p_p_m_v_applications.*', 'p_p_m_v_renewals.token')
+        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
+        ->where('p_p_m_v_renewals.renewal_year', date('Y'))
+        ->where('p_p_m_v_renewals.payment', true)
+        ->where('p_p_m_v_renewals.status', 'approved')
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
@@ -46,9 +49,13 @@ class PPMVInspectionApplicationController extends Controller
 
     public function show($id){
 
-        $application = PPMVApplication::where('id', $id)
-        ->where('payment', true)
-        ->where('status', 'approved')
+        $application = PPMVApplication::select('p_p_m_v_applications.*', 'p_p_m_v_renewals.token')
+        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
+        ->where('p_p_m_v_renewals.renewal_year', date('Y'))
+        ->where('p_p_m_v_renewals.payment', true)
+        ->where('p_p_m_v_renewals.status', 'approved')
+        
+        ->where('p_p_m_v_applications.id', $id)
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
@@ -71,7 +78,7 @@ class PPMVInspectionApplicationController extends Controller
         try {
             DB::beginTransaction();
 
-            $application = PPMVApplication::where('id', $id)->where('status', 'approved')->first();
+            $application = PPMVApplication::where('id', $id)->first();
 
             if($application){
 
@@ -87,17 +94,18 @@ class PPMVInspectionApplicationController extends Controller
                 $file_name = 'vendor'.$application->vendor_id.'-inspection_report.'.$file->getClientOriginalExtension();
                 $file->move($private_storage_path, $file_name);
 
-                PPMVApplication::where('id', $id)
+                PPMVRenewal::where('ppmv_application_id', $id)
+                ->where('renewal_year', date('Y'))
                 ->where('status', 'approved')
                 ->where('payment', true)
                 ->update([
                     'status' => $request->recommendation,
-                    'query' => $request['query'],
+                    'inspection_report' => $file_name,
                 ]);
 
                 $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
-                $activity = 'State Officer Document Verification Query';
-                AllActivity::storeActivity($request->application_id, $adminName, $activity, 'ppmv');
+                $activity = 'State Officer Upload Inspection Report';
+                AllActivity::storeActivity($application->id, $adminName, $activity, 'ppmv');
             }
             
             DB::commit();

@@ -24,6 +24,8 @@ class CreatePPMVRenewalsTable extends Migration
             $table->boolean('payment')->default(false);
             $table->longtext('query')->nullable();
             $table->string('token')->nullable();
+            $table->boolean('inspection')->default(false);
+            $table->string('inspection_report')->nullable();
             $table->timestamps();
         });
     }
