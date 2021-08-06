@@ -4,7 +4,7 @@
 @include('layouts.navbars.breadcrumb', ['page' => 'Tiered PPMV Registration - Recommended for Licence', 'route' => 'ppmv-licence-pending-lists'])
 <div class="row">
 <div class="col-lg-12 col-md-12">
-    <form id="generateIndexNumberForm" class="w-100" method="POST" action="{{ route('meptp-generate-index-number') }}" enctype="multipart/form-data">
+    <form id="licenceIssueForm" class="w-100" method="POST" action="{{ route('issue-licences') }}" enctype="multipart/form-data">
     @csrf
     <div class="card text-left">
     <div class="card-body">
@@ -74,7 +74,10 @@
                             <span class="badge badge-success">RECOMMENDED</span>
                             @endif
                         </td>
-                        <td></td>
+                        <td>
+                        <a href="{{ route('ppmv-licence-pending-show', $licence->id) }}">
+                        <button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -98,7 +101,7 @@
             </table>
             {{$licences->links('pagination')}}
         </div>
-        <button onclick="generateIndexNumber(event)" type="button" class="btn btn-primary mt-5">LICENCE SELECTED</button>
+        <button onclick="issueLicecne(event)" type="button" class="btn btn-primary mt-5">ISSUE LICENCE (SELECTED)</button>
     </div>
 </div>
 </form>
@@ -134,19 +137,19 @@
         });    
     });
 
-    function generateIndexNumber(event){
+    function issueLicecne(event){
         event.preventDefault();
 
         $.confirm({
-            title: 'GENERATE INDEX NUMBERS AND EXAMINATION CARDS',
-            content: 'Are you sure want to generated index number & examination cards for seleted applications?',
+            title: 'Licence Issue',
+            content: 'Are you sure want to issue the licecne for the selected applications?',
             buttons: {   
                 ok: {
                     text: "YES",
                     btnClass: 'btn-primary',
                     keys: ['enter'],
                     action: function(){
-                        document.getElementById('generateIndexNumberForm').submit();
+                        document.getElementById('licenceIssueForm').submit();
                     }
                 },
                 cancel: function(){

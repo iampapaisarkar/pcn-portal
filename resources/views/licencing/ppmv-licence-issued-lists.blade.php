@@ -62,7 +62,10 @@
                             <span class="badge badge-success">LICENCE ISSUED</span>
                             @endif
                         </td>
-                        <td></td>
+                        <td>
+                        <a href="{{ route('ppmv-licence-pending-show', $licence->id) }}">
+                        <button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
