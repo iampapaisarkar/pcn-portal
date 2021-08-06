@@ -87,10 +87,15 @@ Route::group(['middleware' => ['auth','verified', 'can:isSOffice']], function ()
     Route::get('/ppmv-application-approve', 'App\Http\Controllers\StateOffice\PPMVPendingApplicationController@approve')->name('ppmv-application-approve');
     Route::post('/ppmv-application-query', 'App\Http\Controllers\StateOffice\PPMVPendingApplicationController@query')->name('ppmv-application-query');
 
-     // PPMV INSSPECTION REGISTRATION ROUTES 
+    // PPMV INSSPECTION REGISTRATION ROUTES 
 	Route::get('/ppmv-inspection-applications', 'App\Http\Controllers\StateOffice\PPMVInspectionApplicationController@applications')->name('ppmv-inspection-applications');
 	Route::get('/ppmv-inspection-show/{id}', 'App\Http\Controllers\StateOffice\PPMVInspectionApplicationController@show')->name('ppmv-inspection-show');
 	Route::post('/ppmv-inspection-report-submit/{id}', 'App\Http\Controllers\StateOffice\PPMVInspectionApplicationController@submitInspectionReport')->name('ppmv-inspection-report-submit');
+
+	// PPMV INSSPECTION REPORT ROUTES 
+	Route::get('/ppmv-inspection-reports', 'App\Http\Controllers\StateOffice\PPMVInspectionReportController@reports')->name('ppmv-inspection-reports');
+	Route::get('/ppmv-inspection-report-show/{id}', 'App\Http\Controllers\StateOffice\PPMVInspectionReportController@show')->name('ppmv-inspection-report-show');
+	Route::get('/download-ppmv-inspection-report/{id}', 'App\Http\Controllers\StateOffice\PPMVInspectionReportController@downloadReport')->name('download-ppmv-inspection-report');
 });
 
 // PHARMACY PRACTICE ROUTE 

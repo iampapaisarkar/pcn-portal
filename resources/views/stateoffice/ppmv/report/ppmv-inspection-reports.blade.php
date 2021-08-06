@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-@include('layouts.navbars.breadcrumb', ['page' => 'Tiered PPMV Registration - Inspection List', 'route' => 'ppmv-inspection-applications'])
+@include('layouts.navbars.breadcrumb', ['page' => 'Tiered PPMV Registration - Inspection Report', 'route' => 'ppmv-inspection-reports'])
 <div class="row">
     <div class="col-lg-12 col-md-12">
-        <h4 class=" mb-6">Tiered PPMV Registration - Inspection Pending</h4>
+        <h4 class=" mb-6">Tiered PPMV Registration - Inspection Report</h4>
         <div class="table-responsive">
             <div class="row m-0">
                 <div class="col-sm-12 col-md-6">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-sm-12 col-md-6">
                     <div id="multicolumn_ordering_table_filter" class="dataTables_filter float-right">
-                    <form method="GET" action="{{ route('ppmv-inspection-applications') }}">
+                    <form method="GET" action="{{ route('ppmv-inspection-reports') }}">
                     @csrf
                         <label>Search:
                             <input name="search" value="{{Request::get('search')}}" type="text" class="form-control form-control-sm" placeholder="" aria-controls="multicolumn_ordering_table">
@@ -53,8 +53,14 @@
                         <td>{{$application->meptp->shop_name}}</td>
                         <td>{{$application->created_at->format('Y')}}</td>
                         <td>{{$application->token}}</td>
-                        <td><span class="badge badge-warning">PENDING</span></td>
-                        <td><a href="{{route('ppmv-inspection-show', $application->id)}}"><button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a></td>
+                        <td>
+                            @if($application->status == 'recommended')
+                            <span class="badge badge-success">RECOMMENDED</span>
+                            @else
+                            <span class="badge badge-danger">NOT RECOMMENDED</span>
+                            @endif
+                        </td>
+                        <td><a href="{{route('ppmv-inspection-report-show', $application->id)}}"><button class="btn btn-success btn-sm" type="button"><i class="nav-icon i-Pen-2"></i></button></a></td>
                     </tr>
                     @endforeach
                 </tbody>
