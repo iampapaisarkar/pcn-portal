@@ -52,7 +52,7 @@ class PPMVApplicationController extends Controller
                 'reference_occupation' => $request->reference_occupation,
             ]);
 
-            PPMVRenewal::create([
+            $renewal = PPMVRenewal::create([
                 'vendor_id' => Auth::user()->id,
                 'meptp_application_id' => $meptp->id,
                 'ppmv_application_id' => $application->id,
@@ -63,7 +63,7 @@ class PPMVApplicationController extends Controller
             ]);
 
 
-            $response = Checkout::checkoutMEPTP($application = ['id' => $application->id], 'ppmv_registration');
+            $response = Checkout::checkoutMEPTP($application = ['id' => $renewal->id], 'ppmv_registration');
 
             DB::commit();
 

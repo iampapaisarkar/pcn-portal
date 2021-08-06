@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\MEPTPApplication;
+use App\Models\PPMVRenewal;
 use App\Models\Service;
 use App\Models\ServiceFeeMeta;
 use App\Models\Payment;
@@ -32,10 +33,6 @@ class CheckoutController extends Controller
 
             $order = Payment::where('token', $token)
             ->with('user', 'service')->first();
-
-            // Payment::where('token', $token)->update([
-            //     'token' => null
-            // ]);
 
             return view('checkout.error', compact('order'));
         }else{
@@ -68,9 +65,19 @@ class CheckoutController extends Controller
                 'service_charge' => $service_charge,
             ]);
 
-            MEPTPApplication::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->update([
-                'payment' => true
-            ]);
+            if($order->service_type == 'meptp_training'){
+                MEPTPApplication::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->update([
+                    'payment' => true
+                ]);
+            }
+            if($order->service_type == 'ppmv_registration'){
+                PPMVRenewal::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->update([
+                    'payment' => true
+                ]);
+            }
+            if($order->service_type == 'ppmv_renewal'){
+                
+            }
 
             return view('checkout.success', compact('order'));
         }else{
