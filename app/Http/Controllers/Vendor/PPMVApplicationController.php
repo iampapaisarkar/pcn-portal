@@ -10,6 +10,7 @@ use App\Http\Requests\PPMV\PPMVApplicationUpdateRequest;
 use App\Http\Services\FileUpload;
 use App\Http\Services\Checkout;
 use App\Models\PPMVApplication;
+use App\Models\PPMVRenewal;
 use DB;
 use PDF;
 use File;
@@ -50,6 +51,14 @@ class PPMVApplicationController extends Controller
                 'reference_2_letter' => $reference_2_letter,
                 'reference_occupation' => $request->reference_occupation,
                 'status' => 'send_to_state_office',
+            ]);
+
+            PPMVRenewal::create([
+                'vendor_id' => Auth::user()->id,
+                'meptp_application_id' => $meptp->id,
+                'ppmv_application_id' => $application->id,
+                'renewal_year' => date('Y'),
+                'status' => 'pending'
             ]);
 
             $response = Checkout::checkoutMEPTP($application = ['id' => $application->id], 'ppmv_registration');

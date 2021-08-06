@@ -92,6 +92,7 @@ class PPMVInspectionApplicationController extends Controller
                 ->where('payment', true)
                 ->update([
                     'status' => $request->recommendation,
+                    'query' => $request['query'],
                 ]);
 
                 $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
