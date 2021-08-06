@@ -48,7 +48,7 @@
                                     <p><span class="rounded badge w-badge badge-warning">PENDING</span></p>
                                 @endif
                                 @if($renewal->status == 'unrecommended')
-                                    <p><span class="rounded badge w-badge badge-warning">REJECTED</span></p>
+                                    <p><span class="rounded badge w-badge badge-warning">NOT RECOMMENDED</span></p>
                                 @endif
                                 @if($renewal->status == 'licence_issued')
                                     <p><span class="rounded badge w-badge badge-success">APPROVED</span></p>
@@ -59,6 +59,26 @@
                                 <td>
                                 @if($renewal->status == 'rejected')
                                 <a href="{{route('ppmv-application-edit', $renewal->ppmv_application_id)}}"><button class="btn btn-info btn-icon btn-sm m-0" type="button"> UPDATE APPLICATION</button></a>
+                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#queryModal{{$renewal->id}}">
+                                VIEW REASON
+                                </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="queryModal{{$renewal->id}}" tabindex="-1" aria-labelledby="queryModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="queryModalLabel">Reason of Query</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                        {{$renewal->query}}
+                                        </div>
+                                        </div>
+                                    </div>
+                                    </div>
                                 @endif
                                 @if($renewal->status == 'unrecommended')
                                 <a href="{{route('ppmv-application-edit', $renewal->ppmv_application_id)}}"><button class="btn btn-info btn-icon btn-sm m-0" type="button"> UPDATE APPLICATION</button></a>

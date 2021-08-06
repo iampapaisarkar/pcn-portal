@@ -13,15 +13,17 @@
                 {{$application->indexNumber->arbitrary_1 .'/'. $application->indexNumber->arbitrary_2 .'/'. $application->indexNumber->batch_year .'/'. $application->indexNumber->state_code .'/'. $application->indexNumber->school_code .'/'. $application->indexNumber->tier .'/'. $application->indexNumber->id}}
                 @endif
 
-                @if($application->result && $application->result->status != 'pending')
-                    @if($application->result->status == 'pass')
-                    <span class="badge badge-pill badge-success">PASS</span>
-                    <h5>Score: <strong>{{$application->result->score}}</strong></h5>
-                    <h5>Percentage: <strong>{{$application->result->percentage}}%</strong></h5>
-                    @else
-                    <span class="badge badge-pill badge-danger">FAILED</span>
-                    <h5>Score: <strong>{{$application->result->score}}</strong></h5>
-                    <h5>Percentage: <strong>{{$application->result->percentage}}%</strong></h5>
+                @if(!Auth::user()->hasROle(['vendor']))
+                    @if($application->result && $application->result->status != 'pending')
+                        @if($application->result->status == 'pass')
+                        <span class="badge badge-pill badge-success">PASS</span>
+                        <h5>Score: <strong>{{$application->result->score}}</strong></h5>
+                        <h5>Percentage: <strong>{{$application->result->percentage}}%</strong></h5>
+                        @else
+                        <span class="badge badge-pill badge-danger">FAILED</span>
+                        <h5>Score: <strong>{{$application->result->score}}</strong></h5>
+                        <h5>Percentage: <strong>{{$application->result->percentage}}%</strong></h5>
+                        @endif
                     @endif
                 @endif
             </div>
