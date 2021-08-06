@@ -77,8 +77,8 @@
                     <div class="form-group col-md-6">
                         <label for="inputEmail3" class="ul-form__label">Shop Name:</label>
                         <input name="shop_name" class="form-control @error('shop_name') is-invalid @enderror"
-                        value="{{ $shop->shop_name }}"
-                        id="shop_name" placeholder="Enter shop name" />
+                        value="{{ $application->meptp->shop_name }}"
+                        id="shop_name" placeholder="Enter shop name" readonly />
                         @error('shop_name')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -88,8 +88,8 @@
                     <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Shop Phone:</label>
                         <input name="shop_phone" class="form-control @error('shop_phone') is-invalid @enderror"
-                        value="{{ $shop->shop_phone }}"
-                        id="shop_phone" placeholder="Enter shop phone" />
+                        value="{{ $application->meptp->shop_phone }}"
+                        id="shop_phone" placeholder="Enter shop phone" readonly />
                         @error('shop_phone')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -100,8 +100,8 @@
                     <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Shop Email:</label>
                         <input type="email" name="shop_email" class="form-control @error('shop_email') is-invalid @enderror"
-                        value="{{ $shop->shop_email }}"
-                        id="shop_email" placeholder="Enter shop email" />
+                        value="{{ $application->meptp->shop_email }}"
+                        id="shop_email" placeholder="Enter shop email" readonly />
                         @error('shop_email')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -111,8 +111,8 @@
                     <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Shop Address:</label>
                         <input name="shop_address" class="form-control @error('shop_address') is-invalid @enderror"
-                        value="{{ $shop->shop_address }}"
-                        id="shop_address" placeholder="Enter shop address" />
+                        value="{{ $application->meptp->shop_address }}"
+                        id="shop_address" placeholder="Enter shop address" readonly />
                         @error('shop_address')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -123,8 +123,8 @@
                     <div class="form-group col-md-3">
                         <label for="inputEmail3" class="ul-form__label">Town/City:</label>
                         <input name="city" class="form-control @error('city') is-invalid @enderror"
-                        value="{{ $shop->city }}"
-                        id="city" placeholder="Enter Town/City" />
+                        value="{{ $application->meptp->city }}"
+                        id="city" placeholder="Enter Town/City" readonly />
                         @error('city')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -153,18 +153,19 @@
                         @enderror
                     </div>
 
-
+                    @if($application->meptp->ppmvl_no)
                     <div class="form-group col-md-4">
                         <label for="inputEmail3" class="ul-form__label">PPMVL Number :</label>
                         <input name="ppmvl_no" class="form-control @error('ppmvl_no') is-invalid @enderror"
-                        value="{{ $shop->ppmvl_no }}"
-                        id="ppmvl_no" placeholder="Enter Town/ppmvl_no" />
+                        value="{{ $application->meptp->ppmvl_no }}"
+                        id="ppmvl_no" placeholder="Enter Town/ppmvl_no" readonly />
                         @error('ppmvl_no')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
                         </span>
                         @enderror
                     </div>
+                    @endif
                 </div>
                 
                 <div class="custom-separator"></div>

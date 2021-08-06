@@ -78,7 +78,7 @@ class PPMVApplicationController extends Controller
 
     public function applicationFormEdit($id){
 
-        $application = PPMVApplication::select('p_p_m_v_applications.*')
+        $application = PPMVApplication::select('p_p_m_v_applications.*', 'p_p_m_v_renewals.id as renewal_id')
         ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
         ->where('p_p_m_v_applications.id', $id)
         ->where('p_p_m_v_applications.vendor_id', Auth::user()->id)
@@ -102,9 +102,13 @@ class PPMVApplicationController extends Controller
         try {
             DB::beginTransaction();
 
-            if(PPMVApplication::where(['vendor_id' => Auth::user()->id, 'id' => $id])->exists()){
+            $renewal = PPMVRenewal::where(['vendor_id' => Auth::user()->id, 'id' => $id])
+            ->with('ppmv_application', 'meptp_application')
+            ->first();
 
-                $application = PPMVApplication::where(['vendor_id' => Auth::user()->id, 'id' => $id])->first();
+            if(PPMVApplication::where(['vendor_id' => Auth::user()->id, 'id' => $renewal->ppmv_application->id])->exists()){
+
+                $application = PPMVApplication::where(['vendor_id' => Auth::user()->id, 'id' => $renewal->ppmv_application->id])->first();
 
                 if($request->file('reference_1_letter') != null){
                     if($application->reference_1_letter == $request->file('reference_1_letter')->getClientOriginalName()){
@@ -135,7 +139,7 @@ class PPMVApplicationController extends Controller
                 }
                 
 
-                PPMVApplication::where(['vendor_id' => Auth::user()->id, 'id' => $id])
+                PPMVApplication::where(['vendor_id' => Auth::user()->id, 'id' => $renewal->ppmv_application->id])
                 ->update([
                     'vendor_id' => Auth::user()->id,
                     'reference_1_name' => $request->reference_1_name,
@@ -153,7 +157,7 @@ class PPMVApplicationController extends Controller
                     'created_at' => now(),
                 ]);
 
-                PPMVRenewal::where(['vendor_id' => Auth::user()->id, 'ppmv_application_id' => $id, 'renewal_year' => date('Y')])
+                PPMVRenewal::where(['vendor_id' => Auth::user()->id, 'id' => $id])
                 ->update([
                     'status' => 'pending',
                 ]);
@@ -184,7 +188,6 @@ class PPMVApplicationController extends Controller
 
         $renewals = PPMVRenewal::where('vendor_id', Auth::user()->id)
         ->with('user', 'ppmv_application', 'meptp_application')
-        ->orderBy('renewal_year')
         ->latest()
         ->get();
 
@@ -194,5 +197,48 @@ class PPMVApplicationController extends Controller
 
     public function downloadLicence($id){
         return back()->with('success', 'Licence downloading pending');
+    }
+
+
+    public function renewLicence(){
+
+        $application = PPMVApplication::where('vendor_id', Auth::user()->id)
+        ->with('meptp')
+        ->first();
+
+        return view('vendor-user.ppmv.ppmv-renew-lincence', compact('application'));
+    }
+
+    public function submitRenewLicence(Request $request){
+
+        $application = PPMVApplication::where('vendor_id', Auth::user()->id)
+        ->with('meptp')
+        ->first();
+
+        try {
+            DB::beginTransaction();
+
+            $renewal = PPMVRenewal::create([
+                'vendor_id' => Auth::user()->id,
+                'meptp_application_id' => $application->meptp->id,
+                'ppmv_application_id' => $application->id,
+                'renewal_year' => date('Y'),
+                'expires_at' => \Carbon\Carbon::now()->addYear()->subDays(1),
+                'status' => 'pending',
+                'inspection' => true,
+            ]);
+
+            $response = Checkout::checkoutMEPTP($application = ['id' => $renewal->id], 'ppmv_renewal');
+
+
+            DB::commit();
+
+                return redirect()->route('invoices.show', ['id' => $response['id']])
+                ->with('success', 'Renewal Application successfully submitted. Please pay amount for further action');
+
+        }catch(Exception $e) {
+            DB::rollback();
+            return back()->with('error','There is something error, please try after some time');
+        } 
     }
 }

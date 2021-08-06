@@ -7,6 +7,7 @@ use App\Models\ServiceFeeMeta;
 use App\Models\Payment;
 use App\Models\MEPTPApplication;
 use App\Models\PPMVApplication;
+use App\Models\PPMVRenewal;
 use DB;
 
 class Checkout
@@ -78,6 +79,45 @@ class Checkout
                         'application_id' => $application['id'],
                         'service_id' => $service->id,
                         'service_type' => 'ppmv_registration',
+                        'amount' => $totalAmount,
+                        'token' => $token,
+                    ]);
+
+                    $response = [
+                        'success' => true,
+                        'order_id' => $order_id,
+                        'token' => $token,
+                        'id' => $payment->id,
+                    ];
+
+                }else{
+                    $response = ['success' => false];
+                }
+            }
+
+            if($type == 'ppmv_renewal'){
+
+                $ppmv = PPMVRenewal::where(['id' => $application['id']])->first();
+
+                if($ppmv){
+                    $service = Service::where('id', 3)
+                    ->with('netFees')
+                    ->first();
+
+                    $totalAmount = 0;
+                    foreach($service->netFees as $fee){
+                        $totalAmount += $fee->amount;
+                    }
+
+                    $token = md5(uniqid(rand(), true));
+                    $order_id = date('m-Y') . '-' .rand(10,1000);
+
+                    $payment = Payment::create([
+                        'vendor_id' => Auth::user()->id,
+                        'order_id' => $order_id,
+                        'application_id' => $application['id'],
+                        'service_id' => $service->id,
+                        'service_type' => 'ppmv_renewal',
                         'amount' => $totalAmount,
                         'token' => $token,
                     ]);
