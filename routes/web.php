@@ -126,8 +126,8 @@ Route::group(['middleware' => ['auth','verified', 'can:isPPractice']], function 
 
 // LICENCING & REGISTERING ROUTE 
 Route::group(['middleware' => ['auth','verified', 'can:isRLicencing']], function () {
-	Route::get('/ppmv-licence-pending-lists', 'App\Http\Controllers\Licencing\PPMVLicenceController@lists')->name('ppmv-licence-pending-lists');
-	Route::get('/ppmv-licence-issued-lists', 'App\Http\Controllers\Licencing\PPMVLicenceController@lists')->name('ppmv-licence-issued-lists');
+	Route::get('/ppmv-licence-pending-lists', 'App\Http\Controllers\Licencing\PPMVLicenceController@pendingLists')->name('ppmv-licence-pending-lists');
+	Route::get('/ppmv-licence-issued-lists', 'App\Http\Controllers\Licencing\PPMVLicenceController@issuedLists')->name('ppmv-licence-issued-lists');
 });
 
 // VENDOR ROUTES 

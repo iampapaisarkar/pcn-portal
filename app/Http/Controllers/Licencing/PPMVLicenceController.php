@@ -13,7 +13,7 @@ use DB;
 
 class PPMVLicenceController extends Controller
 {
-    public function lists(Request $request){
+    public function pendingLists(Request $request){
         
         $licences = PPMVRenewal::where('payment', true)
         ->where('status', 'recommended')
@@ -39,5 +39,34 @@ class PPMVLicenceController extends Controller
         $licences = $licences->latest()->paginate($perPage);
 
         return view('licencing.ppmv-licence-pending-lists', compact('licences'));
+    }
+
+
+    public function issuedLists(Request $request){
+        
+        $licences = PPMVRenewal::where('payment', true)
+        ->where('status', 'licence_issued')
+        ->with('user', 'ppmv_application', 'meptp_application');
+
+        if($request->per_page){
+            $perPage = (integer) $request->per_page;
+        }else{
+            $perPage = 10;
+        }
+
+        if(!empty($request->search)){
+            $search = $request->search;
+            $licences = $licences->whereHas('user', function($q) use ($search){
+                $q->where('firstname', 'like', '%' .$search. '%');
+                $q->orWhere('lastname', 'like', '%' .$search. '%');
+            })
+            ->orWhereHas('meptp_application', function($q) use ($search){
+                $q->where('shop_name', 'like', '%' .$search. '%');
+            });
+        }
+
+        $licences = $licences->latest()->paginate($perPage);
+
+        return view('licencing.ppmv-licence-issued-lists', compact('licences'));
     }
 }

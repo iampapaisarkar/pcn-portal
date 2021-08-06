@@ -47,7 +47,7 @@
                                 @if($renewal->status == 'unrecommended')
                                     <p><span class="rounded badge w-badge badge-warning">REJECTED</span></p>
                                 @endif
-                                @if($renewal->status == 'licence_generated')
+                                @if($renewal->status == 'licence_issued')
                                     <p><span class="rounded badge w-badge badge-success">APPROVED</span></p>
                                 @endif
                                 </td>
