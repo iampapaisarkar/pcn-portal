@@ -13,8 +13,10 @@ class PPMVPendingApplicationController extends Controller
     public function applications(Request $request){
         
         $applications = PPMVApplication::select('p_p_m_v_applications.*')
-        ->where('payment', true)
-        ->where('status', 'send_to_state_office')
+        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
+        ->where('p_p_m_v_renewals.renewal_year', date('Y'))
+        ->where('p_p_m_v_renewals.payment', true)
+        ->where('p_p_m_v_renewals.status', 'pending')
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
@@ -44,9 +46,12 @@ class PPMVPendingApplicationController extends Controller
 
     public function show($id){
 
-        $application = PPMVApplication::where('id', $id)
-        ->where('payment', true)
-        ->where('status', 'send_to_state_office')
+        $application = PPMVApplication::select('p_p_m_v_applications.*')
+        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
+        ->where('p_p_m_v_renewals.renewal_year', date('Y'))
+        ->where('p_p_m_v_renewals.payment', true)
+        ->where('p_p_m_v_renewals.status', 'pending')
+        ->where('p_p_m_v_applications.id', $id)
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
@@ -76,16 +81,43 @@ class PPMVPendingApplicationController extends Controller
 
     public function approve(Request $request){
 
-        if(PPMVApplication::where('id', $request->application_id)
+        // if(PPMVApplication::where('id', $request->application_id)
+        // ->where('vendor_id', $request->vendor_id)
+        // ->where('status', 'send_to_state_office')
+        // ->where('payment', true)
+        // ->exists()){
+
+        //     $application = PPMVApplication::where('id', $request->application_id)
+        //     ->where('vendor_id', $request->vendor_id)
+        //     ->where('status', 'send_to_state_office')
+        //     ->where('payment', true)
+        //     ->update([
+        //         'status' => 'approved',
+        //         'query' => null,
+        //         'token' => random_bytes(6),
+        //     ]);
+
+        //     $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+        //     $activity = 'State Officer Document Verification Approved';
+        //     AllActivity::storeActivity($request->application_id, $adminName, $activity, 'ppmv');
+
+        //     return redirect()->route('meptp-pending-batches')->with('success', 'Application Approved successfully done');
+        // }else{
+        //     return abort(404);
+        // }
+
+        if(PPMVRenewal::where('ppmv_application_id', $request->application_id)
         ->where('vendor_id', $request->vendor_id)
-        ->where('status', 'send_to_state_office')
         ->where('payment', true)
+        ->where('status', 'pending')
+        ->where('renewal_year', date('Y'))
         ->exists()){
 
-            $application = PPMVApplication::where('id', $request->application_id)
+            $application = PPMVRenewal::where('ppmv_application_id', $request->application_id)
             ->where('vendor_id', $request->vendor_id)
-            ->where('status', 'send_to_state_office')
             ->where('payment', true)
+            ->where('status', 'pending')
+            ->where('renewal_year', date('Y'))
             ->update([
                 'status' => 'approved',
                 'query' => null,
@@ -108,15 +140,18 @@ class PPMVPendingApplicationController extends Controller
             'query' => ['required'],
         ]);
 
-        if(PPMVApplication::where('id', $request->application_id)
+        if(PPMVRenewal::where('ppmv_application_id', $request->application_id)
         ->where('vendor_id', $request->vendor_id)
-        ->where('status', 'send_to_state_office')
         ->where('payment', true)
+        ->where('status', 'pending')
+        ->where('renewal_year', date('Y'))
         ->exists()){
-            $application = PPMVApplication::where('id', $request->application_id)
+
+            $application = PPMVRenewal::where('ppmv_application_id', $request->application_id)
             ->where('vendor_id', $request->vendor_id)
-            ->where('status', 'send_to_state_office')
             ->where('payment', true)
+            ->where('status', 'pending')
+            ->where('renewal_year', date('Y'))
             ->update([
                 'status' => 'rejected',
                 'query' => $request['query'],
@@ -128,7 +163,30 @@ class PPMVPendingApplicationController extends Controller
 
             return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');
         }else{
-            return back()->with('error', 'There is something error, please try after some time');
+            return abort(404);
         }
+
+        // if(PPMVApplication::where('id', $request->application_id)
+        // ->where('vendor_id', $request->vendor_id)
+        // ->where('status', 'send_to_state_office')
+        // ->where('payment', true)
+        // ->exists()){
+        //     $application = PPMVApplication::where('id', $request->application_id)
+        //     ->where('vendor_id', $request->vendor_id)
+        //     ->where('status', 'send_to_state_office')
+        //     ->where('payment', true)
+        //     ->update([
+        //         'status' => 'rejected',
+        //         'query' => $request['query'],
+        //     ]);
+
+        //     $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
+        //     $activity = 'State Officer Document Verification Query';
+        //     AllActivity::storeActivity($request->application_id, $adminName, $activity, 'ppmv');
+
+        //     return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');
+        // }else{
+        //     return back()->with('error', 'There is something error, please try after some time');
+        // }
     }
 }

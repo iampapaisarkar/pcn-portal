@@ -57,7 +57,7 @@ class Checkout
 
             if($type == 'ppmv_registration'){
 
-                $ppmv = PPMVApplication::where(['id' => $application['id'], 'payment' => false])->first();
+                $ppmv = PPMVApplication::where(['id' => $application['id']])->first();
 
                 if($ppmv){
                     $service = Service::where('id', 2)

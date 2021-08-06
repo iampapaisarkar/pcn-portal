@@ -31,13 +31,11 @@ class VendorPPMVApplication extends Component
      */
     public function render()
     {
-        $application = PPMVApplication::where('id', $this->application_id)
-        ->where('vendor_id', $this->vendor_id)
-        ->where('payment', true)
-        // ->where('status', 'send_to_state_office')
-        // ->whereHas('user', function($q){
-        //     $q->where('state', Auth::user()->state);
-        // })
+        $application = PPMVApplication::select('p_p_m_v_applications.*')
+        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
+        ->where('p_p_m_v_renewals.payment', true)
+        ->where('p_p_m_v_applications.id', $this->application_id)
+        ->where('p_p_m_v_applications.vendor_id', $this->vendor_id)
         ->with('user', 'meptp')
         ->first();
 
