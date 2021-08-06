@@ -190,4 +190,9 @@ class PPMVApplicationController extends Controller
 
         return view('vendor-user.ppmv.ppmv-renewal', compact('renewals'));
     }
+
+
+    public function downloadLicence($id){
+        return back()->with('success', 'Licence downloading pending');
+    }
 }

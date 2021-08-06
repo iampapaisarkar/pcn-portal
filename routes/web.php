@@ -166,4 +166,6 @@ Route::group(['middleware' => ['auth','verified', 'can:isVendor', 'CheckProfileS
 
 	Route::get('/ppmv-application-edit/{id}', 'App\Http\Controllers\Vendor\PPMVApplicationController@applicationFormEdit')->name('ppmv-application-edit');
 	Route::post('/ppmv-application-update/{id}', 'App\Http\Controllers\Vendor\PPMVApplicationController@applicationFormUpdate')->name('ppmv-application-update');
+	
+	Route::get('/download-licence/{id}', 'App\Http\Controllers\Vendor\PPMVApplicationController@downloadLicence')->name('download-licence');
 });

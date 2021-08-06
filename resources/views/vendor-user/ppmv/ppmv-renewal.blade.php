@@ -83,8 +83,8 @@
                                 @if($renewal->status == 'unrecommended')
                                 <a href="{{route('ppmv-application-edit', $renewal->ppmv_application_id)}}"><button class="btn btn-info btn-icon btn-sm m-0" type="button"> UPDATE APPLICATION</button></a>
                                 @endif
-                                @if($renewal->status == 'licence_generated')
-                                <a href="#"><button class="btn btn-info btn-icon btn-sm m-0" type="button"> <span class="ul-btn__icon"><i class="i-Gear-2"></i></span> <span class="ul-btn__text">LICENCE</span></button></a>
+                                @if($renewal->status == 'licence_issued')
+                                <a href="{{route('download-licence', $renewal->id)}}"><button class="btn btn-info btn-icon btn-sm m-0" type="button"> <span class="ul-btn__icon"><i class="i-Gear-2"></i></span> <span class="ul-btn__text">LICENCE</span></button></a>
                                 @endif
                                 </td>
                             </tr>
