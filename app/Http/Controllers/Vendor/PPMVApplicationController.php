@@ -184,6 +184,7 @@ class PPMVApplicationController extends Controller
         $renewals = PPMVRenewal::where('vendor_id', Auth::user()->id)
         ->with('user', 'ppmv_application', 'meptp_application')
         ->orderBy('renewal_year')
+        ->latest()
         ->get();
 
         return view('vendor-user.ppmv.ppmv-renewal', compact('renewals'));

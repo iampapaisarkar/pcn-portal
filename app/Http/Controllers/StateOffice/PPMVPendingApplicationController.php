@@ -13,15 +13,12 @@ class PPMVPendingApplicationController extends Controller
 {
     public function applications(Request $request){
         
-        $applications = PPMVApplication::select('p_p_m_v_applications.*')
-        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
-        ->where('p_p_m_v_renewals.renewal_year', date('Y'))
-        ->where('p_p_m_v_renewals.payment', true)
-        ->where('p_p_m_v_renewals.status', 'pending')
+        $applications = PPMVRenewal::where('payment', true)
+        ->where('status', 'pending')
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
-        ->with('user', 'meptp');
+        ->with('user', 'ppmv_application', 'meptp_application');
 
         if($request->per_page){
             $perPage = (integer) $request->per_page;
@@ -35,7 +32,7 @@ class PPMVPendingApplicationController extends Controller
                 $q->where('firstname', 'like', '%' .$search. '%');
                 $q->orWhere('lastname', 'like', '%' .$search. '%');
             })
-            ->orWhereHas('meptp', function($q) use ($search){
+            ->orWhereHas('meptp_application', function($q) use ($search){
                 $q->where('shop_name', 'like', '%' .$search. '%');
             });
         }
@@ -47,16 +44,13 @@ class PPMVPendingApplicationController extends Controller
 
     public function show($id){
 
-        $application = PPMVApplication::select('p_p_m_v_applications.*')
-        ->join('p_p_m_v_renewals', 'p_p_m_v_renewals.ppmv_application_id', 'p_p_m_v_applications.id')
-        ->where('p_p_m_v_renewals.renewal_year', date('Y'))
-        ->where('p_p_m_v_renewals.payment', true)
-        ->where('p_p_m_v_renewals.status', 'pending')
-        ->where('p_p_m_v_applications.id', $id)
+        $application = PPMVRenewal::where('id', $id)
+        ->where('payment', true)
+        ->where('status', 'pending')
         ->whereHas('user', function($q){
             $q->where('state', Auth::user()->state);
         })
-        ->with('user', 'meptp')
+        ->with('user', 'ppmv_application', 'meptp_application')
         ->first();
 
         if($application){
@@ -107,18 +101,16 @@ class PPMVPendingApplicationController extends Controller
         //     return abort(404);
         // }
 
-        if(PPMVRenewal::where('ppmv_application_id', $request->application_id)
+        if(PPMVRenewal::where('id', $request->application_id)
         ->where('vendor_id', $request->vendor_id)
         ->where('payment', true)
         ->where('status', 'pending')
-        ->where('renewal_year', date('Y'))
         ->exists()){
 
-            $application = PPMVRenewal::where('ppmv_application_id', $request->application_id)
+            $application = PPMVRenewal::where('id', $request->application_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('payment', true)
             ->where('status', 'pending')
-            ->where('renewal_year', date('Y'))
             ->update([
                 'status' => 'approved',
                 'query' => null,
@@ -141,18 +133,16 @@ class PPMVPendingApplicationController extends Controller
             'query' => ['required'],
         ]);
 
-        if(PPMVRenewal::where('ppmv_application_id', $request->application_id)
+        if(PPMVRenewal::where('id', $request->application_id)
         ->where('vendor_id', $request->vendor_id)
         ->where('payment', true)
         ->where('status', 'pending')
-        ->where('renewal_year', date('Y'))
         ->exists()){
 
-            $application = PPMVRenewal::where('ppmv_application_id', $request->application_id)
+            $application = PPMVRenewal::where('id', $request->application_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('payment', true)
             ->where('status', 'pending')
-            ->where('renewal_year', date('Y'))
             ->update([
                 'status' => 'rejected',
                 'query' => $request['query'],

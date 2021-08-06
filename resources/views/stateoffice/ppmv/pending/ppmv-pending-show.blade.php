@@ -8,7 +8,7 @@
     <div class="card-body">
         <h4>Tiered PPMV Registration Document Verification - Vendor Details</h4>
         <x-vendor-p-p-m-v-application
-        :applicationID="$application->id" 
+        :applicationID="$application->ppmv_application->id" 
         :vendorID="$application->vendor_id"
         />
         @if(Auth::user()->hasRole(['state_office']))
