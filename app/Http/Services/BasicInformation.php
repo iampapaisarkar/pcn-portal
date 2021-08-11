@@ -710,6 +710,28 @@ class BasicInformation
         }
     }
 
+    public function canAccessRenewalPage(){
+
+
+        if(PPMVRenewal::where('vendor_id', Auth::user()->id)
+        ->latest()
+        ->first()){
+            return $response = [
+                'response' => true,
+                'color' => 'warning',
+                'message' => 'You\'re already submited PPMV registration',
+            ]; 
+        
+        }else{
+            return $response = [
+                'response' => false,
+                'color' => 'warning',
+                'message' => 'You don\'t have licence or renwals yet.',
+            ];
+        }
+
+    }
+
     public function licenceRenewalYearCheck(){
         $meptp = Auth::user()->passed_meptp_application()->first();
 

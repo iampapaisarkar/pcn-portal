@@ -6,6 +6,7 @@
     <div class="col-lg-12 col-md-12">
         <div class="card text-left">
             <div class="card-body">
+            @if(app('App\Http\Services\BasicInformation')->canAccessRenewalPage()['response'])
                 <h2 class=" mb-6">Renewals</h2>
                 @if(app('App\Http\Services\BasicInformation')->licenceRenewalYearCheck()['response'])
                 <a href="{{route('renew-licence')}}"><button class="btn btn-primary" type="button">RENEW LICENCE</button></a>
@@ -92,6 +93,11 @@
                         </tbody>
                     </table>
                 </div>
+            @else
+            <div class="alert alert-card alert-{{app('App\Http\Services\BasicInformation')->canAccessRenewalPage()['color']}}" role="alert">
+                {{app('App\Http\Services\BasicInformation')->canAccessRenewalPage()['message']}}
+            </div>
+            @endif
             </div>
         </div>
     </div>
