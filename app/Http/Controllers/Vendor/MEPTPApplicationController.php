@@ -52,6 +52,7 @@ class MEPTPApplicationController extends Controller
                 'traing_centre' => $request->school,
                 'batch_id' => Batch::where('status', true)->first()->id,
                 'status' => 'send_to_state_office',
+                'payment' => true, // should remove this field
             ]);
 
             $response = Checkout::checkoutMEPTP($application = ['id' => $application->id], 'meptp');
