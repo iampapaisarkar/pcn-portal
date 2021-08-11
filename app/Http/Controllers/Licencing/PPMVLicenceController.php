@@ -58,13 +58,27 @@ class PPMVLicenceController extends Controller
     }
 
     public function issueSingleLicence($id){
+
+        $app = PPMVRenewal::where('payment', true)
+        ->where('status', 'recommended')
+        ->where('id', $id)
+        ->with('meptp_application')
+        ->first();
+
+        $licencecount = PPMVRenewal::where('payment', true)->count();
+
+        $licenceNO = strtoupper($app->meptp_application->user_state->name) . 
+        substr($app->renewal_year, -2) . 
+        strtoupper($app->meptp_application->tier->name[0]) . $app->meptp_application->tier->name[5] .
+        000 .
+        $licencecount++;
         
         $licence = PPMVRenewal::where('payment', true)
         ->where('status', 'recommended')
         ->where('id', $id)
         ->update([
             'status' => 'licence_issued',
-            'licence' => 'LICENCE'
+            'licence' => $licenceNO
         ]);
 
         $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
@@ -83,12 +97,26 @@ class PPMVLicenceController extends Controller
             if($checkboxes == true){
                 foreach($request->check_box_bulk_action as $renewal_id => $application){
 
+                    $app = PPMVRenewal::where('payment', true)
+                    ->where('status', 'recommended')
+                    ->where('id', $renewal_id)
+                    ->with('meptp_application')
+                    ->first();
+
+                    $licencecount = PPMVRenewal::where('payment', true)->count();
+
+                    $licenceNO = strtoupper($app->meptp_application->user_state->name) . 
+                    substr($app->renewal_year, -2) . 
+                    strtoupper($app->meptp_application->tier->name[0]) . $app->meptp_application->tier->name[5] .
+                    000 .
+                    $licencecount++;
+
                     $licence = PPMVRenewal::where('payment', true)
                     ->where('status', 'recommended')
                     ->where('id', $renewal_id)
                     ->update([
                         'status' => 'licence_issued',
-                        'licence' => 'LICENCE'
+                        'licence' => $licenceNO
                     ]);
 
                     $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
