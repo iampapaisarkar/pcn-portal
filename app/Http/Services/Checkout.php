@@ -42,6 +42,7 @@ class Checkout
                         'service_type' => 'meptp_training',
                         'amount' => $totalAmount,
                         'token' => $token,
+                        'status' => true // should removethis field
                     ]);
 
                     $response = [
@@ -81,6 +82,7 @@ class Checkout
                         'service_type' => 'ppmv_registration',
                         'amount' => $totalAmount,
                         'token' => $token,
+                        'status' => true // should removethis field
                     ]);
 
                     $response = [
@@ -120,6 +122,7 @@ class Checkout
                         'service_type' => 'ppmv_renewal',
                         'amount' => $totalAmount,
                         'token' => $token,
+                        'status' => true // should removethis field
                     ]);
 
                     $response = [
