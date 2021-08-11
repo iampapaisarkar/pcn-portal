@@ -196,7 +196,24 @@ class PPMVApplicationController extends Controller
 
 
     public function downloadLicence($id){
-        return back()->with('success', 'Licence downloading pending');
+
+        if(PPMVRenewal::where('vendor_id',  Auth::user()->id)
+        ->where('id',  $id)
+        ->where('status', 'licence_issued')->exists()){
+
+            $data = PPMVRenewal::where('vendor_id',  Auth::user()->id)
+            ->where('id',  $id)
+            ->where('status', 'licence_issued')
+            ->with('meptp_application', 'ppmv_application', 'user')
+            ->first();
+
+            $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
+            $profilePhoto = Auth::user()->photo ? public_path('images/'. Auth::user()->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+            $pdf = PDF::loadView('pdf.licence', ['data' => $data, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
+            return $pdf->stream();
+        }else{
+            return abort(404);
+        }
     }
 
 
