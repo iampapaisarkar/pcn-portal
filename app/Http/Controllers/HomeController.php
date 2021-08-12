@@ -91,7 +91,6 @@ class HomeController extends Controller
         }
         if(Auth::user()->hasRole(['vendor'])){
             $meptpApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id])->latest()->first();
-            $ppmvRenewal = PPMVRenewal::where(['vendor_id' => Auth::user()->id, 'meptp_application_id' => $meptpApplication->id])->latest()->first();
 
             if($meptpApplication){
                 if($meptpApplication->status == 'send_to_state_offcie'){
@@ -141,6 +140,9 @@ class HomeController extends Controller
                         'type' => 'METPT'
                     ];
                 }
+
+                $ppmvRenewal = PPMVRenewal::where(['vendor_id' => Auth::user()->id, 'meptp_application_id' => $meptpApplication->id])->latest()->first();
+
                 if($ppmvRenewal){
                     if($ppmvRenewal->status == 'send_to_state_office'){
                         $data = [
@@ -180,7 +182,10 @@ class HomeController extends Controller
                     }
                 }
             }else{
-
+                $data = [
+                    'status' => 'NO DATA',
+                    'type' => 'Date not found yet'
+                ];
             }
 
         }

@@ -64,7 +64,7 @@ class UserSeeder extends Seeder
             'firstname' => 'Public',
             'lastname' => 'Vendor 1',
             'phone' => '+919002090020',
-            'email' => 'vendor@test.com',
+            'email' => 'iampapaisarkar@gmail.com',
             'email_verified_at' => now(),
             'password' => Hash::make('123456'),
             'state' => null,
