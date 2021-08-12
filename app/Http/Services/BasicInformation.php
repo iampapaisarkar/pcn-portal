@@ -227,12 +227,11 @@ class BasicInformation
 
         if($activeBatch){
 
-            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id, 'batch_id' => $activeBatch->id])->latest()->first();
+            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id])->latest()->first();
 
             if($isSubmittedApplication){
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
                 ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                ->where('batches.status', true)
                 ->where('m_e_p_t_p_applications.status', 'send_to_state_office')
                 ->select('m_e_p_t_p_applications.*')
                 ->latest()->first()){
@@ -247,7 +246,6 @@ class BasicInformation
 
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-            ->where('batches.status', true)
             ->where('m_e_p_t_p_applications.status', 'reject_by_state_office')
             ->select('m_e_p_t_p_applications.*')
             ->latest()->first()){
@@ -264,7 +262,6 @@ class BasicInformation
 
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-            ->where('batches.status', true)
             ->where('m_e_p_t_p_applications.status', 'send_to_pharmacy_practice')
             ->select('m_e_p_t_p_applications.*')
             ->latest()->first()){
@@ -279,7 +276,6 @@ class BasicInformation
 
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-            ->where('batches.status', true)
             ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
             ->select('m_e_p_t_p_applications.*')
             ->latest()->first()){
@@ -296,7 +292,6 @@ class BasicInformation
 
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
                 ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                ->where('batches.status', true)
                 ->where('m_e_p_t_p_applications.status', 'approved_tier_selected')
                 ->select('m_e_p_t_p_applications.*')
                 ->latest()->first()){
@@ -311,7 +306,6 @@ class BasicInformation
 
                 if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
                 ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                ->where('batches.status', true)
                 ->where('m_e_p_t_p_applications.status', 'index_generated')
                 ->select('m_e_p_t_p_applications.*')
                 ->latest()->first()){
