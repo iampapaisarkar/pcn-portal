@@ -215,7 +215,7 @@ class MEPTPApprovedApplicationsController extends Controller
             if($response == true){
                 return back()->with('success', 'Index number generated successfully.');
             }else{
-                return back()->with('error', 'Please select atleast one apllication.');
+                return back()->with('error', 'Please select atleast one application.');
             }
 
         }catch(Exception $e) {
