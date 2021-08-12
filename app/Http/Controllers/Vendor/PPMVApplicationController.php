@@ -173,7 +173,7 @@ class PPMVApplicationController extends Controller
             DB::commit();
 
                 if($response == true){
-                    return redirect()->route('ppmv-renewal')
+                    return redirect()->route('ppmv-application')
                     ->with('success', 'Application successfully updated');
                 }else{
                     return back()->with('error','There is something error, please try after some time');
@@ -183,12 +183,20 @@ class PPMVApplicationController extends Controller
             DB::rollback();
             return back()->with('error','There is something error, please try after some time');
         }
+    }
+
+    public function downloadReport($id){
+        $application = PPMVRenewal::where('id', $id)->first();
+        $path = storage_path('app'. DIRECTORY_SEPARATOR . 'private' . 
+        DIRECTORY_SEPARATOR . $application->vendor_id . DIRECTORY_SEPARATOR . 'PPMV' . DIRECTORY_SEPARATOR . $application->inspection_report);
+        return response()->download($path);
         
     }
 
     public function renewal(){
 
         $renewals = PPMVRenewal::where('vendor_id', Auth::user()->id)
+        ->where('renewal', true)
         ->with('user', 'ppmv_application', 'meptp_application')
         ->latest()
         ->get();

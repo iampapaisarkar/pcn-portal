@@ -705,7 +705,39 @@ class BasicInformation
                             'color' => 'warning',
                             'message' => 'YOUR APPLICATION INPROGRESS. STATUS: PENDING',
                         ]; 
-                    
+                    }
+                    if($application->ppmv_renewal->status == 'rejected'){
+                        return $response = [
+                            'can_submit' => false,
+                            'color' => 'danger',
+                            'message' => 'YOUR APPLICATION IS QUERIED. STATUS: QUERIED',
+                            'caption' => $application->ppmv_renewal->query,
+                            'application_id' => $application->id,
+                            'can_edit' => true,
+                        ]; 
+                    }
+                    if($application->ppmv_renewal->status == 'approved'){
+                        return $response = [
+                            'can_submit' => false,
+                            'color' => 'warning',
+                            'message' => 'YOUR APPLICATION INPROGRESS. STATUS: APPROVED',
+                        ]; 
+                    }
+                    if($application->ppmv_renewal->status == 'recommended'){
+                        return $response = [
+                            'can_submit' => false,
+                            'color' => 'success',
+                            'message' => 'YOUR APPLICATION SELECT TO RECOMMENDED. STATUS: RECOMMENDED',
+                            'download_link' => $application->ppmv_renewal->id
+                        ]; 
+                    }
+                    if($application->ppmv_renewal->status == 'unrecommended'){
+                        return $response = [
+                            'can_submit' => true,
+                            'color' => 'danger',
+                            'message' => 'YOUR APPLICATION UNRECOMMENDED. STATUS: UNRECOMMENDED',
+                            'download_link' => $application->ppmv_renewal->id
+                        ]; 
                     }
                 }
 
@@ -728,6 +760,7 @@ class BasicInformation
 
 
         if(PPMVRenewal::where('vendor_id', Auth::user()->id)
+        ->where('renewal', true)
         ->latest()
         ->first()){
             return $response = [

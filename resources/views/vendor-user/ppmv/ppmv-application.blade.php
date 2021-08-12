@@ -6,6 +6,17 @@
     <div class="col-lg-12 col-md-12">
         <div class="card-body">
         @if(app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['can_submit'] == true)
+
+            @if(isset(app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['message']))
+            <div class="alert alert-card alert-{{app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['color']}}" role="alert">
+                {{app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['message']}}
+                <br><br>
+                @if(isset(app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['download_link']))
+                <a target="_blank" class="btn btn-{{app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['color']}} m-1" href="{{route('download-inspection-report', app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['download_link'])}}">Download Report</a>
+                @endif
+            </div>
+            @endif
+
             <form method="POST" action="{{ route('ppmv-application-submit') }}" enctype="multipart/form-data" novalidate>
             @csrf
                 <h4>Vendor Details</h4>
