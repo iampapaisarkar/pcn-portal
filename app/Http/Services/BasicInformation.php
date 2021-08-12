@@ -229,12 +229,14 @@ class BasicInformation
 
             $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id])->latest()->first();
 
+            $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id])
+            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
+            ->select('m_e_p_t_p_applications.*')
+            ->latest()->first();
+
+
             if($isSubmittedApplication){
-                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                ->where('m_e_p_t_p_applications.status', 'send_to_state_office')
-                ->select('m_e_p_t_p_applications.*')
-                ->latest()->first()){
+                if($isSubmittedApplication->status == 'send_to_state_office'){
                     return $response = [
                             'color' => 'warning',
                             'is_status' => true,
@@ -244,11 +246,7 @@ class BasicInformation
                         ];
                 }
 
-                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-            ->where('m_e_p_t_p_applications.status', 'reject_by_state_office')
-            ->select('m_e_p_t_p_applications.*')
-            ->latest()->first()){
+                if($isSubmittedApplication->status == 'reject_by_state_office'){
                     return $response = [
                             'color' => 'danger',
                             'is_status' => true,
@@ -260,11 +258,7 @@ class BasicInformation
                         ];
                 }
 
-                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-            ->where('m_e_p_t_p_applications.status', 'send_to_pharmacy_practice')
-            ->select('m_e_p_t_p_applications.*')
-            ->latest()->first()){
+                if($isSubmittedApplication->status == 'send_to_pharmacy_practice'){
                     return $response = [
                             'color' => 'warning',
                             'is_status' => true,
@@ -274,11 +268,7 @@ class BasicInformation
                         ];
                 }
 
-                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-            ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-            ->where('m_e_p_t_p_applications.status', 'reject_by_pharmacy_practice')
-            ->select('m_e_p_t_p_applications.*')
-            ->latest()->first()){
+                if($isSubmittedApplication->status == 'reject_by_pharmacy_practice'){
                     return $response = [
                             'color' => 'danger',
                             'is_status' => true,
@@ -290,11 +280,7 @@ class BasicInformation
                 }
 
 
-                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                ->where('m_e_p_t_p_applications.status', 'approved_tier_selected')
-                ->select('m_e_p_t_p_applications.*')
-                ->latest()->first()){
+                if($isSubmittedApplication->status == 'approved_tier_selected'){
                     return $response = [
                             'color' => 'success',
                             'is_status' => true,
@@ -304,11 +290,7 @@ class BasicInformation
                         ];
                 }
 
-                if(MEPTPApplication::where(['vendor_id' => Auth::user()->id])
-                ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
-                ->where('m_e_p_t_p_applications.status', 'index_generated')
-                ->select('m_e_p_t_p_applications.*')
-                ->latest()->first()){
+                if($isSubmittedApplication->status == 'index_generated'){
                     return $response = [
                             'color' => 'success',
                             'is_status' => true,
