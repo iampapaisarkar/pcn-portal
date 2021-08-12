@@ -253,10 +253,10 @@ class MEPTPResultsApplicationsController extends Controller
 
             foreach($results as $result){
 
-                if($result['exam_score_50'] >= 50 && $result['exam_score_50'] <= 100){
+                if($result['percentage_score'] >= 50 && $result['percentage_score'] <= 100){
                     $status = 'pass';
                 }
-                if($result['exam_score_50'] <= 49 && $result['exam_score_50'] >= 0){
+                if($result['percentage_score'] <= 49 && $result['percentage_score'] >= 0){
                     $status = 'fail';
                 }
 
