@@ -11,15 +11,37 @@ use App\Models\PPMVRenewal;
 use DB;
 use Mail;
 use App\Mail\PaymentSuccessEmail;
+use App\Mail\ApproveTierEmail;
+use App\Mail\GenerateLicenceEmail;
 
 class EmailSend
 {
-    public static function sendEmailSuccessEMAIL($data){
+    public static function sendPaymentSuccessEMAIL($data){
 
         try {
             DB::beginTransaction();
 
             Mail::to(Auth::user()->email)->send(new PaymentSuccessEmail($data));
+
+            DB::commit();
+            return ['success' => true];
+        }catch(Exception $e) {
+            DB::rollback();
+            return ['success' => false];
+        }  
+    }
+
+    public static function sendApprovedTierEMAIL($data){
+
+        try {
+            DB::beginTransaction();
+
+
+            Mail::to($data['vendor']['email'])->send(new ApproveTierEmail($data));
+
+            foreach ($data['state_officer'] as $state) {
+                Mail::to($state['email'])->send(new ApproveTierEmail($data));
+            }
 
             DB::commit();
             return ['success' => true];

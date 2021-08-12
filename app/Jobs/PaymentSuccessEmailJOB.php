@@ -32,6 +32,6 @@ class PaymentSuccessEmailJOB implements ShouldQueue
      */
     public function handle()
     {
-        EmailSend::sendEmailSuccessEMAIL($this->data);
+        EmailSend::sendPaymentSuccessEMAIL($this->data);
     }
 }

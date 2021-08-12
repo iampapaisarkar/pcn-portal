@@ -13,6 +13,7 @@ use App\Models\School;
 use App\Models\Tier;
 use DB;
 use App\Http\Services\AllActivity;
+use App\Jobs\ApproveTierEmailJOB;
 
 class MEPTPApprovalApplicationsController extends Controller
 {
@@ -133,6 +134,20 @@ class MEPTPApprovalApplicationsController extends Controller
                     'vendor_id' => $request->vendor_id,
                     'status' => 'pending',
                 ]);
+
+                $application = MEPTPApplication::where('id', $request->application_id)
+                ->where('vendor_id', $request->vendor_id)
+                ->where('status', 'approved_tier_selected')
+                ->where('payment', true)
+                ->with('user','tier','school','batch', 'state_officer')
+                ->first();
+
+                $data = [
+                    'application' => $application,
+                    'vendor' => $application->user,
+                    'state_officer' => $application->state_officer
+                ];
+                ApproveTierEmailJOB::dispatch($data);
 
                 $tier = Tier::where('id', $request['tier'])->first();
                 $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;

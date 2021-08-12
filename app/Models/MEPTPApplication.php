@@ -19,6 +19,10 @@ class MEPTPApplication extends Model
         return $this->hasOne(User::class,'id', 'vendor_id');
     }
 
+    public function state_officer() {
+        return $this->hasMany(User::class,'state', 'state');
+    }
+
     public function tier() {
         return $this->hasOne(Tier::class,'id', 'tier_id');
     }
