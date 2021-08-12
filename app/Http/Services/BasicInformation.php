@@ -308,7 +308,7 @@ class BasicInformation
                             'is_status' => true,
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
-                            'message' => 'YOU\'RE PASSED OUT MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.'). STATUS: Application Approved and Examination Card Generated',
+                            'message' => 'YOU\'RE PASSED OUT MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.').',
                         ];
                 }
 
@@ -318,7 +318,7 @@ class BasicInformation
                             'is_status' => true,
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
-                            'message' => 'YOU\'RE FAILED MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.'). STATUS: Application Approved and Examination Card Generated',
+                            'message' => 'YOU\'RE FAILED MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.').',
                         ];
                 }
 
