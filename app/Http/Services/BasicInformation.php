@@ -691,7 +691,6 @@ class BasicInformation
 
 
             if($application){
-
                 if($application->ppmv_renewal->renewal == true){
                     return $response = [
                         'can_submit' => false,

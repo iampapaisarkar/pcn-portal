@@ -29,6 +29,11 @@ class PPMVApplicationController extends Controller
         try {
             DB::beginTransaction();
 
+            if(PPMVApplication::where('vendor_id', Auth::user()->id)->exists()){
+                PPMVApplication::where('vendor_id', Auth::user()->id)->delete();
+                PPMVRenewal::where('vendor_id', Auth::user()->id)->delete();
+            }
+
             $meptp = Auth::user()->passed_meptp_application()->first();
 
             $reference_1_letter = FileUpload::upload($request->file('reference_1_letter'), $private = true, 'ppmv', 'reference_1_letter');

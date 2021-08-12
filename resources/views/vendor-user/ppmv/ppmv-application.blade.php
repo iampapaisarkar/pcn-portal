@@ -362,6 +362,10 @@
                 @if(isset(app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['can_edit']) && app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['can_edit'] == true)
                 <a class="btn btn-primary m-1" href="{{route('ppmv-application-edit', app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['application_id'])}}">Edit Application</a>
                 @endif
+                <br><br>
+                @if(isset(app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['download_link']))
+                <a target="_blank" class="btn btn-{{app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['color']}} m-1" href="{{route('download-inspection-report', app('App\Http\Services\BasicInformation')->canSubmitPPMVApplication()['download_link'])}}">Download Report</a>
+                @endif
             </div>
             
         @endif
