@@ -107,7 +107,8 @@ class HomeController extends Controller
                 }
                 if($meptpApplication->status == 'send_to_pharmacy_practice'){
                     $data = [
-                        'status' => 'PENDING'
+                        'status' => 'PENDING',
+                        'type' => 'METPT'
                     ];
                 }
                 if($meptpApplication->status == 'reject_by_pharmacy_practice'){
