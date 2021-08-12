@@ -212,7 +212,7 @@ class MEPTPApprovalApplicationsController extends Controller
             DB::commit();
 
             if($response == true){
-                return redirect()->route('meptp-approval-states')->with('success', 'Application successfully quired & rejected');
+                return redirect()->route('meptp-approval-states')->with('success', 'Application successfully queried & rejected');
             }else{
                 return back()->with('error', 'There is something error, please try after some time');
             }

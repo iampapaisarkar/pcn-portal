@@ -62,7 +62,7 @@
                 event.preventDefault();
 
                 $.confirm({
-                    title: 'Quired & Reject',
+                    title: 'Queried & Reject',
                     content: 'Are you sure want to reject this application?',
                     buttons: {   
                         ok: {

@@ -43,7 +43,7 @@
                                     <p><span class="rounded badge w-badge badge-warning">PENDING</span></p>
                                 @endif
                                 @if($renewal->status == 'rejected')
-                                    <p><span class="rounded badge w-badge badge-warning">QUIRED</span></p>
+                                    <p><span class="rounded badge w-badge badge-warning">QUERIED</span></p>
                                 @endif
                                 @if($renewal->status == 'recommended')
                                     <p><span class="rounded badge w-badge badge-warning">PENDING</span></p>

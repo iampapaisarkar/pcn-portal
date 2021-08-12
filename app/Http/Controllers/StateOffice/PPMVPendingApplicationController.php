@@ -141,7 +141,7 @@ class PPMVPendingApplicationController extends Controller
             $activity = 'State Officer Document Verification Query';
             AllActivity::storeActivity($request->application_id, $adminName, $activity, 'ppmv');
 
-            return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');
+            return redirect()->route('meptp-pending-batches')->with('success', 'Application Queried successfully');
         }else{
             return abort(404);
         }
@@ -164,7 +164,7 @@ class PPMVPendingApplicationController extends Controller
         //     $activity = 'State Officer Document Verification Query';
         //     AllActivity::storeActivity($request->application_id, $adminName, $activity, 'ppmv');
 
-        //     return redirect()->route('meptp-pending-batches')->with('success', 'Application Quired successfully');
+        //     return redirect()->route('meptp-pending-batches')->with('success', 'Application Queried successfully');
         // }else{
         //     return back()->with('error', 'There is something error, please try after some time');
         // }
