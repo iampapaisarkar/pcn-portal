@@ -19,7 +19,8 @@ class GenerateLicenceEmailJOB implements ShouldQueue
      *
      * @return void
      */
-    public  $data;
+    public $licence;
+    public $vendor;
     /**
      * Create a new job instance.
      *
@@ -27,7 +28,8 @@ class GenerateLicenceEmailJOB implements ShouldQueue
      */
     public function __construct($data)
     {
-        $this->data = $data;
+        $this->licence = $data['licence'];
+        $this->vendor = $data['vendor'];
     }
 
     /**
@@ -36,7 +38,7 @@ class GenerateLicenceEmailJOB implements ShouldQueue
      * @return void
      */
     public function handle()
-    {
-        EmailSend::sendLicenceGenerateEMAIL($this->data);
+    {   
+        EmailSend::sendLicenceGenerateEMAIL($this->licence, $this->vendor);
     }
 }

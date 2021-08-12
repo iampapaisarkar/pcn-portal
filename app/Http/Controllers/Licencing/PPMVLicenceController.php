@@ -10,6 +10,7 @@ use App\Models\PPMVRenewal;
 use App\Http\Services\AllActivity;
 use App\Http\Services\FileUpload;
 use DB;
+use PDF;
 use App\Jobs\GenerateLicenceEmailJOB;
 
 class PPMVLicenceController extends Controller
@@ -79,6 +80,7 @@ class PPMVLicenceController extends Controller
         ->where('id', $id)
         ->update([
             'status' => 'licence_issued',
+            'renewal' => true,
             'licence' => $licenceNO
         ]);
 
@@ -88,14 +90,9 @@ class PPMVLicenceController extends Controller
         ->with('meptp_application', 'ppmv_application', 'user')
         ->first();
 
-        $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
-        $profilePhoto = $licence->user->photo ? public_path('images/'. $licence->user->photo) : public_path('admin/dist-assets/images/avatar.jpg');
-        $pdf = PDF::loadView('pdf.licence', ['data' => $data, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
-
         $data = [
             'licence' => $licence,
-            'attachment' => $pdf,
-            'vendor' => $licence->user,
+            'vendor' => $licence->user
         ];
         GenerateLicenceEmailJOB::dispatch($data);
 
@@ -134,6 +131,7 @@ class PPMVLicenceController extends Controller
                     ->where('id', $renewal_id)
                     ->update([
                         'status' => 'licence_issued',
+                        'renewal' => true,
                         'licence' => $licenceNO
                     ]);
 
@@ -143,13 +141,8 @@ class PPMVLicenceController extends Controller
                     ->with('meptp_application', 'ppmv_application', 'user')
                     ->first();
 
-                    $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
-                    $profilePhoto = $licence->user->photo ? public_path('images/'. $licence->user->photo) : public_path('admin/dist-assets/images/avatar.jpg');
-                    $pdf = PDF::loadView('pdf.licence', ['data' => $data, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
-
                     $data = [
                         'licence' => $licence,
-                        'attachment' => $pdf->output(),
                         'vendor' => $licence->user,
                     ];
                     GenerateLicenceEmailJOB::dispatch($data);

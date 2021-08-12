@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use PDF;
 
 class GenerateLicenceEmail extends Mailable
 {
@@ -28,8 +29,12 @@ class GenerateLicenceEmail extends Mailable
      */
     public function build()
     {
+        $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
+        $profilePhoto = $this->newData->user->photo ? public_path('images/'. $this->newData->user->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+        $pdf = PDF::loadView('pdf.licence', ['data' => $this->newData, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
+
         return $this->markdown('mail.generate-licence',['data'=>$this->newData])
-        ->attach($this->newData['attachment'], "licence.pdf")
+        ->attachData($pdf->output(), "licence.pdf")
         ->subject(env('APP_NAME') . ' - Licence Generate for PPMV Application');
     }
 }
