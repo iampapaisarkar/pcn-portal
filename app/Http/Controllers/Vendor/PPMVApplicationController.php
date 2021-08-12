@@ -192,6 +192,8 @@ class PPMVApplicationController extends Controller
         ->latest()
         ->get();
 
+        // dd($renewals);
+
         return view('vendor-user.ppmv.ppmv-renewal', compact('renewals'));
     }
 

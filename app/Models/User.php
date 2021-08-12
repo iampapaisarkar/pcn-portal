@@ -90,6 +90,7 @@ class User extends Authenticatable implements MustVerifyEmail
         })
         ->leftjoin('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
         ->where('m_e_p_t_p_results.status', 'pass')
-        ->with('user_state', 'user_lga', 'school', 'batch');
+        ->with('user_state', 'user_lga', 'school', 'batch')
+        ->select('m_e_p_t_p_applications.*', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_results.status as result_status');
     }
 }
