@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\ServiceFeeMeta;
 use App\Models\Payment;
 use DB;
+use App\Jobs\PaymentSuccessEmailJOB;
 
 class CheckoutController extends Controller
 {
@@ -69,14 +70,37 @@ class CheckoutController extends Controller
                 MEPTPApplication::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->update([
                     'payment' => true
                 ]);
+
+                $application = MEPTPApplication::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->with('batch')->first();
+
+                $data = [
+                    'order_id' => $order->order_id,
+                    'type' => 'meptp_training',
+                    'batch' => $application->batch,
+                ];
+                PaymentSuccessEmailJOB::dispatch($data);
             }
             if($order->service_type == 'ppmv_registration'){
                 PPMVRenewal::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->update([
                     'payment' => true
                 ]);
+
+                $data = [
+                    'order_id' => $order->order_id,
+                    'type' => 'ppmv_registration'
+                ];
+                PaymentSuccessEmailJOB::dispatch($data);
             }
             if($order->service_type == 'ppmv_renewal'){
+                PPMVRenewal::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->update([
+                    'payment' => true
+                ]);
                 
+                $data = [
+                    'order_id' => $order->order_id,
+                    'type' => 'ppmv_renewal'
+                ];
+                PaymentSuccessEmailJOB::dispatch($data);
             }
 
             return view('checkout.success', compact('order'));
