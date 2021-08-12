@@ -57,6 +57,8 @@ class MEPTPApplicationController extends Controller
 
             $response = Checkout::checkoutMEPTP($application = ['id' => $application->id], 'meptp');
 
+            // dd($response);
+
             DB::commit();
 
                 return redirect()->route('invoices.show', ['id' => $response['id']])

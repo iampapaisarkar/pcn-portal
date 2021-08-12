@@ -19,7 +19,8 @@ class Checkout
 
             if($type == 'meptp'){
 
-                $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => false])->first();
+                // $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => false])->first(); 
+                $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => true])->first(); // should removethis field
 
                 if($meptp){
                     $service = Service::where('id', 1)
