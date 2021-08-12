@@ -11,7 +11,9 @@
                 @if(app('App\Http\Services\BasicInformation')->licenceRenewalYearCheck()['response'])
                 <a href="{{route('renew-licence')}}"><button class="btn btn-primary" type="button">RENEW LICENCE</button></a>
                 @else
+                    @if(isset(app('App\Http\Services\BasicInformation')->licenceRenewalYearCheck()['renewal_date']))
                     <h5>You can renwal on {{app('App\Http\Services\BasicInformation')->licenceRenewalYearCheck()['renewal_date']}}</h5>
+                    @endif
                 @endif
                 <div class="custom-separator"></div>
 

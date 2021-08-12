@@ -783,16 +783,40 @@ class BasicInformation
 
         $renwal = PPMVRenewal::where('vendor_id', Auth::user()->id)->orderBy('renewal_year', 'desc')->first();
 
-        if(PPMVRenewal::where('vendor_id', Auth::user()->id)->exists() && $renwal->expires_at < date('Y-m-d')){
+        if($renwal && $renwal->status == 'pending'){
             return [
-                'response' => true
+                'response' => false
             ];
-        }else{
+        }
+        if($renwal && $renwal->status == 'rejected'){
+            return [
+                'response' => false
+            ];
+        }
+        if($renwal && $renwal->status == 'approved'){
+            return [
+                'response' => false
+            ];
+        }
+        if($renwal && $renwal->status == 'recommended'){
+            return [
+                'response' => false
+            ];
+        }
+        if($renwal && $renwal->status == 'unrecommended'){
+            return [
+                'response' => false
+            ];
+        }
+        if($renwal && $renwal->status == 'licence_issued'){
             return [
                 'response' => false,
                 'renewal_date' => \Carbon\Carbon::createFromFormat('Y-m-d', $renwal->expires_at)->addDays(1)->format('d M, Y')
             ];
         }
+        return [
+            'response' => true
+        ];
     }
 
 }
