@@ -232,6 +232,7 @@ class BasicInformation
             $isSubmittedApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id])
             ->join('batches', 'batches.id', 'm_e_p_t_p_applications.batch_id')
             ->select('m_e_p_t_p_applications.*')
+            ->with('batch')
             ->latest()->first();
 
 
@@ -242,7 +243,7 @@ class BasicInformation
                             'is_status' => true,
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.') STATUS:  Document Verification Pending',
                         ];
                 }
 
@@ -253,7 +254,7 @@ class BasicInformation
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
                             'edit' => true,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Document Verification Queried',
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.') STATUS: Document Verification Queried',
                             'caption' => $isSubmittedApplication->query,
                         ];
                 }
@@ -264,7 +265,7 @@ class BasicInformation
                             'is_status' => true,
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS:  Document Verification Pending',
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.') STATUS:  Document Verification Pending',
                         ];
                 }
 
@@ -274,7 +275,7 @@ class BasicInformation
                             'is_status' => true,
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: APPLICATION REJECTED',
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.') STATUS: APPLICATION REJECTED',
                             'caption' => $isSubmittedApplication->query,
                         ];
                 }
@@ -286,7 +287,7 @@ class BasicInformation
                             'is_status' => true,
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved',
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.') STATUS: Application Approved',
                         ];
                 }
 
@@ -296,7 +297,7 @@ class BasicInformation
                             'is_status' => true,
                             'application_id' => $isSubmittedApplication->id,
                             'vendor_id' => Auth::user()->id,
-                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$activeBatch->batch_no.'/'.$activeBatch->year.') STATUS: Application Approved and Examination Card Generated',
+                            'message' => 'APPLICATION FOR MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.') STATUS: Application Approved and Examination Card Generated',
                             'download_link' => route('meptp-examination-card-download', $isSubmittedApplication->id)
                         ];
                 }
