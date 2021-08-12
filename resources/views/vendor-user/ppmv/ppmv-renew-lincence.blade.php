@@ -167,6 +167,163 @@
                     </div>
                     @endif
                 </div>
+
+
+                <div class="custom-separator"></div>
+
+                <h4>Reference 1 (A Registered Pharmacist from any part of Nigeria)</h4>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="inputEmail3" class="ul-form__label">Reference Name:</label>
+                        <input name="reference_1_name" class="form-control @error('reference_1_name') is-invalid @enderror"
+                        value="{{ $application->reference_1_name }}"
+                        id="reference_1_name" placeholder="Enter name" />
+                        @error('reference_1_name')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inputEmail3" class="ul-form__label">Reference Phone:</label>
+                        <input name="reference_1_phone" class="form-control @error('reference_1_phone') is-invalid @enderror"
+                        value="{{ $application->reference_1_phone }}"
+                        id="reference_1_phone" placeholder="Enter phone" />
+                        @error('reference_1_phone')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="inputEmail3" class="ul-form__label">Reference Email:</label>
+                        <input type="email" name="reference_1_email" class="form-control @error('reference_1_email') is-invalid @enderror"
+                        value="{{ $application->reference_1_email }}"
+                        id="reference_1_email" placeholder="Enter email" />
+                        @error('reference_1_email')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inputEmail3" class="ul-form__label">Current Annual Licence:</label>
+                        <input name="current_annual_licence" class="form-control @error('current_annual_licence') is-invalid @enderror"
+                        value="{{ $application->current_annual_licence }}"
+                        id="current_annual_licence" placeholder="Enter licence no" />
+                        @error('current_annual_licence')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail3" class="ul-form__label">Reference Address:</label>
+                        <input type="text" name="reference_1_address" class="form-control @error('reference_1_address') is-invalid @enderror"
+                        value="{{ $application->reference_1_address }}"
+                        id="reference_1_address" placeholder="Enter address" />
+                        @error('reference_1_address')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-6 d-flex flex-column justify-content-between">
+                        <label for="picker1">Reference Letter:</label>
+                        <div class="custom-file">
+                            <input name="reference_1_letter" type="file" name="color_passportsize" class="custom-file-input
+                            @error('reference_1_letter') is-invalid @enderror" accept="application/pdf"
+                                id="inputGroupFile01" accept="image/*">
+                            <label class="custom-file-label " for="inputGroupFile01"
+                                aria-describedby="inputGroupFileAddon02" id="inputGroupFile01previewLabel">{{$application->reference_1_letter}}</label>
+                            @error('reference_1_letter')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div class="custom-separator"></div>
+
+                <h4>Reference 2</h4>
+                <div class="form-row">
+                    <div class="form-group col-md-3">
+                        <label for="inputEmail3" class="ul-form__label">Reference Name:</label>
+                        <input name="reference_2_name" class="form-control @error('reference_2_name') is-invalid @enderror"
+                        value="{{ $application->reference_2_name }}"
+                        id="reference_2_name" placeholder="Enter name" />
+                        @error('reference_2_name')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inputEmail3" class="ul-form__label">Reference Phone:</label>
+                        <input name="reference_2_phone" class="form-control @error('reference_2_phone') is-invalid @enderror"
+                        value="{{ $application->reference_2_phone }}"
+                        id="reference_2_phone" placeholder="Enter phone" />
+                        @error('reference_2_phone')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-3">
+                        <label for="inputEmail3" class="ul-form__label">Reference Email:</label>
+                        <input type="email" name="reference_2_email" class="form-control @error('reference_2_email') is-invalid @enderror"
+                        value="{{ $application->reference_2_email }}"
+                        id="reference_2_email" placeholder="Enter email" />
+                        @error('reference_2_email')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="inputEmail3" class="ul-form__label">Current Annual Licence:</label>
+                        <input name="reference_occupation" class="form-control @error('reference_occupation') is-invalid @enderror"
+                        value="{{ $application->reference_occupation }}"
+                        id="reference_occupation" placeholder="Enter licence no" />
+                        @error('reference_occupation')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="inputEmail3" class="ul-form__label">Reference Address:</label>
+                        <input type="text" name="reference_2_address" class="form-control @error('reference_2_address') is-invalid @enderror"
+                        value="{{ $application->reference_2_address }}"
+                        id="reference_2_address" placeholder="Enter address" />
+                        @error('reference_2_address')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-6 d-flex flex-column justify-content-between">
+                        <label for="picker1">Reference Letter:</label>
+                        <div class="custom-file">
+                            <input name="reference_2_letter" type="file" name="color_passportsize" class="custom-file-input
+                            @error('reference_2_letter') is-invalid @enderror" accept="application/pdf"
+                                id="inputGroupFile01" accept="image/*">
+                            <label class="custom-file-label " for="inputGroupFile01"
+                                aria-describedby="inputGroupFileAddon02" id="inputGroupFile01previewLabel">{{$application->reference_2_letter}}</label>
+                            @error('reference_2_letter')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
                 
                 <div class="custom-separator"></div>
 
