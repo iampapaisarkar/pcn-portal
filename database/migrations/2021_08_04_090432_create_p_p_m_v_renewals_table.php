@@ -22,6 +22,7 @@ class CreatePPMVRenewalsTable extends Migration
             $table->date('expires_at');
             $table->string('licence')->nullable();
             $table->string('status');
+            $table->string('renewal')->default(true);
             $table->boolean('payment')->default(false);
             $table->longtext('query')->nullable();
             $table->string('token')->nullable();

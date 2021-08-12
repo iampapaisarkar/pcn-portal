@@ -57,8 +57,9 @@ class PPMVApplicationController extends Controller
                 'meptp_application_id' => $meptp->id,
                 'ppmv_application_id' => $application->id,
                 'renewal_year' => date('Y'),
-                'expires_at' => \Carbon\Carbon::now()->addYear()->subDays(1),
+                'expires_at' => \Carbon\Carbon::now()->format('Y') .'-12-31', //\Carbon\Carbon::now()->addYear()->subDays(1),
                 'status' => 'pending',
+                'renewal' => false,
                 'inspection' => true,
                 'payment' => true, // should remove this field
             ]);

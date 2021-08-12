@@ -10,7 +10,7 @@ class PPMVRenewal extends Model
     use HasFactory;
 
     protected $fillable = [
-        'vendor_id', 'meptp_application_id', 'ppmv_application_id', 'renewal_year', 'expires_at', 'licence', 'status', 'payment', 'query', 'token', 'inspection', 'inspection_report'
+        'vendor_id', 'meptp_application_id', 'ppmv_application_id', 'renewal_year', 'expires_at', 'licence', 'status', 'renewal', 'payment', 'query', 'token', 'inspection', 'inspection_report'
     ];
 
     public function user() {

@@ -684,19 +684,35 @@ class BasicInformation
 
         if($meptp){
 
-            if(PPMVApplication::where('vendor_id', Auth::user()->id)
+            $application = PPMVApplication::where('vendor_id', Auth::user()->id)
+            ->with('ppmv_renewal')
             ->latest()
-            ->first()){
-                return $response = [
-                    'can_submit' => false,
-                    'color' => 'warning',
-                    'message' => 'You\'re already submited PPMV registration',
-                ]; 
-            
+            ->first();
+
+
+            if($application){
+
+                if($application->ppmv_renewal->renewal == true){
+                    return $response = [
+                        'can_submit' => false,
+                        'color' => 'warning',
+                        'message' => 'you\'re alredy submitted the PPMV Application and approved by State Officer',
+                    ];
+                }else{
+                    if($application->ppmv_renewal->status == 'pending'){
+                        return $response = [
+                            'can_submit' => false,
+                            'color' => 'warning',
+                            'message' => 'YOUR APPLICATION INPROGRESS. STATUS: PENDING',
+                        ]; 
+                    
+                    }
+                }
+
             }else{
                 return $response = [
                     'can_submit' => true,
-                ];
+                ];    
             }
 
         }else{

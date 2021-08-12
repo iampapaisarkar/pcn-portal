@@ -22,4 +22,8 @@ class PPMVApplication extends Model
     public function meptp() {
         return $this->hasOne(MEPTPApplication::class,'id', 'meptp_application_id');
     }
+
+    public function ppmv_renewal() {
+        return $this->hasOne(PPMVRenewal::class,'meptp_application_id', 'id');
+    }
 }
