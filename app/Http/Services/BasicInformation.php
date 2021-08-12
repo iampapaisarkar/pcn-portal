@@ -301,6 +301,27 @@ class BasicInformation
                             'download_link' => route('meptp-examination-card-download', $isSubmittedApplication->id)
                         ];
                 }
+
+                if($isSubmittedApplication->status == 'pass'){
+                    return $response = [
+                            'color' => 'success',
+                            'is_status' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'YOU\'RE PASSED OUT MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.'). STATUS: Application Approved and Examination Card Generated',
+                        ];
+                }
+
+                if($isSubmittedApplication->status == 'fail'){
+                    return $response = [
+                            'color' => 'success',
+                            'is_status' => true,
+                            'application_id' => $isSubmittedApplication->id,
+                            'vendor_id' => Auth::user()->id,
+                            'message' => 'YOU\'RE FAILED MEPTP (Batch: '.$isSubmittedApplication->batch->batch_no.'/'.$isSubmittedApplication->batch->year.'). STATUS: Application Approved and Examination Card Generated',
+                        ];
+                }
+
             }else{
                 $isResultPASS = MEPTPApplication::where(['m_e_p_t_p_applications.vendor_id' => Auth::user()->id, 'm_e_p_t_p_applications.status' => 'pass'])
                 ->join('m_e_p_t_p_results', 'm_e_p_t_p_results.application_id', 'm_e_p_t_p_applications.id')
