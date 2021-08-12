@@ -14,13 +14,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 // CHECK IF AUTH LOGGED IN REDIRECT DASHBOARD 
-Route::get('/', function () {
-    if(Auth::check()){
-        return view('index');
-    }else{
-        return view('auth.login');
-    }
-});
+if(Auth::check()){
+	Route::get('/', 'App\Http\Controllers\HomeController@index')->name('dashboard');
+}else{
+	Route::get('/', function () { return view('auth.login'); });
+}
+// Route::get('/', function () {
+//     if(Auth::check()){
+//         return view('index');
+//     }else{
+//         return view('auth.login');
+//     }
+// });
 
 // ADMIN USER'S ACTICATION ROUTE
 Route::get('/active-account', 'App\Http\Controllers\ProfileController@activeAccount')->name('active-account');
@@ -37,7 +42,7 @@ Route::post('/profile-password-update', 'App\Http\Controllers\ProfileController@
 
 // DASHBOARD ROUTE 
 Route::group(['middleware' => ['auth','verified', 'CheckProfileStatus']], function () {
-    Route::get('/', function () { return view('index'); })->name('dashboard');
+    Route::get('/', 'App\Http\Controllers\HomeController@index')->name('dashboard');
     Route::get('/download-meptp-application-document', 'App\Http\Controllers\Vendor\MEPTPApplicationController@downloadMEPTPDocument')->name('download-meptp-application-document');
     Route::get('/download-invoice/{id}', 'App\Http\Controllers\InvoiceController@downloadInvoice')->name('download-invoice');
 });

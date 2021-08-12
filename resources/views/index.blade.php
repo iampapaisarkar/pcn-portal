@@ -35,37 +35,37 @@
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="card card-icon mb-4">
                     <div class="card-body text-center"><i class="i-Diploma"></i>
-                        <p class="text-muted mt-2 mb-2">METPT</p>
-                        <p class="text-muted mt-2 mb-2">Document Verification Pending</p>
-                        <p class="text-primary text-60 line-height-1 m-0">60</p>
+                        <p class="text-muted mt-2 mb-2">{{$data['meptp_pending']['type']}}</p>
+                        <p class="text-muted mt-2 mb-2">{{$data['meptp_pending']['status']}}</p>
+                        <p class="text-primary text-60 line-height-1 m-0">{{$data['meptp_pending']['total']}}</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="card card-icon mb-4">
                     <div class="card-body text-center"><i class="i-Diploma"></i>
-                        <p class="text-muted mt-2 mb-2">METPT</p>
-                        <p class="text-muted mt-2 mb-2">Document Verification Approved</p>
-                        <p class="text-primary text-60 line-height-1 m-0">21</p>
+                        <p class="text-muted mt-2 mb-2">{{$data['meptp_approved']['type']}}</p>
+                        <p class="text-muted mt-2 mb-2">{{$data['meptp_approved']['status']}}</p>
+                        <p class="text-primary text-60 line-height-1 m-0">{{$data['meptp_approved']['total']}}</p>
                     </div>
                 </div>
             </div>
             
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="card card-icon mb-4">
-                    <div class="card-body text-center"><i class="i-Diploma-2"></i>
-                        <p class="text-muted mt-2 mb-2">Tiered PPMV Registration</p>
-                        <p class="text-muted mt-2 mb-2">Document Verification Pending</p>
-                        <p class="text-primary text-60 line-height-1 m-0">123</p>
+                    <div class="card-body text-center"><i class="i-Diploma"></i>
+                        <p class="text-muted mt-2 mb-2">{{$data['ppmv_pending']['type']}}</p>
+                        <p class="text-muted mt-2 mb-2">{{$data['ppmv_pending']['status']}}</p>
+                        <p class="text-primary text-60 line-height-1 m-0">{{$data['ppmv_pending']['total']}}</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="card card-icon mb-4">
-                    <div class="card-body text-center"><i class="i-Diploma-2"></i>
-                        <p class="text-muted mt-2 mb-2">Tiered PPMV Registration</p>
-                        <p class="text-muted mt-2 mb-2">Document Verification Approved</p>
-                        <p class="text-primary text-60 line-height-1 m-0">13</p>
+                    <div class="card-body text-center"><i class="i-Diploma"></i>
+                        <p class="text-muted mt-2 mb-2">{{$data['ppmv_approved']['type']}}</p>
+                        <p class="text-muted mt-2 mb-2">{{$data['ppmv_approved']['status']}}</p>
+                        <p class="text-primary text-60 line-height-1 m-0">{{$data['ppmv_approved']['total']}}</p>
                     </div>
                 </div>
             </div>
@@ -101,19 +101,19 @@
         <div class="row">
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="card card-icon mb-4">
-                    <div class="card-body text-center"><i class="i-Diploma-2"></i>
-                        <p class="text-muted mt-2 mb-2">Tiered PPMV Registration</p>
-                        <p class="text-muted mt-2 mb-2">Licence Pending</p>
-                        <p class="text-primary text-60 line-height-1 m-0">123</p>
+                    <div class="card-body text-center"><i class="i-Diploma"></i>
+                        <p class="text-muted mt-2 mb-2">{{$data['ppmv_pending']['type']}}</p>
+                        <p class="text-muted mt-2 mb-2">{{$data['ppmv_pending']['status']}}</p>
+                        <p class="text-primary text-60 line-height-1 m-0">{{$data['ppmv_pending']['total']}}</p>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="card card-icon mb-4">
-                    <div class="card-body text-center"><i class="i-Diploma-2"></i>
-                        <p class="text-muted mt-2 mb-2">Tiered PPMV Registration</p>
-                        <p class="text-muted mt-2 mb-2">Licence Approved</p>
-                        <p class="text-primary text-60 line-height-1 m-0">13</p>
+                    <div class="card-body text-center"><i class="i-Diploma"></i>
+                        <p class="text-muted mt-2 mb-2">{{$data['ppmv_approved']['type']}}</p>
+                        <p class="text-muted mt-2 mb-2">{{$data['ppmv_approved']['status']}}</p>
+                        <p class="text-primary text-60 line-height-1 m-0">{{$data['ppmv_approved']['total']}}</p>
                     </div>
                 </div>
             </div>
@@ -127,12 +127,12 @@
             <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="card card-icon mb-4">
                     <div class="card-body text-center"><i class="i-Diploma"></i>
-                        <p class="text-muted mt-2 mb-2">METPT</p>
-                        <p class="text-primary text-20 line-height-1 m-0">PENDING</p>
+                        <p class="text-muted mt-2 mb-2">{{$data['type']}}</p>
+                        <p class="text-primary text-20 line-height-1 m-0">{{$data['status']}}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 col-md-6 col-sm-6">
+            <!-- <div class="col-lg-6 col-md-6 col-sm-6">
                 <div class="card card-icon mb-4">
                     <div class="card-body text-center"><i class="i-Diploma"></i>
                         <p class="text-muted mt-2 mb-2">METPT</p>
@@ -179,7 +179,7 @@
                         <p class="text-primary text-20 line-height-1 m-0">PENDING</p>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
         @endcan
         <!-- Vendor cards end  -->
