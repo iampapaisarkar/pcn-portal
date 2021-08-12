@@ -52,4 +52,20 @@ class EmailSend
     }
 
 
+    public static function sendLicenceGenerateEMAIL($data){
+
+        try {
+            DB::beginTransaction();
+
+            Mail::to($data['vendor']['email'])->send(new GenerateLicenceEmail($data));
+
+            DB::commit();
+            return ['success' => true];
+        }catch(Exception $e) {
+            DB::rollback();
+            return ['success' => false];
+        }  
+    }
+
+
 }

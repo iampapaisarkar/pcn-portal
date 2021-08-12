@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Http\Services\EmailSend;
 
 class GenerateLicenceEmailJOB implements ShouldQueue
 {
@@ -18,9 +19,15 @@ class GenerateLicenceEmailJOB implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public  $data;
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -30,6 +37,6 @@ class GenerateLicenceEmailJOB implements ShouldQueue
      */
     public function handle()
     {
-        //
+        EmailSend::sendLicenceGenerateEMAIL($this->data);
     }
 }

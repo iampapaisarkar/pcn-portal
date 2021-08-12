@@ -16,9 +16,9 @@ class GenerateLicenceEmail extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->newData = $data;
     }
 
     /**
@@ -28,6 +28,8 @@ class GenerateLicenceEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->markdown('mail.generate-licence',['data'=>$this->newData])
+        ->attachData($this->newData['attachment'], "licence.pdf")
+        ->subject(env('APP_NAME') . ' - Licence Generate for PPMV Application');
     }
 }

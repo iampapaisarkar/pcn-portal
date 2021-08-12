@@ -10,6 +10,7 @@ use App\Models\PPMVRenewal;
 use App\Http\Services\AllActivity;
 use App\Http\Services\FileUpload;
 use DB;
+use App\Jobs\GenerateLicenceEmailJOB;
 
 class PPMVLicenceController extends Controller
 {
@@ -73,13 +74,30 @@ class PPMVLicenceController extends Controller
         000 .
         $licencecount++;
         
-        $licence = PPMVRenewal::where('payment', true)
+        PPMVRenewal::where('payment', true)
         ->where('status', 'recommended')
         ->where('id', $id)
         ->update([
             'status' => 'licence_issued',
             'licence' => $licenceNO
         ]);
+
+        // Send Licence Email 
+        $licence = PPMVRenewal::where('id',  $id)
+        ->where('status', 'licence_issued')
+        ->with('meptp_application', 'ppmv_application', 'user')
+        ->first();
+
+        $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
+        $profilePhoto = $licence->user->photo ? public_path('images/'. $licence->user->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+        $pdf = PDF::loadView('pdf.licence', ['data' => $data, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
+
+        $data = [
+            'licence' => $licence,
+            'attachment' => $pdf,
+            'vendor' => $licence->user,
+        ];
+        GenerateLicenceEmailJOB::dispatch($data);
 
         $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
         $activity = 'Registration and Licencing Issue The Licence';
@@ -111,13 +129,30 @@ class PPMVLicenceController extends Controller
                     000 .
                     $licencecount++;
 
-                    $licence = PPMVRenewal::where('payment', true)
+                    PPMVRenewal::where('payment', true)
                     ->where('status', 'recommended')
                     ->where('id', $renewal_id)
                     ->update([
                         'status' => 'licence_issued',
                         'licence' => $licenceNO
                     ]);
+
+                    // Send Licence Email 
+                    $licence = PPMVRenewal::where('id',  $renewal_id)
+                    ->where('status', 'licence_issued')
+                    ->with('meptp_application', 'ppmv_application', 'user')
+                    ->first();
+
+                    $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
+                    $profilePhoto = $licence->user->photo ? public_path('images/'. $licence->user->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+                    $pdf = PDF::loadView('pdf.licence', ['data' => $data, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
+
+                    $data = [
+                        'licence' => $licence,
+                        'attachment' => $pdf->output(),
+                        'vendor' => $licence->user,
+                    ];
+                    GenerateLicenceEmailJOB::dispatch($data);
 
                     $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
                     $activity = 'Registration and Licencing Issue The Licence';
