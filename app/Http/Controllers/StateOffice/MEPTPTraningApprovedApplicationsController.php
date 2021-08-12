@@ -34,7 +34,7 @@ class MEPTPTraningApprovedApplicationsController extends Controller
                     $withoutIndexBatches[$key]['index_status'] = 'false';
                 }
             }
-            $withoutResultBatches[$key]['result_status'] = 'false';
+            $withoutIndexBatches[$key]['result_status'] = 'false';
         }
 
         // With Index but Without Result 
