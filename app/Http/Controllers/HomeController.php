@@ -27,6 +27,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $data= [];
         if(Auth::user()->hasRole(['sadmin'])){
             $data= [];
         }
@@ -93,13 +94,13 @@ class HomeController extends Controller
             $meptpApplication = MEPTPApplication::where(['vendor_id' => Auth::user()->id])->latest()->first();
 
             if($meptpApplication){
-                if($meptpApplication->status == 'send_to_state_offcie'){
+                if($meptpApplication->status == 'send_to_state_office'){
                     $data = [
                         'status' => 'PENDING',
                         'type' => 'METPT'
                     ];
                 }
-                if($meptpApplication->status == 'reject_by_state_offcie'){
+                if($meptpApplication->status == 'reject_by_state_office'){
                     $data = [
                         'status' => 'DOCS. QUERIED',
                         'type' => 'METPT'

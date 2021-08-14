@@ -20,7 +20,10 @@ class MEPTPApplication extends Model
     }
 
     public function state_officer() {
-        return $this->hasMany(User::class,'state', 'state');
+        return $this->hasMany(User::class,'state', 'state')
+        ->join('user_roles', 'user_roles.user_id', 'users.id')
+        ->join('roles', 'roles.id', 'user_roles.role_id')
+        ->where('roles.code', 'state_office');
     }
 
     public function tier() {

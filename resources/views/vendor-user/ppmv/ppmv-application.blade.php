@@ -342,7 +342,7 @@
                     <div class="mc-footer">
                         <div class="row">
                             <div class="col-lg-12">
-                                <button type="submit" class="btn  btn-primary m-1" id="save" name="save">Submit MEPTP
+                                <button type="submit" class="btn  btn-primary m-1" id="save" name="save">Submit PPMV
                                     Application</button>
                                 <!-- <button type="button" onclick="makePayment()" class="btn  btn-primary m-1" id="save" name="save">Submit MEPTP
                                 Application</button> -->

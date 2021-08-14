@@ -36,7 +36,6 @@ class EmailSend
         try {
             DB::beginTransaction();
 
-
             Mail::to($data['vendor']['email'])->send(new ApproveTierEmail($data));
 
             foreach ($data['state_officer'] as $state) {
