@@ -125,7 +125,6 @@
                 console.log('callback Error Response', response);
                 var param = '?am=' + response.amount + '&ref=' + response.paymentReference;
                 window.location.href = "{{ route('payment-failed', $invoice->token) }}" + param;
-                // window.location.href = "{{ route('payment-failed', $invoice->token) }}";
             },
             onClose: function(response) {
                 console.log('callback Close Response', response);
