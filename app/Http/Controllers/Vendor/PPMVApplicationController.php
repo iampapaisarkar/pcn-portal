@@ -66,7 +66,7 @@ class PPMVApplicationController extends Controller
                 'status' => 'pending',
                 'renewal' => false,
                 'inspection' => true,
-                'payment' => true, // should remove this field
+                // 'payment' => true, // should remove this field
             ]);
 
 
@@ -262,7 +262,7 @@ class PPMVApplicationController extends Controller
                 'expires_at' => \Carbon\Carbon::now()->format('Y') .'-12-31', //\Carbon\Carbon::now()->addYear()->subDays(1),
                 'status' => 'pending',
                 'inspection' => $PPMVRenwal->inspection == true ? false : true,
-                'payment' => true, // should remove this field
+                // 'payment' => true, // should remove this field
             ]);
 
             $response = Checkout::checkoutMEPTP($application = ['id' => $renewal->id], 'ppmv_renewal');

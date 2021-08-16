@@ -19,8 +19,8 @@ class Checkout
 
             if($type == 'meptp'){
 
-                // $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => false])->first(); 
-                $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => true])->first(); // should removethis field
+                $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => false])->first(); 
+                // $meptp = MEPTPApplication::where(['id' => $application['id'], 'payment' => true])->first(); // should removethis field
 
                 if($meptp){
                     $service = Service::where('id', 1)
@@ -43,7 +43,7 @@ class Checkout
                         'service_type' => 'meptp_training',
                         'amount' => $totalAmount,
                         'token' => $token,
-                        'status' => true // should removethis field
+                        // 'status' => true // should removethis field
                     ]);
 
                     $response = [
@@ -83,7 +83,7 @@ class Checkout
                         'service_type' => 'ppmv_registration',
                         'amount' => $totalAmount,
                         'token' => $token,
-                        'status' => true // should removethis field
+                        // 'status' => true // should removethis field
                     ]);
 
                     $response = [
@@ -123,7 +123,7 @@ class Checkout
                         'service_type' => 'ppmv_renewal',
                         'amount' => $totalAmount,
                         'token' => $token,
-                        'status' => true // should removethis field
+                        // 'status' => true // should removethis field
                     ]);
 
                     $response = [
