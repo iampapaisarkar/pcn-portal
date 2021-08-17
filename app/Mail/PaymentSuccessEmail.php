@@ -29,13 +29,13 @@ class PaymentSuccessEmail extends Mailable
     public function build()
     {
         if($this->newData['type'] == 'meptp_training'){
-            $subject = env('APP_NAME') . ' - Payment successfully done for MEPTP Training Application';
+            $subject = 'PCN - MEPTP Payment Notification';
         }
         if($this->newData['type'] == 'ppmv_registration'){
-            $subject = env('APP_NAME') . ' - Payment successfully done for PPMV Registration Application';
+            $subject = 'Licence Registration Payment';
         }
         if($this->newData['type'] == 'ppmv_renewal'){
-            $subject = env('APP_NAME') . ' - Payment successfully done for PPMV Licence Renewal';
+            $subject = 'Licence Registration Payment';
         }
 
         return $this->markdown('mail.payment-success',['data'=>$this->newData])->subject($subject);

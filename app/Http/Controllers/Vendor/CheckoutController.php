@@ -75,6 +75,7 @@ class CheckoutController extends Controller
 
                 $data = [
                     'order_id' => $order->order_id,
+                    'amount' => $order->amount,
                     'type' => 'meptp_training',
                     'batch' => $application->batch,
                 ];
@@ -87,7 +88,9 @@ class CheckoutController extends Controller
 
                 $data = [
                     'order_id' => $order->order_id,
-                    'type' => 'ppmv_registration'
+                    'amount' => $order->amount,
+                    'type' => 'ppmv_registration',
+                    'year' => PPMVRenewal::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->first()->renewal_year
                 ];
                 PaymentSuccessEmailJOB::dispatch($data);
             }
@@ -98,7 +101,9 @@ class CheckoutController extends Controller
                 
                 $data = [
                     'order_id' => $order->order_id,
-                    'type' => 'ppmv_renewal'
+                    'amount' => $order->amount,
+                    'type' => 'ppmv_renewal',
+                    'year' => PPMVRenewal::where(['id' => $order->application_id, 'vendor_id' => Auth::user()->id])->first()->renewal_year
                 ];
                 PaymentSuccessEmailJOB::dispatch($data);
             }
