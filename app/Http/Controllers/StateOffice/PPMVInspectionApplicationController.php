@@ -10,6 +10,7 @@ use App\Models\PPMVRenewal;
 use App\Http\Services\AllActivity;
 use App\Http\Services\FileUpload;
 use DB;
+use App\Jobs\PPMVLicenceQueryEmailJOB;
 
 class PPMVInspectionApplicationController extends Controller
 {
@@ -94,6 +95,19 @@ class PPMVInspectionApplicationController extends Controller
                     'status' => $request->recommendation,
                     'inspection_report' => $file_name,
                 ]);
+
+                if($request->recommendation == 'unrecommended'){
+                    $application = PPMVRenewal::where('id', $id)
+                    ->where('payment', true)
+                    ->with('user')
+                    ->first();
+                    
+                    $data = [
+                        'application' => $application,
+                        'vendor' => $application->user,
+                    ];
+                    PPMVLicenceQueryEmailJOB::dispatch($data);
+                }
 
                 $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
                 $activity = 'State Officer Upload Inspection Report';
