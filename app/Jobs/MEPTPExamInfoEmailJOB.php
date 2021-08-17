@@ -19,6 +19,12 @@ class MEPTPExamInfoEmailJOB implements ShouldQueue
      *
      * @return void
      */
+    public  $data;
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
     public function __construct($data)
     {
         $this->data = $data;

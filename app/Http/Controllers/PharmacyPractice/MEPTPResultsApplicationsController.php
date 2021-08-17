@@ -16,6 +16,7 @@ use App\Http\Services\AllActivity;
 use App\Exports\ResultTemplateExport;
 use App\Imports\ResultImport;
 use Excel;
+use App\Jobs\MEPTPExamResultEmailJOB;
 
 class MEPTPResultsApplicationsController extends Controller
 {
@@ -272,6 +273,15 @@ class MEPTPResultsApplicationsController extends Controller
                     'score' => $result['exam_score_50'],
                     'percentage' => $result['percentage_score']
                 ]);
+
+                $application = MEPTPResult::where(['application_id' => $result['application_id'], 'vendor_id' => $result['vendor_id']])
+                ->first();
+
+                $data = [
+                    'vendor' => $application->user
+                ];
+                MEPTPExamResultEmailJOB::dispatch($data);
+
 
                 $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
                 $activity = 'MEPTP Examination Result Uploaded';
