@@ -14,6 +14,13 @@ use App\Mail\PaymentSuccessEmail;
 use App\Mail\ApproveTierEmail;
 use App\Mail\GenerateLicenceEmail;
 
+use App\Mail\MEPTPDeclinedEmail;
+use App\Mail\MEPTPExamInfoEmail;
+use App\Mail\MEPTPExamResultEmail;
+use App\Mail\MEPTPQueryEmail;
+use App\Mail\PPMVDocQueryEmail;
+use App\Mail\PPMVLicenceQueryEmail;
+
 class EmailSend
 {
     public static function sendPaymentSuccessEMAIL($data){
@@ -57,6 +64,96 @@ class EmailSend
             DB::beginTransaction();
 
             Mail::to($vendor['email'])->send(new GenerateLicenceEmail($licence, $vendor));
+
+            DB::commit();
+            return ['success' => true];
+        }catch(Exception $e) {
+            DB::rollback();
+            return ['success' => false];
+        }  
+    }
+
+    public static function sendMEPTPDeclinedEMAIL($data){
+
+        try {
+            DB::beginTransaction();
+
+            Mail::to(Auth::user()->email)->send(new MEPTPDeclinedEmail($data));
+
+            DB::commit();
+            return ['success' => true];
+        }catch(Exception $e) {
+            DB::rollback();
+            return ['success' => false];
+        }  
+    }
+
+    public static function sendMEPTPExamInfoEmail($data){
+
+        try {
+            DB::beginTransaction();
+
+            Mail::to(Auth::user()->email)->send(new MEPTPExamInfoEmail($data));
+
+            DB::commit();
+            return ['success' => true];
+        }catch(Exception $e) {
+            DB::rollback();
+            return ['success' => false];
+        }  
+    }
+
+    public static function sendMEPTPExamResultEmail($data){
+
+        try {
+            DB::beginTransaction();
+
+            Mail::to(Auth::user()->email)->send(new MEPTPExamResultEmail($data));
+
+            DB::commit();
+            return ['success' => true];
+        }catch(Exception $e) {
+            DB::rollback();
+            return ['success' => false];
+        }  
+    }
+
+    public static function sendMEPTPQueryEmail($data){
+
+        try {
+            DB::beginTransaction();
+
+            Mail::to(Auth::user()->email)->send(new MEPTPQueryEmail($data));
+
+            DB::commit();
+            return ['success' => true];
+        }catch(Exception $e) {
+            DB::rollback();
+            return ['success' => false];
+        }  
+    }
+
+    public static function sendPPMVDocQueryEmail($data){
+
+        try {
+            DB::beginTransaction();
+
+            Mail::to(Auth::user()->email)->send(new PPMVDocQueryEmail($data));
+
+            DB::commit();
+            return ['success' => true];
+        }catch(Exception $e) {
+            DB::rollback();
+            return ['success' => false];
+        }  
+    }
+
+    public static function sendPPMVLicenceQueryEmail($data){
+
+        try {
+            DB::beginTransaction();
+
+            Mail::to(Auth::user()->email)->send(new PPMVLicenceQueryEmail($data));
 
             DB::commit();
             return ['success' => true];
