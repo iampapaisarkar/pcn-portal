@@ -14,6 +14,7 @@ use App\Models\School;
 use DB;
 use PDF;
 use App\Http\Services\AllActivity;
+use App\Jobs\MEPTPExamInfoEmailJOB;
 
 class MEPTPApprovedApplicationsController extends Controller
 {
@@ -199,6 +200,18 @@ class MEPTPApprovedApplicationsController extends Controller
                         'status' => 'index_generated',
                         'index_number_id' => $indexNumber->id
                     ]); 
+
+                    $application = MEPTPApplication::where('id', $application_id)
+                    ->with('user_state', 'user_lga', 'school', 'batch', 'user', 'tier')
+                    ->where('status', 'index_generated')
+                    ->first(); 
+
+
+                    $data = [
+                        'vendor' => $application->user
+                    ];
+                    MEPTPExamInfoEmailJOB::dispatch($data);
+
 
                     $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
                     $activity = 'Index Number Generated';

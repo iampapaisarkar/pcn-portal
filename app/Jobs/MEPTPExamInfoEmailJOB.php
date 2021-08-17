@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use App\Http\Services\EmailSend;
 
 class MEPTPExamInfoEmailJOB implements ShouldQueue
 {
@@ -18,9 +19,9 @@ class MEPTPExamInfoEmailJOB implements ShouldQueue
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -30,6 +31,6 @@ class MEPTPExamInfoEmailJOB implements ShouldQueue
      */
     public function handle()
     {
-        //
+        EmailSend::sendMEPTPExamInfoEmail($this->data);
     }
 }
