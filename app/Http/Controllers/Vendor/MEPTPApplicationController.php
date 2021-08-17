@@ -253,8 +253,10 @@ class MEPTPApplicationController extends Controller
             ->orWhere('status', 'pass')
             ->exists()){
                 $application = MEPTPApplication::where(['id' => $request->application_id, 'vendor_id' => Auth::user()->id])
-                ->where('status', 'fail')
-                ->orWhere('status', 'pass')
+                ->where(function($q){
+                    $q->where('status', 'fail');
+                    $q->orWhere('status', 'pass');
+                })
                 ->with('batch', 'tier', 'school', 'indexNumber', 'result')
                 ->first();
 
