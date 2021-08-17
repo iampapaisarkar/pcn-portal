@@ -9,6 +9,7 @@ use App\Models\PPMVApplication;
 use App\Models\PPMVRenewal;
 use App\Http\Services\AllActivity;
 use App\Http\Services\BasicInformation;
+use App\Jobs\PPMVDocQueryEmailJOB;
 
 class PPMVPendingApplicationController extends Controller
 {
@@ -128,7 +129,7 @@ class PPMVPendingApplicationController extends Controller
         ->where('status', 'pending')
         ->exists()){
 
-            $application = PPMVRenewal::where('id', $request->application_id)
+            PPMVRenewal::where('id', $request->application_id)
             ->where('vendor_id', $request->vendor_id)
             ->where('payment', true)
             ->where('status', 'pending')
@@ -136,6 +137,19 @@ class PPMVPendingApplicationController extends Controller
                 'status' => 'rejected',
                 'query' => $request['query'],
             ]);
+
+            $application = PPMVRenewal::where('id', $request->application_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('payment', true)
+            ->with('user')
+            ->first();
+
+            $data = [
+                'application' => $application,
+                'vendor' => $application->user,
+            ];
+            PPMVDocQueryEmailJOB::dispatch($data);
+
 
             $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
             $activity = 'State Officer Document Verification Query';
