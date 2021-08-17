@@ -78,7 +78,7 @@ class EmailSend
         try {
             DB::beginTransaction();
 
-            Mail::to(Auth::user()->email)->send(new MEPTPDeclinedEmail($data));
+            Mail::to($data['vendor']['email'])->send(new MEPTPDeclinedEmail($data));
 
             DB::commit();
             return ['success' => true];
@@ -93,7 +93,7 @@ class EmailSend
         try {
             DB::beginTransaction();
 
-            Mail::to(Auth::user()->email)->send(new MEPTPExamInfoEmail($data));
+            Mail::to($data['vendor']['email'])->send(new MEPTPExamInfoEmail($data));
 
             DB::commit();
             return ['success' => true];
@@ -108,7 +108,7 @@ class EmailSend
         try {
             DB::beginTransaction();
 
-            Mail::to(Auth::user()->email)->send(new MEPTPExamResultEmail($data));
+            Mail::to($data['vendor']['email'])->send(new MEPTPExamResultEmail($data));
 
             DB::commit();
             return ['success' => true];
@@ -123,7 +123,7 @@ class EmailSend
         try {
             DB::beginTransaction();
 
-            Mail::to(Auth::user()->email)->send(new MEPTPQueryEmail($data));
+            Mail::to($data['vendor']['email'])->send(new MEPTPQueryEmail($data));
 
             DB::commit();
             return ['success' => true];
@@ -138,7 +138,7 @@ class EmailSend
         try {
             DB::beginTransaction();
 
-            Mail::to(Auth::user()->email)->send(new PPMVDocQueryEmail($data));
+            Mail::to($data['vendor']['email'])->send(new PPMVDocQueryEmail($data));
 
             DB::commit();
             return ['success' => true];
@@ -153,7 +153,7 @@ class EmailSend
         try {
             DB::beginTransaction();
 
-            Mail::to(Auth::user()->email)->send(new PPMVLicenceQueryEmail($data));
+            Mail::to($data['vendor']['email'])->send(new PPMVLicenceQueryEmail($data));
 
             DB::commit();
             return ['success' => true];

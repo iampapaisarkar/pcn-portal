@@ -14,6 +14,7 @@ use App\Models\Tier;
 use DB;
 use App\Http\Services\AllActivity;
 use App\Jobs\ApproveTierEmailJOB;
+use App\Jobs\MEPTPDeclinedEmailJOB;
 
 class MEPTPApprovalApplicationsController extends Controller
 {
@@ -186,7 +187,7 @@ class MEPTPApprovalApplicationsController extends Controller
             ->where('status', 'send_to_pharmacy_practice')
             ->where('payment', true)
             ->exists()){
-                $application = MEPTPApplication::where('id', $request->application_id)
+                MEPTPApplication::where('id', $request->application_id)
                 ->where('vendor_id', $request->vendor_id)
                 ->where('status', 'send_to_pharmacy_practice')
                 ->where('payment', true)
@@ -195,11 +196,17 @@ class MEPTPApprovalApplicationsController extends Controller
                     'query' => $request['query'],
                 ]);
 
-                // MEPTPResult::create([
-                //     'application_id' => $request->application_id,
-                //     'vendor_id' => $request->vendor_id,
-                //     'status' => 'pending',
-                // ]);
+                $application = MEPTPApplication::where('id', $request->application_id)
+                ->where('vendor_id', $request->vendor_id)
+                ->where('payment', true)
+                ->with('user')
+                ->first();
+
+                $data = [
+                    'application' => $application,
+                    'vendor' => $application->user
+                ];
+                MEPTPDeclinedEmailJOB::dispatch($data);
 
                 $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
                 $activity = 'Pharmacy Practice Document Verification Query';
