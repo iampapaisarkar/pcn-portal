@@ -275,6 +275,7 @@ class MEPTPResultsApplicationsController extends Controller
                 ]);
 
                 $application = MEPTPResult::where(['application_id' => $result['application_id'], 'vendor_id' => $result['vendor_id']])
+                ->with('user')
                 ->first();
 
                 $data = [
