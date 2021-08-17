@@ -28,6 +28,6 @@ class ApproveTierEmail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('mail.approve-tier-email',['data'=>$this->newData])->subject(env('APP_NAME') . ' - Approve MEPTP Registration Application');
+        return $this->markdown('mail.approve-tier-email',['data'=>$this->newData])->subject('MEPTP Application Approval');
     }
 }
