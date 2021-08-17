@@ -9,7 +9,7 @@ use App\Models\MEPTPApplication;
 use App\Models\Batch;
 use App\Models\School;
 use App\Http\Services\AllActivity;
-
+use App\Jobs\MEPTPQueryEmailJOB;
 
 class MEPTPPendingApplicationsController extends Controller
 {
@@ -144,7 +144,7 @@ class MEPTPPendingApplicationsController extends Controller
         ->where('status', 'send_to_state_office')
         ->where('payment', true)
         ->exists()){
-            $application = MEPTPApplication::where('id', $request->application_id)
+            MEPTPApplication::where('id', $request->application_id)
             ->where('batch_id', $request->batch_id)
             ->where('traing_centre', $request->school_id)
             ->where('vendor_id', $request->vendor_id)
@@ -154,6 +154,20 @@ class MEPTPPendingApplicationsController extends Controller
                 'status' => 'reject_by_state_office',
                 'query' => $request['query'],
             ]);
+
+            $application = MEPTPApplication::where('id', $request->application_id)
+            ->where('batch_id', $request->batch_id)
+            ->where('traing_centre', $request->school_id)
+            ->where('vendor_id', $request->vendor_id)
+            ->where('payment', true)
+            ->with('user')
+            ->first();
+
+            $data = [
+                'application' => $application,
+                'vendor' => $application->user,
+            ];
+            MEPTPQueryEmailJOB::dispatch($data);
 
             $adminName = Auth::user()->firstname .' '. Auth::user()->lastname;
             $activity = 'State Officer Document Verification Query';
