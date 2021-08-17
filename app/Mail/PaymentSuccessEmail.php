@@ -29,7 +29,7 @@ class PaymentSuccessEmail extends Mailable
     public function build()
     {
         if($this->newData['type'] == 'meptp_training'){
-            $subject = 'PCN - MEPTP Payment Notification';
+            $subject = 'MEPTP Payment Notification';
         }
         if($this->newData['type'] == 'ppmv_registration'){
             $subject = 'Licence Registration Payment';

@@ -1,5 +1,5 @@
 @component('mail::message')
-# Approve MEPTP Traning Application {{env('APP_NAME')}}
+# MEPTP Application Approval - {{env('APP_NAME')}}
 
 <h2>Hello {{$data['vendor']['firstname']}} {{$data['vendor']['lastname']}}, <br>
 CONGRATULATIONS.

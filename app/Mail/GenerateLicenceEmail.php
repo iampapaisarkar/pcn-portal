@@ -17,9 +17,10 @@ class GenerateLicenceEmail extends Mailable
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct($data, $vendor)
     {
         $this->newData = $data;
+        $this->newVendor = $vendor;
     }
 
     /**
@@ -33,8 +34,8 @@ class GenerateLicenceEmail extends Mailable
         $profilePhoto = $this->newData->user->photo ? public_path('images/'. $this->newData->user->photo) : public_path('admin/dist-assets/images/avatar.jpg');
         $pdf = PDF::loadView('pdf.licence', ['data' => $this->newData, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
 
-        return $this->markdown('mail.generate-licence',['data'=>$this->newData])
+        return $this->markdown('mail.generate-licence',['data'=>$this->newData, 'vendor' => $this->newVendor])
         ->attachData($pdf->output(), "licence.pdf")
-        ->subject(env('APP_NAME') . ' - Licence Generate for PPMV Application');
+        ->subject('PPMV Licence Approval');
     }
 }

@@ -56,7 +56,7 @@ class EmailSend
         try {
             DB::beginTransaction();
 
-            Mail::to($vendor['email'])->send(new GenerateLicenceEmail($licence));
+            Mail::to($vendor['email'])->send(new GenerateLicenceEmail($licence, $vendor));
 
             DB::commit();
             return ['success' => true];
