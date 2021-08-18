@@ -1,14 +1,14 @@
 @component('mail::message')
 # MEPTP - Documents Review Query - {{env('APP_NAME')}}
 
-Hello {{$data['vendor']['firstname']}} {{$data['vendor']['lastname']}},
-There was an issue found in the documentation you provided for the application submitted.
+<div>Hello {{$data['vendor']['firstname']}} {{$data['vendor']['lastname']}},</div>
+<div>There was an issue found in the documentation you provided for the application submitted.</div>
 
-{{$data['application']['query']}}
+<div>{{$data['application']['query']}}</div>
 
-Kindly log in into you profile to check and make correctionsThank you.
+<div>Kindly log in into you profile to check and make corrections.</div>
 
-Thank you.
+<div>Thank you.</div>
 
 
 {{ config('app.name') }}

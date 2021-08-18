@@ -1,17 +1,18 @@
 @component('mail::message')
 # MEPTP Application Approval - {{env('APP_NAME')}}
 
-<h2>Hello {{$data['vendor']['firstname']}} {{$data['vendor']['lastname']}}, <br>
+<div>Hello {{$data['vendor']['firstname']}} {{$data['vendor']['lastname']}}, <br>
 CONGRATULATIONS.
-</h2>
+</div>
 
-<h2>There is to inform you that your application for the MEPTP at the {{$data['application']['school']['name']}} has been approvedVendor Name: {{$data['vendor']['firstname']}} {{$data['vendor']['lastname']}}</h2>
+<div>There is to inform you that your application for the MEPTP at the {{$data['application']['school']['name']}} has been approved</div>
+<div>Vendor Name: {{$data['vendor']['firstname']}} {{$data['vendor']['lastname']}}</div>
 
-<h2>Vendor Name: Vendor NamBatch: {{$data['application']['batch']['batch_no']}}</h2>
-<h2>Batch: batch NumbeTier: {{$data['application']['tier']['name']}}</h2>
-<h2>Tier: Tier TypFurther information will be communicated to you accordingly.</h2>
-<h2>Further information will be communicated to you accordingThank you.</h2>
-<h2>Thank you.</h2>
+<div>Vendor Name: Vendor NamBatch: {{$data['application']['batch']['batch_no']}}</div>
+<div>Batch: batch NumbeTier: {{$data['application']['tier']['name']}}</div>
+<div>Tier: Tier TypFurther information will be communicated to you accordingly.</div>
+<div>Further information will be communicated to you according.</div>
+<div>Thank you.</div>
 
 {{ config('app.name') }}
 @endcomponent

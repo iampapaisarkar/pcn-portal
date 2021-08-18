@@ -1,10 +1,10 @@
 @component('mail::message')
 # Licence Registration Document Review Query - {{env('APP_NAME')}}
 
-<h2>Hello {{$data['vendor']['firstname']}} {{$data['vendor']['lastname']}},</h2>
-<h2>There was an issue found in the documentation you provided for the PPMV Licence Registration.</h2>
-<h2>Kindly log in into you profile to check and make correctionsThank you.</h2>
-<h2>Thank you.</h2>
+<div>Hello {{$data['vendor']['firstname']}} {{$data['vendor']['lastname']}},</div>
+<div>There was an issue found in the documentation you provided for the PPMV Licence Registration.</div>
+<div>Kindly log in into you profile to check and make corrections.</div>
+<div>Thank you.</div>
 
 {{ config('app.name') }}
 @endcomponent
