@@ -195,8 +195,10 @@ class MEPTPApplicationController extends Controller
             ->with('user.user_state','user.user_lga', 'user_state', 'user_lga', 'tier', 'indexNumber')
             ->first();
 
-            $backgroundURL = public_path('admin/dist-assets/images/examination-background.jpg');
-            $profilePhoto = Auth::user()->photo ? public_path('images/'. Auth::user()->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+            // $backgroundURL = public_path('admin/dist-assets/images/examination-background.jpg');
+            $backgroundURL = env('APP_URL') . '/admin/dist-assets/images/examination-background.jpg';
+            // $profilePhoto = Auth::user()->photo ? public_path('images/'. Auth::user()->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+            $profilePhoto = Auth::user()->photo ? env('APP_URL') . '/images/'. Auth::user()->photo : env('APP_URL') . '/admin/dist-assets/images/avatar.jpg';
             $pdf = PDF::loadView('pdf.examination-card', ['data' => $data, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
             return $pdf->stream();
         }else{

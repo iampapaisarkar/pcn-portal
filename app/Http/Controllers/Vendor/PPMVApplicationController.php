@@ -224,8 +224,12 @@ class PPMVApplicationController extends Controller
             ->with('meptp_application', 'ppmv_application', 'user')
             ->first();
 
-            $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
-            $profilePhoto = Auth::user()->photo ? public_path('images/'. Auth::user()->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+            // $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
+            // $profilePhoto = Auth::user()->photo ? public_path('images/'. Auth::user()->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+
+            $backgroundURL = env('APP_URL') . '/admin/dist-assets/images/licence-bg.jpg';
+            $profilePhoto = Auth::user()->photo ? env('APP_URL') . '/images/'. Auth::user()->photo : env('APP_URL') . '/admin/dist-assets/images/avatar.jpg';
+
             $pdf = PDF::loadView('pdf.licence', ['data' => $data, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
             return $pdf->stream();
         }else{
