@@ -120,7 +120,7 @@ class InvoiceController extends Controller
                 ->currencyDecimalPoint('.')
                 ->filename($title. '-' .$client->name)
                 ->addItems($items)
-                ->logo(public_path('admin/dist-assets/images/logo.png'));
+                ->logo(env('APP_URL') . '/admin/dist-assets/images/logo.png');
                 // You can additionally save generated invoice to configured disk
                 // ->save('public');
 
