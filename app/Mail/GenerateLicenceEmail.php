@@ -30,8 +30,12 @@ class GenerateLicenceEmail extends Mailable
      */
     public function build()
     {
-        $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
-        $profilePhoto = $this->newData->user->photo ? public_path('images/'. $this->newData->user->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+        // $backgroundURL = public_path('admin/dist-assets/images/licence-bg.jpg');
+        // $profilePhoto = $this->newData->user->photo ? public_path('images/'. $this->newData->user->photo) : public_path('admin/dist-assets/images/avatar.jpg');
+
+        $backgroundURL = env('APP_URL') . '/admin/dist-assets/images/licence-bg.jpg';
+        $profilePhoto = $this->newData->user->photo ? env('APP_URL') . '/images/'. $this->newData->user->photo : env('APP_URL') . '/admin/dist-assets/images/avatar.jpg';
+
         $pdf = PDF::loadView('pdf.licence', ['data' => $this->newData, 'background' => $backgroundURL, 'photo' => $profilePhoto]);
 
         return $this->markdown('mail.generate-licence',['data'=>$this->newData, 'vendor' => $this->newVendor])
